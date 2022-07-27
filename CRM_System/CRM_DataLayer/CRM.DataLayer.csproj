@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CRM_System.DB\CRM_System.DB.sqlproj" />
+  </ItemGroup>
+
 </Project>
