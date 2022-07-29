@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[Account_Add]
-	@Currency NVARCHAR(10),
-	@Status NVARCHAR(10),
+	@Currency TINYINT,
+	@Status TINYINT,
 	@LeadId INT
 AS
 BEGIN

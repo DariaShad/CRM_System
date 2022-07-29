@@ -10,7 +10,6 @@ namespace CRM.DataLayer.Enum
     {
         Active=1,
         Frozen,
-        Blocked,
-        Closed
+        Blocked
     }
 }

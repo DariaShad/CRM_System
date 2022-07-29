@@ -1,17 +1,15 @@
 ﻿CREATE PROCEDURE [dbo].[Account_Update]
-	@Id int,
-	@Currency NVARCHAR(10),
-	@Status NVARCHAR(10),
+	@Id BIGINT,
+	@Currency TINYINT,
+	@Status TINYINT,
 	@LeadId INT
 
 AS
 BEGIN
 
 UPDATE dbo.Account
-SET Currency=@Currency,
-	[Status]=@Status,
-	LeadId=@LeadId
-
+SET [Status]=@Status
+	
 WHERE 
 Id=@Id
 

@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace CRM.DataLayer.Repositories
 {
-    public class AccountRepository : ServerOptions
+    public class AccountRepository : BaseRepository
     {
-        public int AddAccount(AccountDTO accountDTO)
+        public int AddAccount(AccountDto accountDTO)
         {
             var id = ConnectionString.QuerySingle<int>(
                 AccountStoredProcedure.Account_Add,
@@ -26,14 +26,51 @@ namespace CRM.DataLayer.Repositories
                 
         }
 
-        public AccountDTO GetAccountById (int id)
+        public List <AccountDto> GetAllAccounts()
         {
-            var account = ConnectionString.QuerySingle<AccountDTO>(
+            var accounts = ConnectionString.Query<AccountDto>(
+                AccountStoredProcedure.Account_GetAll,
+                commandType: System.Data.CommandType.StoredProcedure)
+                .ToList();
+            return accounts;
+        }
+
+        public List <AccountDto> GetAllAccountsByLeadId (int leadId)
+        {
+            var accounts = ConnectionString.Query<AccountDto>(
+                AccountStoredProcedure.Account_GetAllAccountsByLeadId,
+                param: new { leadId },
+                commandType: System.Data.CommandType.StoredProcedure).ToList();
+            return accounts;
+        }
+
+        public AccountDto GetAccountById (int id)
+        {
+            var account = ConnectionString.QueryFirstOrDefault<AccountDto>(
                 AccountStoredProcedure.Account_GetById,
                 param: new { id },
                 commandType: System.Data.CommandType.StoredProcedure);
 
             return account;
+        }
+
+        public void UpdateAccount(AccountDto account)
+        {
+            ConnectionString.QuerySingleOrDefault(
+                AccountStoredProcedure.Account_Update,
+                param: new
+                {
+                    account.Currency
+                },
+                 commandType: System.Data.CommandType.StoredProcedure);
+        }
+
+        public void DeleteAccount(int accountId)
+        {
+            ConnectionString.QuerySingleOrDefault(
+                AccountStoredProcedure.Account_Delete,
+                param: new { id= accountId},
+                commandType: System.Data.CommandType.StoredProcedure);
         }
     }
 }

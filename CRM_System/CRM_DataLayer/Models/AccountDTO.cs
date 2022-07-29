@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CRM.DataLayer.Models
 {
-    public class AccountDTO
+    public class AccountDto
     {
         public int Id { get; set; }
         public Currency Currency { get; set; }
@@ -19,13 +19,13 @@ namespace CRM.DataLayer.Models
         public bool IsDeleted { get; set; }
         public override bool Equals(object? obj)
         {
-            return obj is AccountDTO accountDTO &&
+            return obj is AccountDto accountDto &&
 
-                Id == accountDTO.Id &&
-                Currency == accountDTO.Currency &&
-                Status == accountDTO.Status &&
-                LeadId == accountDTO.LeadId &&
-                IsDeleted == accountDTO.IsDeleted;
+                Id == accountDto.Id &&
+                Currency == accountDto.Currency &&
+                Status == accountDto.Status &&
+                LeadId == accountDto.LeadId &&
+                IsDeleted == accountDto.IsDeleted;
 
         }
     }
