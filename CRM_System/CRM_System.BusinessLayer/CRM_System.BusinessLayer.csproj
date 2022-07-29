@@ -7,14 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CRM_System.DB\CRM_System.DB.sqlproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Interfaces\" />
-    <Folder Include="Models\" />
-    <Folder Include="Repositories\" />
+    <ProjectReference Include="..\CRM_DataLayer\CRM.DataLayer.csproj" />
   </ItemGroup>
 
 </Project>
-
