@@ -4,7 +4,7 @@
 	@LeadId INT
 AS
 BEGIN
-INSERT INTO dbo.[Account](
+INSERT INTO dbo.Account(
 	Currency,
 	[Status],
 	LeadId) 
