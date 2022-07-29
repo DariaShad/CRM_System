@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CRM_System.BusinessLayer\CRM_System.BusinessLayer.csproj" />
     <ProjectReference Include="..\CRM_System.DB\CRM_System.DB.sqlproj" />
   </ItemGroup>
 
