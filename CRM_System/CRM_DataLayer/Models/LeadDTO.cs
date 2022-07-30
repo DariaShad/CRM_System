@@ -1,8 +1,6 @@
-﻿using CRM_System.BusinessLayer;
+﻿namespace CRM.DataLayer.Models;
 
-namespace CRM.DataLayer.Models;
-
-public class LeadDTO
+public class LeadDto
 {
     public int Id { get; set; }
     public string FirstName { get; set; }
