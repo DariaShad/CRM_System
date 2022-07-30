@@ -9,7 +9,7 @@ public class LeadDto
     public DateTime Birthday { get; set; }
     public string Email { get; set; }
     public string Phone { get; set; }
-    public int Passport { get; set; }
+    public string Passport { get; set; }
     public string Address { get; set; }
     public Role Role { get; set; }
     public DateTime RegistrationDate { get; set; }
