@@ -4,10 +4,11 @@
 	@LastName nvarchar(50),
 	@Patronymic nvarchar(50),
 	@Birthday date,
-	@Phone nvarchar(25),
-	@Passport nvarchar(20),
-	@Address nvarchar(100),
-	@Role nvarchar(20)
+	@Phone nvarchar(15),
+	@Passport nvarchar(150),
+	@City tinyint,
+	@Address nvarchar(60),
+	@Role tinyint
 
 AS
 BEGIN
@@ -19,6 +20,7 @@ SET FirstName = @FirstName,
 	Birthday = @Birthday,
 	Phone = @Phone,
 	Passport = @Passport,
+	City = @City,
 	[Address] = @Address,
 	[Role] = @Role
 WHERE Id = @Id

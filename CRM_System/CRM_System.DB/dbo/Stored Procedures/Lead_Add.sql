@@ -4,10 +4,12 @@
 	@Patronymic nvarchar(50),
 	@Birthday date,
 	@Email nvarchar(50),
-	@Phone nvarchar(25),
-	@Passport nvarchar(20),
-	@Address nvarchar(100),
-	@Role nvarchar(20)
+	@Phone nvarchar(15),
+	@Passport nvarchar(150),
+	@City tinyint,
+	@Address nvarchar(60),
+	@Role tinyint,
+	@RegistarionDate date
 AS
 BEGIN
 INSERT INTO dbo.[Lead](
@@ -18,8 +20,10 @@ INSERT INTO dbo.[Lead](
 	Email,
 	Phone,
 	Passport,
+	City,
 	[Address],
-	[Role])
+	[Role],
+	RegistrationDate)
 VALUES(
 	@FirstName,
 	@LastName,
@@ -28,8 +32,10 @@ VALUES(
 	@Email,
 	@Phone,
 	@Passport,
+	@City,
 	@Address,
-	@Role)
+	@Role,
+	@RegistarionDate)
 
 SELECT @@IDENTITY
 END

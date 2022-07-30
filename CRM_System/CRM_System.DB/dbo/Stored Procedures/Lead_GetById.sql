@@ -5,8 +5,8 @@ AS
 BEGIN
 
 	SELECT Id, FirstName, LastName, Patronymic, Birthday, Email, Phone,
-	Passport, [Address], [Role]
+	Passport, City, [Address], [Role], RegistrationDate
 	FROM dbo.[Lead]
-	WHERE Id = @Id
+	WHERE Id = @Id AND IsDeleted = 0
 
 END

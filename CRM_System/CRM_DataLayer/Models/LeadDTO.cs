@@ -12,5 +12,6 @@ public class LeadDto
     public int Passport { get; set; }
     public string Address { get; set; }
     public Role Role { get; set; }
+    public DateTime RegistrationDate { get; set; }
     public bool IsDeleted { get; set; }
 }
