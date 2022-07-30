@@ -1,7 +1,5 @@
 ﻿namespace CRM_System.BusinessLayer;
 
-public enum Role
+public class AdminModel : UserModel
 {
-    Regular = 1,
-    Vip
 }

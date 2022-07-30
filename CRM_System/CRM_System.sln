@@ -7,15 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRM.DataLayer", "CRM_DataLa
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CRM_System.DB", "CRM_System.DB\CRM_System.DB.sqlproj", "{C37C13B5-AC5D-45B4-94CC-644C599591F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRM_System.BusinessLayer", "CRM_System.BusinessLayer\CRM_System.BusinessLayer.csproj", "{C5608536-422E-4F5A-8775-F1ADE3A14E2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRM_System.BusinessLayer", "CRM_System.BusinessLayer\CRM_System.BusinessLayer.csproj", "{C5608536-422E-4F5A-8775-F1ADE3A14E2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRM_System.API", "CRM_System.API\CRM_System.API.csproj", "{4E7FC3D2-0B6F-4D29-91DE-9F6153235ECD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRM_System.API", "CRM_System.API\CRM_System.API.csproj", "{4E7FC3D2-0B6F-4D29-91DE-9F6153235ECD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRM_System.API.Tests", "CRM_System.API.Tests\CRM_System.API.Tests.csproj", "{C8EB1E9F-63C3-4A40-9305-26DCB43265E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRM_System.API.Tests", "CRM_System.API.Tests\CRM_System.API.Tests.csproj", "{C8EB1E9F-63C3-4A40-9305-26DCB43265E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRM_System.DataLayer.Tests", "CRM_System.DataLayer.Tests\CRM_System.DataLayer.Tests.csproj", "{0BF197D1-63B4-456A-BF91-C325B59FD6DA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRM_System.BusinessLayer.Tests", "CRM_System.BusinessLayer.Tests\CRM_System.BusinessLayer.Tests.csproj", "{A349E005-617F-42EE-8AE7-DD498B8870B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRM_System.BusinessLayer.Tests", "CRM_System.BusinessLayer.Tests\CRM_System.BusinessLayer.Tests.csproj", "{A349E005-617F-42EE-8AE7-DD498B8870B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,10 +43,6 @@ Global
 		{C8EB1E9F-63C3-4A40-9305-26DCB43265E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8EB1E9F-63C3-4A40-9305-26DCB43265E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8EB1E9F-63C3-4A40-9305-26DCB43265E5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0BF197D1-63B4-456A-BF91-C325B59FD6DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0BF197D1-63B4-456A-BF91-C325B59FD6DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0BF197D1-63B4-456A-BF91-C325B59FD6DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0BF197D1-63B4-456A-BF91-C325B59FD6DA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A349E005-617F-42EE-8AE7-DD498B8870B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A349E005-617F-42EE-8AE7-DD498B8870B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A349E005-617F-42EE-8AE7-DD498B8870B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
