@@ -12,7 +12,7 @@ public class LeadDto
     public string Passport { get; set; }
     public City City { get; set; }
     public string Address { get; set; }
-    public Role Role { get; set; }
+    public LeadRole Role { get; set; }
     public DateTime RegistrationDate { get; set; }
     public bool IsDeleted { get; set; }
 }
