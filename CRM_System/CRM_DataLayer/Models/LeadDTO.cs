@@ -15,4 +15,31 @@ public class LeadDto
     public LeadRole Role { get; set; }
     public DateTime RegistrationDate { get; set; }
     public bool IsDeleted { get; set; }
+
+    public override bool Equals(object? obj)
+    {
+        bool flag = true;
+        if (obj == null || !(obj is LeadDto))
+        {
+            flag = false;
+        }
+        LeadDto leadDto = (LeadDto)obj;
+        if (leadDto.Id != this.Id ||
+            leadDto.FirstName != this.FirstName ||
+            leadDto.LastName != this.LastName ||
+            leadDto.Patronymic != this.Patronymic ||
+            leadDto.Birthday != this.Birthday ||
+            leadDto.Email != this.Email ||
+            leadDto.Phone != this.Phone ||
+            leadDto.Passport != this.Passport ||
+            leadDto.City != this.City ||
+            leadDto.Address != this.Address ||
+            leadDto.Role != this.Role ||
+            leadDto.RegistrationDate != this.RegistrationDate ||
+            leadDto.IsDeleted != this.IsDeleted)
+        {
+            flag = false;
+        }
+        return flag;
+    }
 }
