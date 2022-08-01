@@ -21,7 +21,7 @@ public class LeadService : ILeadService
     //    //return _leadRepository.Add(lead);
     //}
 
-    public LeadDto GetById(int id, ClaimModel claims)
+    public LeadDto GetById(int id)
     {
         var client = _leadRepository.GetById(id);
 

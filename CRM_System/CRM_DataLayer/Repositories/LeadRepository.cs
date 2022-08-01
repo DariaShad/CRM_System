@@ -28,7 +28,7 @@ public class LeadRepository : BaseRepository, ILeadRepository
                 leadDto.City,
                 leadDto.Address,
                 leadDto.Role,
-                leadDto.RegistrationDate
+
             },
             commandType: System.Data.CommandType.StoredProcedure);
 
@@ -74,8 +74,7 @@ public class LeadRepository : BaseRepository, ILeadRepository
                 leadDto.Phone,
                 leadDto.Passport,
                 leadDto.City,
-                leadDto.Address,
-                leadDto.Role
+                leadDto.Address
             },
             commandType: System.Data.CommandType.StoredProcedure);
     }
@@ -87,4 +86,6 @@ public class LeadRepository : BaseRepository, ILeadRepository
             param: new { id },
             commandType: System.Data.CommandType.StoredProcedure);
     }
+
+    //+restore
 }
