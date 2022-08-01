@@ -71,5 +71,10 @@
     <Build Include="dbo\Stored Procedures\Account_GetById.sql" />
     <Build Include="dbo\Stored Procedures\Account_Update.sql" />
     <Build Include="dbo\Stored Procedures\Account_GetAllAccountsByLeadId.sql" />
+    <Build Include="dbo\Stored Procedures\Lead_Add.sql" />
+    <Build Include="dbo\Stored Procedures\Lead_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\Lead_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Lead_Update.sql" />
+    <Build Include="dbo\Stored Procedures\Lead_Delete.sql" />
   </ItemGroup>
 </Project>
