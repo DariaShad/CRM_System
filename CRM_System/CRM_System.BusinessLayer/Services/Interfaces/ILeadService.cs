@@ -1,5 +1,11 @@
-﻿namespace CRM_System.BusinessLayer;
+﻿using CRM.DataLayer.Models;
 
-public class ILeadService
+namespace CRM_System.BusinessLayer;
+
+public interface ILeadService
 {
+    LeadDto GetById(int id, ClaimModel claims);
+    List<LeadDto> GetAll();
+    void Update(LeadDto lead, ClaimModel claims);
+    void Delete(int id);
 }
