@@ -30,6 +30,12 @@ namespace CRM_System.API.Controllers
             var result=_accountService.AddAccount(_mapper.Map<AccountDto>(accountRequest));
             return Created("", result);
         }
+        [HttpPut]
+        public ActionResult UpdateAccount([FromBody] UpdateAccountRequest accountRequest)
+        {
+            _accountService.UpdateAccount(_mapper.Map<AccountDto>(accountRequest));
+            return NoContent();
+        }
     
     }
    

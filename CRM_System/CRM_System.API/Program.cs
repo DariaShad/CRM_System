@@ -1,7 +1,11 @@
 using CRM.DataLayer;
+using CRM.DataLayer.Interfaces;
+using CRM.DataLayer.Repositories;
 //using CRM.DataLayer.Interfaces;
 using CRM_System.API;
 using CRM_System.API.Infrastucture;
+using CRM_System.BusinessLayer.Services;
+using CRM_System.BusinessLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -63,8 +67,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //builder.Services.AddScoped<ILeadRepository, LeadRepository>();
 //builder.Services.AddScoped<ILeadService, LeadService>();
 //
-//builder.Services.AddScoped<IAccountRepository, AccountRepository>();
-//builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 
 builder.Services.AddAutoMapper(typeof(MapperConfigStorage));
 
