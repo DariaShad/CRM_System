@@ -16,6 +16,5 @@ namespace CRM.DataLayer.Interfaces
         public void UpdateAccount(AccountDto account);
         public void DeleteAccount(int id);
 
-
     }
 }
