@@ -1,9 +1,10 @@
-﻿using CRM.DataLayer.Models;
+﻿using CRM.DataLayer.Interfaces;
+using CRM.DataLayer.Models;
 using Dapper;
 
 namespace CRM.DataLayer;
 
-public class LeadRepository : BaseRepository
+public class LeadRepository : BaseRepository, ILeadRepository
 {
     //private readonly DapperContext _context;
     //public LeadRepository(DapperContext context)
