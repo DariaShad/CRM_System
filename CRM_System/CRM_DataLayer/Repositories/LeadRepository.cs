@@ -6,6 +6,12 @@ namespace CRM.DataLayer;
 
 public class LeadRepository : BaseRepository, ILeadRepository
 {
+    //private readonly DapperContext _context;
+    //public LeadRepository(DapperContext context)
+    //{
+    //    _context = context;
+    //}
+
     public int Add(LeadDto leadDto)
     {
         var id = ConnectionString.QuerySingle<int>(
