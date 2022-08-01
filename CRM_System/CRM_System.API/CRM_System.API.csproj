@@ -15,9 +15,9 @@
 
   <ItemGroup>
     <Folder Include="Infrastucture\" />
-    <Folder Include="Extensions\" />
     <Folder Include="Models\Responses\" />
     <Folder Include="Models\Requests\" />
+    <Folder Include="Extensions\" />
     <Folder Include="CustomAttributes\" />
   </ItemGroup>
 
