@@ -12,7 +12,8 @@ public class LeadDto
     public string Passport { get; set; }
     public City City { get; set; }
     public string Address { get; set; }
-    public LeadRole Role { get; set; }
+    public Role Role { get; set; }
+    public string Password { get; set; }
     public DateTime RegistrationDate { get; set; }
     public bool IsDeleted { get; set; }
 
@@ -35,6 +36,7 @@ public class LeadDto
             leadDto.City != this.City ||
             leadDto.Address != this.Address ||
             leadDto.Role != this.Role ||
+            leadDto.Password != this.Password ||
             leadDto.RegistrationDate != this.RegistrationDate ||
             leadDto.IsDeleted != this.IsDeleted)
         {

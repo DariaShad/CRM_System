@@ -11,6 +11,7 @@
     [City] TINYINT NOT NULL,
     [Address] NVARCHAR(60) NOT NULL,
     [Role] TINYINT NOT NULL,
+    [Password] NVARCHAR(30) NOT NULL,
     [RegistrationDate] DATE NOT NULL,
     [IsDeleted] BIT DEFAULT 0 NOT NULL
 )
