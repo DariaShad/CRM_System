@@ -1,12 +1,6 @@
 ﻿using CRM.DataLayer.Interfaces;
 using CRM.DataLayer.Models;
-using CRM.DataLayer.StoredProcedure;
 using Dapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CRM.DataLayer.Repositories
 {
@@ -15,7 +9,7 @@ namespace CRM.DataLayer.Repositories
         public int AddAccount(AccountDto accountDTO)
         {
             var id = ConnectionString.QuerySingle<int>(
-                AccountStoredProcedure.Account_Add,
+                StoredProcedures.Account_Add,
                 param: new
                 {
                     accountDTO.LeadId,
@@ -23,14 +17,13 @@ namespace CRM.DataLayer.Repositories
                     accountDTO.Status
                 },
                 commandType: System.Data.CommandType.StoredProcedure);
-            return id;
-                
+            return id;               
         }
 
         public List <AccountDto> GetAllAccounts()
         {
             var accounts = ConnectionString.Query<AccountDto>(
-                AccountStoredProcedure.Account_GetAll,
+                StoredProcedures.Account_GetAll,
                 commandType: System.Data.CommandType.StoredProcedure)
                 .ToList();
             return accounts;
@@ -39,7 +32,7 @@ namespace CRM.DataLayer.Repositories
         public List <AccountDto> GetAllAccountsByLeadId (int leadId)
         {
             var accounts = ConnectionString.Query<AccountDto>(
-                AccountStoredProcedure.Account_GetAllAccountsByLeadId,
+                StoredProcedures.Account_GetAllAccountsByLeadId,
                 param: new { leadId },
                 commandType: System.Data.CommandType.StoredProcedure).ToList();
             return accounts;
@@ -48,7 +41,7 @@ namespace CRM.DataLayer.Repositories
         public AccountDto GetAccountById (int id)
         {
             var account = ConnectionString.QueryFirstOrDefault<AccountDto>(
-                AccountStoredProcedure.Account_GetById,
+                StoredProcedures.Account_GetById,
                 param: new { id },
                 commandType: System.Data.CommandType.StoredProcedure);
 
@@ -58,7 +51,7 @@ namespace CRM.DataLayer.Repositories
         public void UpdateAccount(AccountDto account)
         {
             ConnectionString.QuerySingleOrDefault(
-                AccountStoredProcedure.Account_Update,
+                StoredProcedures.Account_Update,
                 param: new
                 {
                     account.Currency
@@ -69,8 +62,8 @@ namespace CRM.DataLayer.Repositories
         public void DeleteAccount(int accountId)
         {
             ConnectionString.QuerySingleOrDefault(
-                AccountStoredProcedure.Account_Delete,
-                param: new { id= accountId},
+                StoredProcedures.Account_Delete,
+                param: new { id= accountId },
                 commandType: System.Data.CommandType.StoredProcedure);
         }
     }

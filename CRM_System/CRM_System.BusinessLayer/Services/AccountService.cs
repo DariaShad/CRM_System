@@ -1,11 +1,6 @@
 ﻿using CRM.DataLayer.Interfaces;
 using CRM.DataLayer.Models;
 using CRM_System.BusinessLayer.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CRM_System.BusinessLayer.Services
 {
