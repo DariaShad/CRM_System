@@ -44,7 +44,7 @@ namespace CRM.DataLayer.Repositories
                 commandType: System.Data.CommandType.StoredProcedure).ToList();
             return accounts;
         }
-
+        //GetBalance, Last transaction date
         public AccountDto GetAccountById (int id)
         {
             var account = ConnectionString.QueryFirstOrDefault<AccountDto>(
@@ -73,5 +73,6 @@ namespace CRM.DataLayer.Repositories
                 param: new { id= accountId},
                 commandType: System.Data.CommandType.StoredProcedure);
         }
+        //GetBalance
     }
 }
