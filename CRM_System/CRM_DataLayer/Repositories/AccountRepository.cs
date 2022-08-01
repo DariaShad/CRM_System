@@ -1,4 +1,5 @@
-﻿using CRM.DataLayer.Models;
+﻿using CRM.DataLayer.Interfaces;
+using CRM.DataLayer.Models;
 using CRM.DataLayer.StoredProcedure;
 using Dapper;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CRM.DataLayer.Repositories
 {
-    public class AccountRepository : BaseRepository
+    public class AccountRepository : BaseRepository, IAccountRepository
     {
         public int AddAccount(AccountDto accountDTO)
         {
