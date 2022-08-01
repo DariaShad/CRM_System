@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CRM.DataLayer.Enum
+namespace CRM.DataLayer.Enums
 {
     public enum Status
     {
