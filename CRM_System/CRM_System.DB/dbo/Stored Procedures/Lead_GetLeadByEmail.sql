@@ -3,7 +3,7 @@
 
 as
 begin
-
+--айди фио и пароль
 	select Id, FirstName, LastName, Patronymic, Birthday, Phone,
 	Passport, City, [Address], [Role], RegistrationDate
 	from dbo.[Lead]

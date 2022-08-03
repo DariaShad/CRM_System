@@ -13,7 +13,7 @@ public class LeadsService : ILeadsService
         _leadRepository = leadRepository;
     }
 
-    public async Task<int> AddLead(LeadDto lead)
+    public async Task<int> Add(LeadDto lead)
     {
         bool isChecked = CheckEmailForUniqueness(lead.Email);
         if (!isChecked)
@@ -22,6 +22,7 @@ public class LeadsService : ILeadsService
         else
             lead.Password = PasswordHash.HashPassword(lead.Password);
             lead.Role = Role.Regular;
+        //accounts
 
         return await _leadRepository.Add(lead);
     }
@@ -39,13 +40,13 @@ public class LeadsService : ILeadsService
 
     public async Task<LeadDto> GetByEmail(string email)
     {
-        var lead = _leadRepository.GetByEmail(email);
+        var lead = await _leadRepository.GetByEmail(email);
 
         if (lead is null)
             throw new NotFoundException($"Lead with {email} was not found");
 
         else
-            return await lead;
+            return lead;
     }
 
     public async Task<List<LeadDto>> GetAll()
@@ -68,7 +69,7 @@ public class LeadsService : ILeadsService
 
     public async Task DeleteOrRestore(int id, bool isDeleting)
     {
-        var lead = _leadRepository.GetById(id);
+        var lead = await _leadRepository.GetById(id);
 
         if (lead is null)
             throw new NotFoundException($"Lead with {id} was not found");

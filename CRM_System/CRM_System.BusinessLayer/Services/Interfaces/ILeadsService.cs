@@ -4,7 +4,7 @@ namespace CRM_System.BusinessLayer;
 
 public interface ILeadsService
 {
-    Task<int> AddLead(LeadDto lead);
+    Task<int> Add(LeadDto lead);
     Task<LeadDto> GetById(int id);
     Task<LeadDto> GetByEmail(string email);
     Task<List<LeadDto>> GetAll();

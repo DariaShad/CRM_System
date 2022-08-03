@@ -5,7 +5,12 @@ namespace CRM_System.API;
 
 public class MapperConfigStorage : Profile
 {
-    //CreateMap<LeadRegistrationRequest, LeadDto>();
-    //CreateMap<LeadUpdateRequest, LeadDto>();
-    //CreateMap<LeadDto, LeadAllInfoResponse>();
+   public MapperConfigStorage()
+    {
+        CreateMap<LeadRegistrationRequest, LeadDto>();
+        CreateMap<LeadUpdateRequest, LeadDto>();
+        CreateMap<LeadDto, LeadAllInfoResponse>();
+        CreateMap<LeadDto, LeadMainInfoResponse>();
+    }
 }
+
