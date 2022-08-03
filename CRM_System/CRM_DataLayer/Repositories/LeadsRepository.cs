@@ -1,15 +1,14 @@
 ﻿using CRM.DataLayer.Interfaces;
 using CRM.DataLayer.Models;
 using Dapper;
+using System.Data;
 
 namespace CRM.DataLayer;
 
 public class LeadsRepository : BaseRepository, ILeadsRepository
 {
-    private readonly DapperContext _context;
-    public LeadsRepository(DapperContext context)
+    public LeadsRepository(IDbConnection connection) : base(connection)
     {
-        _context = context;
     }
 
     public async Task<int> Add(LeadDto leadDto)

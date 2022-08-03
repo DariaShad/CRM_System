@@ -1,6 +1,5 @@
 using CRM.DataLayer;
 using CRM.DataLayer.Interfaces;
-using CRM.DataLayer.Repositories;
 using CRM_System.API;
 using CRM_System.API.Infrastucture;
 using CRM_System.BusinessLayer;
@@ -9,10 +8,13 @@ using CRM_System.BusinessLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Data;
+using System.Data.SqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<DapperContext>();
+//builder.Services.AddSingleton<DapperContext>();
+builder.Services.AddScoped<IDbConnection>(c => new SqlConnection(@"Server=80.78.240.16;Database=CRM.Db;User Id=Student;Password=qwe!23"));
 // Add services to the container.
 
 builder.Services.AddControllers();
