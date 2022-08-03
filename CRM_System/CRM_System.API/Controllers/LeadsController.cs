@@ -11,12 +11,12 @@ namespace CRM_System.API;
 [ApiController]
 [Produces("application/json")]
 [Route("[controller]")]
-public class LeadController : ControllerBase
+public class LeadsController : ControllerBase
 {
-    private readonly ILeadService _leadService;
+    private readonly ILeadsService _leadService;
     private readonly IMapper _mapper;
 
-    public LeadController(ILeadService leadService, IMapper mapper)
+    public LeadsController(ILeadsService leadService, IMapper mapper)
     {
         _leadService = leadService;
         _mapper = mapper;

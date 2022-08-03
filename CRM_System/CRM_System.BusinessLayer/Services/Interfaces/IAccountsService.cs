@@ -2,7 +2,7 @@
 
 namespace CRM_System.BusinessLayer.Services.Interfaces
 {
-    public interface IAccountService
+    public interface IAccountsService
     {
         public int AddAccount(AccountDto accountDTO);
         public List<AccountDto> GetAllAccounts();
