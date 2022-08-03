@@ -15,7 +15,7 @@ public class LeadsService : ILeadsService
 
     public async Task<int> Add(LeadDto lead)
     {
-        bool isChecked = CheckEmailForUniqueness(lead.Email);
+        bool isChecked = await CheckEmailForUniqueness(lead.Email);
         if (!isChecked)
             throw new RegisteredEmailException($"This email is registered already");
 
@@ -38,7 +38,7 @@ public class LeadsService : ILeadsService
             return await lead;
     }
 
-    public async Task<LeadDto> GetByEmail(string email)
+    public async Task<LeadDto?> GetByEmail(string email)
     {
         var lead = await _leadRepository.GetByEmail(email);
 
@@ -51,12 +51,12 @@ public class LeadsService : ILeadsService
 
     public async Task<List<LeadDto>> GetAll()
     {
-        var leads = _leadRepository.GetAll();
+        var leads = await _leadRepository.GetAll();
 
         if (leads is null)
             throw new NotFoundException($"Leads were not found");
 
-        return await leads;
+        return leads;
     }
 
     public async Task Update(LeadDto lead)
@@ -78,5 +78,5 @@ public class LeadsService : ILeadsService
             await _leadRepository.DeleteOrRestore(id, isDeleting);
     }
 
-    private bool CheckEmailForUniqueness(string email) => _leadRepository.GetByEmail(email) == null;
+    private async Task<bool> CheckEmailForUniqueness(string email) => await _leadRepository.GetByEmail(email) == null;
 }

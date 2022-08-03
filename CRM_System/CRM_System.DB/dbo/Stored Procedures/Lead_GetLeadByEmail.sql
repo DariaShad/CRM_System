@@ -3,10 +3,13 @@
 
 as
 begin
---айди фио и пароль
-	select Id, FirstName, LastName, Patronymic, Birthday, Phone,
-	Passport, City, [Address], [Role], RegistrationDate
+
+	select 
+		Id, 
+		FirstName, 
+		LastName, 
+		[Password]
 	from dbo.[Lead]
-	where @Email = Email and IsDeleted = 0
+	where Email = @Email and IsDeleted = 0
 
 end

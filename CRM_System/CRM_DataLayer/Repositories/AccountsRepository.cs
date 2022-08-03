@@ -6,6 +6,11 @@ namespace CRM.DataLayer.Repositories
 {
     public class AccountsRepository : BaseRepository, IAccountsRepository
     {
+        private readonly DapperContext _context;
+        public AccountsRepository(DapperContext context)
+        {
+            _context = context;
+        }
         public int AddAccount(AccountDto accountDTO)
         {
             var id = ConnectionString.QuerySingle<int>(
