@@ -4,7 +4,7 @@ using Dapper;
 
 namespace CRM.DataLayer.Repositories
 {
-    public class AccountRepository : BaseRepository, IAccountRepository
+    public class AccountsRepository : BaseRepository, IAccountsRepository
     {
         public int AddAccount(AccountDto accountDTO)
         {

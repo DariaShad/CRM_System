@@ -64,11 +64,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddScoped<ILeadRepository, LeadRepository>();
-builder.Services.AddScoped<ILeadService, LeadService>();
+builder.Services.AddScoped<ILeadsRepository, LeadsRepository>();
+builder.Services.AddScoped<ILeadsService, LeadsService>();
 
-builder.Services.AddScoped<IAccountRepository, AccountRepository>();
-builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IAccountsRepository, AccountsRepository>();
+builder.Services.AddScoped<IAccountsService, AccountsService>();
 
 builder.Services.AddAutoMapper(typeof(MapperConfigStorage));
 

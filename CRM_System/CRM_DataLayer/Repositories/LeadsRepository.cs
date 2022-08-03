@@ -4,7 +4,7 @@ using Dapper;
 
 namespace CRM.DataLayer;
 
-public class LeadRepository : BaseRepository, ILeadRepository
+public class LeadsRepository : BaseRepository, ILeadsRepository
 {
     //private readonly DapperContext _context;
     //public LeadRepository(DapperContext context)
@@ -51,6 +51,16 @@ public class LeadRepository : BaseRepository, ILeadRepository
         var lead = await ConnectionString.QueryFirstOrDefaultAsync<LeadDto>(
             StoredProcedures.Lead_GetAllInfoByLeadId,
             param: new { id },
+            commandType: System.Data.CommandType.StoredProcedure);
+
+        return lead;
+    }
+
+    public async Task<LeadDto> GetByEmail(string email)
+    {
+        var lead = await ConnectionString.QueryFirstOrDefaultAsync<LeadDto>(
+            StoredProcedures.Lead_GetLeadByEmail,
+            param: new { email },
             commandType: System.Data.CommandType.StoredProcedure);
 
         return lead;

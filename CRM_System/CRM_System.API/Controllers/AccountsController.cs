@@ -6,7 +6,7 @@ namespace CRM_System.API.Controllers
     [Authorize]
     [ApiController]
     [Route("[controller]")]
-    public class AccountController : ControllerBase
+    public class AccountsController : ControllerBase
     {
         
     }
