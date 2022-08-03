@@ -13,8 +13,8 @@
 <ItemGroup>
 	<Folder Include="Enums\" />
 	<Folder Include="Repositories\" />
-	<Folder Include="Models\" />
 	<Folder Include="Interfaces\" />
+	<Folder Include="Models\" />
 </ItemGroup>
 
 <ItemGroup>
