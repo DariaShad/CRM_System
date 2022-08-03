@@ -12,9 +12,9 @@ public class LeadRepository : BaseRepository, ILeadRepository
     //    _context = context;
     //}
 
-    public int Add(LeadDto leadDto)
+    public async Task<int> Add(LeadDto leadDto)
     {
-        var id = ConnectionString.QuerySingle<int>(
+        var id = await ConnectionString.QuerySingleAsync<int>(
             StoredProcedures.Lead_Add,
             param: new
             {
@@ -28,14 +28,15 @@ public class LeadRepository : BaseRepository, ILeadRepository
                 leadDto.City,
                 leadDto.Address,
                 leadDto.Role,
-
+                leadDto.Password,
+                leadDto.RegistrationDate
             },
             commandType: System.Data.CommandType.StoredProcedure);
 
         return id;
     }
 
-    public List<LeadDto> GetAll()
+    public async Task<List<LeadDto>> GetAll()
     {
         var leads = ConnectionString.Query<LeadDto>(
             StoredProcedures.Lead_GetAll,
@@ -45,25 +46,19 @@ public class LeadRepository : BaseRepository, ILeadRepository
         return leads;
     }
 
-    public LeadDto GetById(int id)
+    public async Task<LeadDto> GetById(int id)
     {
-        var lead = ConnectionString.QueryFirstOrDefault<LeadDto>(
-            StoredProcedures.Lead_GetById,
+        var lead = await ConnectionString.QueryFirstOrDefaultAsync<LeadDto>(
+            StoredProcedures.Lead_GetAllInfoByLeadId,
             param: new { id },
             commandType: System.Data.CommandType.StoredProcedure);
-
-        //var accounts = ConnectionString.Query<AccountDto>(
-        //    StoredProcedures.Account_GetAllAccountsByLeadId,
-        //    param: new { lead.Id },
-        //    commandType: System.Data.CommandType.StoredProcedure)
-        //    .ToList();
 
         return lead;
     }
 
-    public void Update(LeadDto leadDto)
+    public async Task Update(LeadDto leadDto)
     {
-        ConnectionString.QueryFirstOrDefault<LeadDto>(
+        await ConnectionString.QueryFirstOrDefaultAsync<LeadDto>(
             StoredProcedures.Account_Update,
             param: new
             {
@@ -79,13 +74,17 @@ public class LeadRepository : BaseRepository, ILeadRepository
             commandType: System.Data.CommandType.StoredProcedure);
     }
 
-    public void Delete(int id)
+    public async Task DeleteOrRestore(int id, bool isDeleting)
     {
-        ConnectionString.QueryFirstOrDefault<LeadDto>(
-            StoredProcedures.Lead_Delete,
-            param: new { id },
-            commandType: System.Data.CommandType.StoredProcedure);
+        if (isDeleting)
+            await ConnectionString.QueryFirstOrDefaultAsync<LeadDto>(
+                StoredProcedures.Lead_Delete,
+                param: new { id },
+                commandType: System.Data.CommandType.StoredProcedure);
+        else
+            await ConnectionString.QueryFirstOrDefaultAsync<LeadDto>(
+                StoredProcedures.Lead_Restore,
+                param: new { id },
+                commandType: System.Data.CommandType.StoredProcedure);
     }
-
-    //+restore
 }
