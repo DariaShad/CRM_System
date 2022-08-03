@@ -79,6 +79,9 @@
     <Build Include="dbo\Stored Procedures\Lead_GetById.sql" />
     <Build Include="dbo\Stored Procedures\Lead_Update.sql" />
     <Build Include="dbo\Stored Procedures\Lead_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Lead_GetAllInfoByLeadId.sql" />
+    <Build Include="dbo\Stored Procedures\Lead_GetLeadByEmail.sql" />
+    <Build Include="dbo\Stored Procedures\Lead_Restore.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CRM_System.DB.publish.xml" />

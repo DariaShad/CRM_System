@@ -9,16 +9,17 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="FluentValidation" Version="11.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.7" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Infrastucture\" />
-    <Folder Include="Models\Responses\" />
-    <Folder Include="Models\Requests\" />
     <Folder Include="Extensions\" />
     <Folder Include="CustomAttributes\" />
+    <Folder Include="Models\Requests" />
+    <Folder Include="Models\Responses" />    <Folder Include="Validators\" />
   </ItemGroup>
 
   <ItemGroup>

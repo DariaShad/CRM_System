@@ -7,8 +7,7 @@
 	@Phone nvarchar(15),
 	@Passport nvarchar(150),
 	@City tinyint,
-	@Address nvarchar(60),
-	@Role tinyint
+	@Address nvarchar(60)
 
 AS
 BEGIN
@@ -21,8 +20,8 @@ SET FirstName = @FirstName,
 	Phone = @Phone,
 	Passport = @Passport,
 	City = @City,
-	[Address] = @Address,
-	[Role] = @Role
+	[Address] = @Address
+
 WHERE Id = @Id
 
 END

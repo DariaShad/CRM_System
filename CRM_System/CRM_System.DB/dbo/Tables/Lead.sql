@@ -4,14 +4,14 @@
 	[FirstName] NVARCHAR (50) NOT NULL,
     [LastName]  NVARCHAR (50) NOT NULL,
     [Patronymic]  NVARCHAR (50) NOT NULL,
-    [Birthday] DATE NOT NULL,
+    [Birthday] DATETIME NOT NULL,
     [Email]     NVARCHAR (50) UNIQUE NOT NULL,
     [Phone]     NVARCHAR (15) NOT NULL,
     [Passport] NVARCHAR(150) NOT NULL,
     [City] TINYINT NOT NULL,
     [Address] NVARCHAR(60) NOT NULL,
     [Role] TINYINT NOT NULL,
-    [Password] NVARCHAR(30) NOT NULL,
-    [RegistrationDate] DATE NOT NULL,
+    [Password] NVARCHAR(255) NOT NULL,
+    [RegistrationDate] DATETIME NOT NULL,
     [IsDeleted] BIT DEFAULT 0 NOT NULL
 )

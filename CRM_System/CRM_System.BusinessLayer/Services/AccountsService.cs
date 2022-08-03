@@ -4,11 +4,11 @@ using CRM_System.BusinessLayer.Services.Interfaces;
 
 namespace CRM_System.BusinessLayer.Services
 {
-    public class AccountService : IAccountService
+    public class AccountsService : IAccountsService
     {
-        private readonly IAccountRepository _accountRepository;
+        private readonly IAccountsRepository _accountRepository;
 
-        public AccountService(IAccountRepository accountRepository)
+        public AccountsService(IAccountsRepository accountRepository)
         {
             _accountRepository = accountRepository;
         }
