@@ -36,14 +36,6 @@ namespace CRM.DataLayer.Repositories
             return accounts;
         }
 
-        public List <AccountDto> GetAllAccountsByLeadId (int leadId)
-        {
-            var accounts = ConnectionString.Query<AccountDto>(
-                AccountStoredProcedure.Account_GetAllAccountsByLeadId,
-                param: new { leadId },
-                commandType: System.Data.CommandType.StoredProcedure).ToList();
-            return accounts;
-        }
         //GetBalance, Last transaction date
         public AccountDto GetAccountById (int id)
         {

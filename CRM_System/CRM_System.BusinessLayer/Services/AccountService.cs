@@ -38,7 +38,7 @@ namespace CRM_System.BusinessLayer.Services
 
         public List<AccountDto> GetAllAccountsByLeadId(int leadId)
         {
-            var result = _accountRepository.GetAllAccountsByLeadId(leadId);
+            var result = _accountRepository.GetAllAccounts();
             return result;
         }
 
