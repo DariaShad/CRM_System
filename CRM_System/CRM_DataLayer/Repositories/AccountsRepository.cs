@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CRM.DataLayer.Repositories
 {
-    public class AccountRepository : BaseRepository, IAccountsRepository
+    public class AccountsRepository : BaseRepository, IAccountsRepository
     {
         public int AddAccount(AccountDto accountDTO)
         {

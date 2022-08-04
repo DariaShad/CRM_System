@@ -4,7 +4,7 @@ using Dapper;
 
 namespace CRM.DataLayer;
 
-public class LeadRepository : BaseRepository, ILeadsRepository
+public class LeadsRepository : BaseRepository, ILeadsRepository
 {
     //private readonly DapperContext _context;
     //public LeadRepository(DapperContext context)
