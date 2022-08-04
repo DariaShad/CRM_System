@@ -67,7 +67,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //builder.Services.AddScoped<ILeadRepository, LeadRepository>();
 //builder.Services.AddScoped<ILeadService, LeadService>();
 //
-builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IAccountsRepository, AccountRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 
 builder.Services.AddAutoMapper(typeof(MapperConfigStorage));

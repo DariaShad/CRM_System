@@ -11,9 +11,9 @@ namespace CRM_System.BusinessLayer.Services
 {
     public class AccountService : IAccountService
     {
-        private readonly IAccountRepository _accountRepository;
+        private readonly IAccountsRepository _accountRepository;
 
-        public AccountService(IAccountRepository accountRepository)
+        public AccountService(IAccountsRepository accountRepository)
         {
             _accountRepository = accountRepository;
         }

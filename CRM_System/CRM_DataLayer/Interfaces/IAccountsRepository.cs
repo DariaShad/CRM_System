@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CRM.DataLayer.Interfaces
 {
-    public interface IAccountRepository
+    public interface IAccountsRepository
     {
         public int AddAccount(AccountDto accountDTO);
         public List<AccountDto> GetAllAccounts();
