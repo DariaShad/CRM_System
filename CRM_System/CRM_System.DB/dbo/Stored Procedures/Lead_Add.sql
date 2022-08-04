@@ -2,14 +2,15 @@
 	@FirstName nvarchar(50),
 	@LastName nvarchar(50),
 	@Patronymic nvarchar(50),
-	@Birthday date,
+	@Birthday datetime,
 	@Email nvarchar(50),
 	@Phone nvarchar(15),
 	@Passport nvarchar(150),
 	@City tinyint,
 	@Address nvarchar(60),
 	@Role tinyint,
-	@RegistarionDate date
+	@Password nvarchar(255),
+	@RegistarionDate datetime
 AS
 BEGIN
 INSERT INTO dbo.[Lead](
@@ -23,6 +24,7 @@ INSERT INTO dbo.[Lead](
 	City,
 	[Address],
 	[Role],
+	[Password],
 	RegistrationDate)
 VALUES(
 	@FirstName,
@@ -35,7 +37,8 @@ VALUES(
 	@City,
 	@Address,
 	@Role,
-	@RegistarionDate)
+	@Password,
+	GETDATE())
 
 SELECT @@IDENTITY
 END

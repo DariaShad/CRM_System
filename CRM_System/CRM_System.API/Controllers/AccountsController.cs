@@ -13,10 +13,10 @@ namespace CRM_System.API.Controllers;
 [Route("[controller]")]
 public class AccountsController : ControllerBase
 {
-    private readonly IAccountService _accountService;
+    private readonly IAccountsService _accountService;
     private readonly IMapper _mapper;
 
-    public AccountsController (IAccountService accountService, IMapper mapper)
+    public AccountsController (IAccountsService accountService, IMapper mapper)
     {
         _accountService = accountService;
         _mapper = mapper;

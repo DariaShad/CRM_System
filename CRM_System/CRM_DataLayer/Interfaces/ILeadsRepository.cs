@@ -4,10 +4,11 @@ namespace CRM.DataLayer.Interfaces
 {
     public interface ILeadsRepository
     {
-        int Add(LeadDto leadDto);
-        void Delete(int id);
-        List<LeadDto> GetAll();
-        LeadDto GetById(int id);
-        void Update(LeadDto leadDto);
+        Task<int> Add(LeadDto leadDto);
+        Task<List<LeadDto>> GetAll();
+        Task<LeadDto> GetById(int id);
+        Task<LeadDto> GetByEmail(string email);
+        Task Update(LeadDto leadDto);
+        Task DeleteOrRestore(int id, bool isDeleting);
     }
 }

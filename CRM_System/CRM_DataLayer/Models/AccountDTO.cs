@@ -12,11 +12,12 @@ namespace CRM.DataLayer.Models
         public int Id { get; set; }
         public Currency Currency { get; set; }
 
-        public Status Status { get; set; }
+        public AccountStatus Status { get; set; }
 
         public int LeadId { get; set; }
 
         public bool IsDeleted { get; set; }
+
         public override bool Equals(object? obj)
         {
             return obj is AccountDto accountDto &&

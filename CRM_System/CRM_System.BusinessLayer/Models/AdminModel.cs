@@ -1,5 +1,5 @@
 ﻿namespace CRM_System.BusinessLayer;
 
-public class AdminModel : UserModel
+public class AdminModel : ClaimModel
 {
 }

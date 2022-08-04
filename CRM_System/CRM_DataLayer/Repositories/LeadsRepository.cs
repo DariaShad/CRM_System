@@ -1,20 +1,19 @@
 ﻿using CRM.DataLayer.Interfaces;
 using CRM.DataLayer.Models;
 using Dapper;
+using System.Data;
 
 namespace CRM.DataLayer;
 
-public class LeadRepository : BaseRepository, ILeadsRepository
+public class LeadsRepository : BaseRepository, ILeadsRepository
 {
-    //private readonly DapperContext _context;
-    //public LeadRepository(DapperContext context)
-    //{
-    //    _context = context;
-    //}
-
-    public int Add(LeadDto leadDto)
+    public LeadsRepository(IDbConnection connection) : base(connection)
     {
-        var id = ConnectionString.QuerySingle<int>(
+    }
+
+    public async Task<int> Add(LeadDto leadDto)
+    {
+        var id = await ConnectionString.QuerySingleAsync<int>(
             StoredProcedures.Lead_Add,
             param: new
             {
@@ -28,6 +27,7 @@ public class LeadRepository : BaseRepository, ILeadsRepository
                 leadDto.City,
                 leadDto.Address,
                 leadDto.Role,
+                leadDto.Password,
                 leadDto.RegistrationDate
             },
             commandType: System.Data.CommandType.StoredProcedure);
@@ -35,7 +35,7 @@ public class LeadRepository : BaseRepository, ILeadsRepository
         return id;
     }
 
-    public List<LeadDto> GetAll()
+    public async Task<List<LeadDto>> GetAll()
     {
         var leads = ConnectionString.Query<LeadDto>(
             StoredProcedures.Lead_GetAll,
@@ -45,25 +45,29 @@ public class LeadRepository : BaseRepository, ILeadsRepository
         return leads;
     }
 
-    public LeadDto GetById(int id)
+    public async Task<LeadDto> GetById(int id)
     {
-        var lead = ConnectionString.QueryFirstOrDefault<LeadDto>(
-            StoredProcedures.Lead_GetById,
+        var lead = await ConnectionString.QueryFirstOrDefaultAsync<LeadDto>(
+            StoredProcedures.Lead_GetAllInfoByLeadId,
             param: new { id },
             commandType: System.Data.CommandType.StoredProcedure);
-
-        //var accounts = ConnectionString.Query<AccountDto>(
-        //    StoredProcedures.Account_GetAllAccountsByLeadId,
-        //    param: new { lead.Id },
-        //    commandType: System.Data.CommandType.StoredProcedure)
-        //    .ToList();
 
         return lead;
     }
 
-    public void Update(LeadDto leadDto)
+    public async Task<LeadDto> GetByEmail(string email)
     {
-        ConnectionString.QueryFirstOrDefault<LeadDto>(
+        var lead = await ConnectionString.QueryFirstOrDefaultAsync<LeadDto>(
+            StoredProcedures.Lead_GetLeadByEmail,
+            param: new { email },
+            commandType: System.Data.CommandType.StoredProcedure);
+
+        return lead;
+    }
+
+    public async Task Update(LeadDto leadDto)
+    {
+        await ConnectionString.QueryFirstOrDefaultAsync<LeadDto>(
             StoredProcedures.Account_Update,
             param: new
             {
@@ -74,17 +78,22 @@ public class LeadRepository : BaseRepository, ILeadsRepository
                 leadDto.Phone,
                 leadDto.Passport,
                 leadDto.City,
-                leadDto.Address,
-                leadDto.Role
+                leadDto.Address
             },
             commandType: System.Data.CommandType.StoredProcedure);
     }
 
-    public void Delete(int id)
+    public async Task DeleteOrRestore(int id, bool isDeleting)
     {
-        ConnectionString.QueryFirstOrDefault<LeadDto>(
-            StoredProcedures.Lead_Delete,
-            param: new { id },
-            commandType: System.Data.CommandType.StoredProcedure);
+        if (isDeleting)
+            await ConnectionString.QueryFirstOrDefaultAsync<LeadDto>(
+                StoredProcedures.Lead_Delete,
+                param: new { id },
+                commandType: System.Data.CommandType.StoredProcedure);
+        else
+            await ConnectionString.QueryFirstOrDefaultAsync<LeadDto>(
+                StoredProcedures.Lead_Restore,
+                param: new { id },
+                commandType: System.Data.CommandType.StoredProcedure);
     }
 }

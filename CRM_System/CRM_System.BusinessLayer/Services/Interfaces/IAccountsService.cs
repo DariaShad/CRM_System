@@ -1,13 +1,8 @@
 ﻿using CRM.DataLayer.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CRM_System.BusinessLayer.Services.Interfaces
 {
-    public interface IAccountService
+    public interface IAccountsService
     {
         public int AddAccount(AccountDto accountDTO);
         public List<AccountDto> GetAllAccounts();
