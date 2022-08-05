@@ -20,4 +20,10 @@
     <ProjectReference Include="..\CRM_System.BusinessLayer\CRM_System.BusinessLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="NegativeTests\" />
+    <Folder Include="PositiveTests\" />
+    <Folder Include="TestCaseSources\" />
+  </ItemGroup>
+
 </Project>

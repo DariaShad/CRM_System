@@ -20,4 +20,9 @@
     <ProjectReference Include="..\CRM_System.API\CRM_System.API.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ControllersTests\" />
+    <Folder Include="ValidatorsTests\" />
+  </ItemGroup>
+
 </Project>
