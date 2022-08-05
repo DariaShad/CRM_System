@@ -20,6 +20,14 @@ public class ExceptionMiddleware
         }
         catch (NotFoundException error)
         {
+            await HandleExceptionAsync(httpContext, HttpStatusCode.NotFound, error.Message);
+        }
+        catch (AccessDeniedException error)
+        {
+            await HandleExceptionAsync(httpContext, HttpStatusCode.Forbidden, error.Message);
+        }
+        catch (RegisteredEmailException error)
+        {
             await HandleExceptionAsync(httpContext, HttpStatusCode.BadRequest, error.Message);
         }
         catch (Exception error)

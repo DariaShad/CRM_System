@@ -12,6 +12,8 @@
 
 <ItemGroup>
 	<Folder Include="Enums\" />
+	<Folder Include="Repositories\" />
+	<Folder Include="Models\" />
 </ItemGroup>
 
 <ItemGroup>
