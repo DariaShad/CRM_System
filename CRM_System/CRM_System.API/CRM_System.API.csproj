@@ -19,7 +19,7 @@
     <Folder Include="Extensions\" />
     <Folder Include="CustomAttributes\" />
     <Folder Include="Models\Requests" />
-    <Folder Include="Models\Responses" />    <Folder Include="Validators\" />
+    <Folder Include="Models\Responses" />
   </ItemGroup>
 
   <ItemGroup>
