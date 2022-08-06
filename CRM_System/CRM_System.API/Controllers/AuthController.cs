@@ -1,6 +1,13 @@
-﻿namespace CRM_System.API.Controllers
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Mvc;
+using RouteAttribute = Microsoft.AspNetCore.Components.RouteAttribute;
+
+namespace CRM_System.API.Controllers
 {
-    public class AuthController
+    [ApiController]
+    [Route("[controller]")]
+    public class AuthController : ControllerBase
     {
+
     }
 }
