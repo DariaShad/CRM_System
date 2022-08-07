@@ -1,9 +1,9 @@
 using CRM.DataLayer;
 using CRM.DataLayer.Interfaces;
 using CRM.DataLayer.Repositories;
-//using CRM.DataLayer.Interfaces;
 using CRM_System.API;
 using CRM_System.API.Infrastucture;
+using CRM_System.BusinessLayer;
 using CRM_System.BusinessLayer.Services;
 using CRM_System.BusinessLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -67,11 +67,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-//builder.Services.AddScoped<ILeadRepository, LeadRepository>();
-//builder.Services.AddScoped<ILeadService, LeadService>();
-//
-builder.Services.AddScoped<IAccountsRepository, AccountsRepository>();
-builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ILeadsRepository, LeadsRepository>();
 builder.Services.AddScoped<ILeadsService, LeadsService>();
 

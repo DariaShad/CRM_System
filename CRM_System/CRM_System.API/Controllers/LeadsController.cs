@@ -64,7 +64,7 @@ public class LeadsController : ControllerBase
 
     [AuthorizeByRole(Role.Regular, Role.Vip)]
     [HttpPut("{id}")]
-    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
@@ -72,11 +72,11 @@ public class LeadsController : ControllerBase
     public async Task<ActionResult> Update([FromBody] LeadUpdateRequest request)
     {
         await _leadsService.Update(_mapper.Map<LeadDto>(request));
-        return Ok();
+        return NoContent();
     }
 
     [AuthorizeByRole(Role.Regular, Role.Vip)]
-    [HttpDelete]
+    [HttpDelete("{id}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
@@ -89,7 +89,7 @@ public class LeadsController : ControllerBase
     }
 
     [AuthorizeByRole(Role.Regular, Role.Vip)]
-    [HttpPatch("{id}")]
+    [HttpPatch("{id}/restore")]
     [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
