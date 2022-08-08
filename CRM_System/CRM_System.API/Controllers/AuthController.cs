@@ -8,6 +8,6 @@ namespace CRM_System.API.Controllers
     [Route("[controller]")]
     public class AuthController : ControllerBase
     {
-
+        private readonly 
     }
 }

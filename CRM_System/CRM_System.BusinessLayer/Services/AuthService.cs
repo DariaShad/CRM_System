@@ -11,10 +11,11 @@ using CRM_System.BusinessLayer.Models;
 using CRM_System.BusinessLayer.Infrastuctures;
 using System.Data;
 using CRM.DataLayer;
+using CRM_System.BusinessLayer.Services.Interfaces;
 
 namespace CRM_System.BusinessLayer.Services
 {
-    public class AuthService
+    public class AuthService : IAuthService
     {
         private readonly ILeadsRepository _leadsRepository;
 
@@ -23,30 +24,6 @@ namespace CRM_System.BusinessLayer.Services
             _leadsRepository = leadsRepository;
         }
 
-        public string GetToken(ClaimModel claimModel)
-        {
-            if (claimModel is null || claimModel.Email is null)
-            {
-                throw new DataException("There are empty properties");
-            }
-
-            var claims = new List<Claim>
-            {
-                { new Claim (ClaimTypes.Email, claimModel.Email) },
-                { new Claim (ClaimTypes.Role, claimModel.Role.ToString()) },
-                { new Claim (ClaimTypes.NameIdentifier, claimModel.Id.ToString()) }
-            };
-
-            var jwt = new JwtSecurityToken(
-                issuer: AuthOptions.Issuer,
-                audience: AuthOptions.Audience,
-                claims: claims,
-                expires: DateTime.UtcNow.Add(TimeSpan.FromDays(1)),
-                signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-                
-
-            return new JwtSecurityTokenHandler().WriteToken(jwt);
-        }
 
         public ClaimModel Login (LoginRequest loginRequest)
         {
@@ -71,6 +48,30 @@ namespace CRM_System.BusinessLayer.Services
 
             }
             return claimModel;
+        }
+        public string GetToken(ClaimModel claimModel)
+        {
+            if (claimModel is null || claimModel.Email is null)
+            {
+                throw new DataException("There are empty properties");
+            }
+
+            var claims = new List<Claim>
+            {
+                { new Claim (ClaimTypes.Email, claimModel.Email) },
+                { new Claim (ClaimTypes.Role, claimModel.Role.ToString()) },
+                { new Claim (ClaimTypes.NameIdentifier, claimModel.Id.ToString()) }
+            };
+
+            var jwt = new JwtSecurityToken(
+                issuer: AuthOptions.Issuer,
+                audience: AuthOptions.Audience,
+                claims: claims,
+                expires: DateTime.UtcNow.Add(TimeSpan.FromDays(1)),
+                signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+                
+
+            return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
     }
 }
