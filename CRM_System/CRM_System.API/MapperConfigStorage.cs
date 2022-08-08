@@ -13,10 +13,7 @@ public class MapperConfigStorage : Profile
         CreateMap<UpdateAccountRequest, AccountDto>();
         CreateMap<AccountDto, AccountResponse>();
         CreateMap<AccountDto, AccountsByLeadIdResponse>();
-        CreateMap<AccountDto, AllAccountsResponse>();
-    }
-   public MapperConfigStorage()
-    {
+        CreateMap<AccountDto, AllAccountsResponse>(); 
         CreateMap<LeadRegistrationRequest, LeadDto>();
         CreateMap<LeadUpdateRequest, LeadDto>();
         CreateMap<LeadDto, LeadAllInfoResponse>();
