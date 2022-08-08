@@ -113,5 +113,19 @@ namespace CRM_System.API.Tests.ControllersTests
             Assert.AreEqual(StatusCodes.Status204NoContent, actualResult.StatusCode);
         }
 
+        [Test]
+        public void DeleteAccount_NoContentResult()
+        {
+            //given
+            int accountId = 1;
+
+            //when
+            var actual = _sut.DeleteAccount(accountId);
+
+            //then
+            var actualResult = actual as NoContentResult;
+            Assert.AreEqual(StatusCodes.Status204NoContent, actualResult.StatusCode);
+        }
+
     }
 }
