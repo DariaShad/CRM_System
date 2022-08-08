@@ -78,9 +78,9 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public ActionResult UpdateAccount([FromBody] UpdateAccountRequest accountRequest)
+    public ActionResult UpdateAccount([FromBody] UpdateAccountRequest accountRequest, int id)
     {
-        _accountService.UpdateAccount(_mapper.Map<AccountDto>(accountRequest));
+        _accountService.UpdateAccount(_mapper.Map<AccountDto>(accountRequest), id);
         return NoContent();
     }
 

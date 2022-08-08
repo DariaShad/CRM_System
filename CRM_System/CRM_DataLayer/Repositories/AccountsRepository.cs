@@ -51,7 +51,7 @@ namespace CRM.DataLayer.Repositories
             return account;
         }
 
-        public void UpdateAccount(AccountDto account)
+        public void UpdateAccount(AccountDto account, int id)
         {
             ConnectionString.QuerySingleOrDefault(
                 StoredProcedures.Account_Update,

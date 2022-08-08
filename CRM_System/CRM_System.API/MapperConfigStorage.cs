@@ -10,6 +10,8 @@ public class MapperConfigStorage : Profile
     public MapperConfigStorage()
     {
         CreateMap<AddAccountRequest, AccountDto>();
+        CreateMap<AddAccountRequest, UpdateAccountRequest>();
+        CreateMap<UpdateAccountRequest, AddAccountRequest >();
         CreateMap<AccountDto, AddAccountRequest >();
         CreateMap<UpdateAccountRequest, AccountDto>();
         CreateMap<AccountDto, AccountResponse>();

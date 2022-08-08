@@ -8,7 +8,7 @@ namespace CRM_System.BusinessLayer.Services.Interfaces
         public List<AccountDto> GetAllAccounts();
         public AccountDto GetAccountById(int id);
         public List<AccountDto> GetAllAccountsByLeadId(int leadId);
-        public void UpdateAccount(AccountDto account);
+        public void UpdateAccount(AccountDto account, int id);
         public void DeleteAccount(int id);
     }
 }

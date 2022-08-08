@@ -95,5 +95,23 @@ namespace CRM_System.API.Tests.ControllersTests
             Assert.AreEqual(StatusCodes.Status201Created, actualResult.StatusCode);
         }
 
+        [Test]
+        public void UpdateAccount_NoContentResult()
+        {
+            //given
+            var account = new UpdateAccountRequest
+            {
+                Status = AccountStatus.Active,
+            };
+            int accountId = 1;
+
+            //when
+            var actual = _sut.UpdateAccount(account, accountId);
+
+            //then
+            var actualResult = actual as NoContentResult;
+            Assert.AreEqual(StatusCodes.Status204NoContent, actualResult.StatusCode);
+        }
+
     }
 }

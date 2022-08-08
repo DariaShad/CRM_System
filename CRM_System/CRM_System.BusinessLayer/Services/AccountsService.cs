@@ -37,9 +37,10 @@ namespace CRM_System.BusinessLayer.Services
             return result;
         }
 
-        public void UpdateAccount(AccountDto account)
+        public void UpdateAccount(AccountDto account, int id)
         {
-            _accountRepository.UpdateAccount(account);
+            _accountRepository.UpdateAccount(account, id);
         }
+
     }
 }
