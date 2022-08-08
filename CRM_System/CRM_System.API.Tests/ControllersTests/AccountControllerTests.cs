@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CRM.DataLayer;
 using CRM.DataLayer.Models;
 using CRM_System.API.Controllers;
 using CRM_System.BusinessLayer;
@@ -59,6 +60,35 @@ namespace CRM_System.API.Tests.ControllersTests
             //then
             var actualResult = actual.Result as ObjectResult;
             Assert.AreEqual(StatusCodes.Status200OK, actualResult.StatusCode);
+        }
+
+        [Test]
+        public void GetAllAccountsByLeadId()
+        {
+            //given
+            int leadId = 1;
+            //when
+            var actual = _sut.GetAllAccountsByLeadId(leadId);
+
+            //then
+            var actualResult = actual.Result as ObjectResult;
+            Assert.AreEqual(StatusCodes.Status200OK, actualResult.StatusCode);
+        }
+
+        [Test]
+        public void AddAccount_ValidRequestPassed_CreatedResultReceived()
+        {
+            //given
+            var account = new AccountDto
+            {
+                Currency = Currency.USD,
+                Status = AccountStatus.Active,
+                LeadId = 1
+            };
+
+            //when
+           
+
         }
 
     }
