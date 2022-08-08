@@ -2,6 +2,7 @@
 using CRM.DataLayer;
 using CRM.DataLayer.Models;
 using CRM_System.API.Controllers;
+using CRM_System.API.Models.Requests;
 using CRM_System.BusinessLayer;
 using CRM_System.BusinessLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -79,7 +80,7 @@ namespace CRM_System.API.Tests.ControllersTests
         public void AddAccount_ValidRequestPassed_CreatedResultReceived()
         {
             //given
-            var account = new AccountDto
+            var account = new AddAccountRequest
             {
                 Currency = Currency.USD,
                 Status = AccountStatus.Active,
@@ -87,8 +88,11 @@ namespace CRM_System.API.Tests.ControllersTests
             };
 
             //when
-           
+            var actual = _sut.AddAccount(account);
 
+            //then
+            var actualResult = actual.Result as CreatedResult;
+            Assert.AreEqual(StatusCodes.Status201Created, actualResult.StatusCode);
         }
 
     }
