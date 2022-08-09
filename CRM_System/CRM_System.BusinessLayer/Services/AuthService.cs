@@ -18,10 +18,12 @@ namespace CRM_System.BusinessLayer.Services
     public class AuthService : IAuthService
     {
         private readonly ILeadsRepository _leadsRepository;
+        private readonly IAdminRepository _adminRepository;
 
-        public AuthService(ILeadsRepository leadsRepository)
+        public AuthService(ILeadsRepository leadsRepository, IAdminRepository adminRepository)
         {
             _leadsRepository = leadsRepository;
+            _adminRepository = adminRepository;
         }
 
 
@@ -30,7 +32,7 @@ namespace CRM_System.BusinessLayer.Services
             ClaimModel claimModel = new ClaimModel ();
 
             var lead = _leadsRepository.GetByEmail(loginRequest.Login);
-
+            
             if (lead is not null && loginRequest.Login == lead.Result.Email && 
                 PasswordHash.ValidatePassword(loginRequest.Password, lead.Result.Password) && !lead.Result.IsDeleted)
 
@@ -47,6 +49,16 @@ namespace CRM_System.BusinessLayer.Services
                 else claimModel.Role = Role.Vip;
 
             }
+
+            var admin = _adminRepository.GetAdminByEmail(loginRequest.Login);
+
+            if (admin is not null && loginRequest.Login == admin.Result.Email &&
+                PasswordHash.ValidatePassword(loginRequest.Password, admin.Result.Password) && !admin.Result.IsDeleted)
+
+            {
+                claimModel.Role = Role.Admin;
+            }
+
             return claimModel;
         }
         public string GetToken(ClaimModel claimModel)
