@@ -1,4 +1,5 @@
-﻿using CRM.DataLayer.Models;
+﻿using CRM.DataLayer.Interfaces;
+using CRM.DataLayer.Models;
 using Dapper;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CRM.DataLayer.Repositories
 {
-    public class AdminRepository : BaseRepository
+    public class AdminRepository : BaseRepository, IAdminRepository
     {
         public AdminRepository(IDbConnection dbConnection) : base(dbConnection)
         {
