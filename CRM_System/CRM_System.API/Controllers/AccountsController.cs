@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CRM.DataLayer;
 using CRM.DataLayer.Models;
 using CRM_System.API.Models.Requests;
 using CRM_System.API.Models.Responses;
@@ -22,7 +23,7 @@ public class AccountsController : ControllerBase
         _mapper = mapper;
 
     }
-
+    [AuthorizeByRole(Role.Regular, Role.Vip)]
     [HttpGet]
     [ProducesResponseType(typeof(AccountResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
@@ -37,6 +38,7 @@ public class AccountsController : ControllerBase
             return Ok(_mapper.Map<AccountResponse>(result));
     }
 
+    [AuthorizeByRole()]
     [HttpGet]
     [ProducesResponseType(typeof(AllAccountsResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
@@ -47,6 +49,7 @@ public class AccountsController : ControllerBase
         return Ok(_mapper.Map<List<AllAccountsResponse>>(result));
     }
 
+    [AuthorizeByRole(Role.Regular, Role.Vip)]
     [HttpGet]
     [ProducesResponseType(typeof(AllAccountsResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
@@ -57,6 +60,7 @@ public class AccountsController : ControllerBase
         return Ok(_mapper.Map<List<AllAccountsResponse>>(result));
     }
 
+    [AuthorizeByRole(Role.Regular, Role.Vip)]
     [HttpPost]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
@@ -68,17 +72,19 @@ public class AccountsController : ControllerBase
         return Created("", result);
     }
 
+    [AuthorizeByRole(Role.Regular, Role.Vip)]
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public ActionResult UpdateAccount([FromBody] UpdateAccountRequest accountRequest)
+    public ActionResult UpdateAccount([FromBody] UpdateAccountRequest accountRequest, int id)
     {
-        _accountService.UpdateAccount(_mapper.Map<AccountDto>(accountRequest));
+        _accountService.UpdateAccount(_mapper.Map<AccountDto>(accountRequest), id);
         return NoContent();
     }
 
+    [AuthorizeByRole(Role.Regular, Role.Vip)]
     [HttpDelete]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]

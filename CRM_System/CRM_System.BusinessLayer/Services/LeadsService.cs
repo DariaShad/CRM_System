@@ -15,8 +15,8 @@ public class LeadsService : ILeadsService
 
     public async Task<int> Add(LeadDto lead)
     {
-        bool isChecked = await CheckEmailForUniqueness(lead.Email);
-        if (!isChecked)
+        bool isUniqueEmail = await CheckEmailForUniqueness(lead.Email);
+        if (!isUniqueEmail)
             throw new RegisteredEmailException($"This email is registered already");
 
         else

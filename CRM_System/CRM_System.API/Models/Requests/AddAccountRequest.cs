@@ -7,7 +7,7 @@ namespace CRM_System.API.Models.Requests
     {
         public Currency Currency { get; set; }
 
-        public Status Status { get; set; }
+        public AccountStatus Status { get; set; }
 
         public int LeadId { get; set; }
 
