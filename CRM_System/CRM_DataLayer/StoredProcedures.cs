@@ -17,4 +17,6 @@ public class StoredProcedures
     public const string Account_Update = "Account_Update";
     public const string Account_Delete = "Account_Delete";
     public const string Account_GetAllAccountsByLeadId = "Account_GetAllAccountsByLeadId";
+
+    public const string Admin_GetAdminByEmail = "Admin_GetAdminByEmail";
 }
