@@ -13,9 +13,9 @@ namespace CRM_System.API;
 [Route("[controller]")]
 public class LeadsController : ControllerBase
 {
+    public ClaimModel _claims;
     private readonly ILeadsService _leadsService;
     private readonly IMapper _mapper;
-    private ClaimModel _claims;
 
     public LeadsController(ILeadsService leadsService, IMapper mapper)
     {
