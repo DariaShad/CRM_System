@@ -82,6 +82,8 @@
     <Build Include="dbo\Stored Procedures\Lead_GetAllInfoByLeadId.sql" />
     <Build Include="dbo\Stored Procedures\Lead_GetLeadByEmail.sql" />
     <Build Include="dbo\Stored Procedures\Lead_Restore.sql" />
+    <Build Include="dbo\Tables\Admin.sql" />
+    <Build Include="dbo\Stored Procedures\Admin_GetAdminByEmail.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CRM_System.DB.publish.xml" />
