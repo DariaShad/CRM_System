@@ -12,7 +12,7 @@ namespace CRM.DataLayer.Interfaces
         public int AddAccount(AccountDto accountDTO);
         public List<AccountDto> GetAllAccounts();
         public AccountDto GetAccountById(int id);
-        public void UpdateAccount(AccountDto account);
+        public void UpdateAccount(AccountDto account, int id);
         public void DeleteAccount(int id);
 
     }
