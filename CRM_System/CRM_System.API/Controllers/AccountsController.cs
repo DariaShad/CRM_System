@@ -3,6 +3,7 @@ using CRM.DataLayer;
 using CRM.DataLayer.Models;
 using CRM_System.API.Models.Requests;
 using CRM_System.API.Models.Responses;
+using CRM_System.BusinessLayer;
 using CRM_System.BusinessLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ public class AccountsController : ControllerBase
 {
     private readonly IAccountsService _accountService;
     private readonly IMapper _mapper;
+    public ClaimModel Claims;
 
     public AccountsController (IAccountsService accountService, IMapper mapper)
     {
@@ -31,7 +33,8 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     public ActionResult<AccountResponse> GetAccount(int id)
     {
-        var result = _accountService.GetAccountById(id);
+        var claim = this.GetClaims();
+        var result = _accountService.GetAccountById(id, claim);
         if (result == null)
             return NotFound();
         else

@@ -23,7 +23,7 @@ namespace CRM_System.BusinessLayer.Services
             _accountRepository.DeleteAccount(id);
         }
 
-        public AccountDto GetAccountById(int id)
+        public AccountDto GetAccountById(int id, ClaimModel claim)
         {
             var result = _accountRepository.GetAccountById(id);
             return result;
