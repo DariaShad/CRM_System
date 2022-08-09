@@ -15,6 +15,7 @@ public class LeadsController : ControllerBase
 {
     private readonly ILeadsService _leadsService;
     private readonly IMapper _mapper;
+    private ClaimModel _claims;
 
     public LeadsController(ILeadsService leadsService, IMapper mapper)
     {
@@ -43,15 +44,16 @@ public class LeadsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<LeadMainInfoResponse>> GetById(int id)
     {
-        var result = await _leadsService.GetById(id);
+        var claims = this.GetClaims();
+        var lead = await _leadsService.GetById(id, claims);
 
-        if (result is null)
+        if (lead is null)
             return NotFound();
         else
-            return Ok(_mapper.Map<LeadMainInfoResponse>(result));
+            return Ok(_mapper.Map<LeadMainInfoResponse>(lead));
     }
 
-    [AuthorizeByRole(Role.Regular, Role.Vip)]
+    [AuthorizeByRole]
     [HttpGet]
     [ProducesResponseType(typeof(List<LeadMainInfoResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
@@ -59,7 +61,11 @@ public class LeadsController : ControllerBase
     public async Task<ActionResult<List<LeadMainInfoResponse>>> GetAll()
     {
         var leads = await _leadsService.GetAll();
-        return Ok(_mapper.Map<List<LeadAllInfoResponse>>(leads));
+
+        if (leads is null)
+            return NotFound();
+        else
+            return Ok(_mapper.Map<List<LeadAllInfoResponse>>(leads));
     }
 
     [AuthorizeByRole(Role.Regular, Role.Vip)]
@@ -69,9 +75,22 @@ public class LeadsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> Update([FromBody] LeadUpdateRequest request)
+    public async Task<ActionResult> Update([FromBody] LeadUpdateRequest request, int id)
     {
-        await _leadsService.Update(_mapper.Map<LeadDto>(request));
+        var claims = this.GetClaims();
+
+        var newLead = new LeadDto()
+        {
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            Patronymic = request.Patronymic,
+            Birthday = request.Birthday,
+            Phone = request.Phone,
+            City = request.City,
+            Address = request.Address
+        };
+
+        await _leadsService.Update(newLead, id, claims);
         return NoContent();
     }
 
@@ -84,8 +103,14 @@ public class LeadsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     public async Task<ActionResult> Remove(int id)
     {
-        await _leadsService.DeleteOrRestore(id, true);
-        return NoContent();
+        var claims = this.GetClaims();
+        var lead = await _leadsService.GetById(id, claims);
+
+        if (lead is null)
+            return NotFound();
+        else
+            await _leadsService.DeleteOrRestore(id, true, claims);
+            return NoContent();
     }
 
     [AuthorizeByRole(Role.Regular, Role.Vip)]
@@ -97,7 +122,13 @@ public class LeadsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     public async Task<ActionResult> Restore(int id)
     {
-        await _leadsService.DeleteOrRestore(id, false);
-        return NoContent();
+        var claims = this.GetClaims();
+        var lead = await _leadsService.GetById(id, claims);
+
+        if (lead is null)
+            return NotFound();
+        else
+            await _leadsService.DeleteOrRestore(id, false, claims);
+            return NoContent();
     }
 }

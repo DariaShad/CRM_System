@@ -23,7 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-	<Folder Include="ControllersTests\" />
+	<Folder Include="ControllersTests\NegativeTests" />
+	<Folder Include="ControllersTests\PositiveTests" />
     <Folder Include="ValidatorsTests\" />
   </ItemGroup>
 
