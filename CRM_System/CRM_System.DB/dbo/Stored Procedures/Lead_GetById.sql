@@ -16,8 +16,9 @@ BEGIN
 		City, 
 		[Address], 
 		[Role], 
-		RegistrationDate
+		RegistrationDate,
+		IsDeleted
 	FROM dbo.[Lead]
-	WHERE Id = @Id AND IsDeleted = 0
+	WHERE Id = @Id
 
 END
