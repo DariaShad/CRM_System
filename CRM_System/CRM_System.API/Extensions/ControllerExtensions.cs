@@ -1,4 +1,5 @@
-﻿using CRM_System.BusinessLayer;
+﻿using CRM.DataLayer;
+using CRM_System.BusinessLayer;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_System.API;
@@ -15,8 +16,9 @@ public static class ControllerExtensions
         if (controller.User is not null)
         {
             var claims = controller.User.Claims.ToList();
-            claimModel.Email = claims[0].Value;
-            //claimModel.Role = claims[1].Value;
+            claimModel.Id = Int32.Parse(claims[0].Value);
+            claimModel.Email = claims[1].Value;
+            claimModel.Role = Enum.Parse<Role>(claims[2].Value);
         }
 
         return claimModel;

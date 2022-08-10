@@ -25,5 +25,20 @@ namespace CRM.DataLayer.Repositories
                 commandType: System.Data.CommandType.StoredProcedure);
             return admin;
         }
+
+        public async Task<int> AddAdmin(AdminDto admin)
+        {
+            var id = await ConnectionString.QuerySingleAsync<int>(
+                StoredProcedures.Admin_Add,
+                param : new 
+                {
+                    admin.Password,
+                    admin.Email,
+                    admin.Role
+                },
+                commandType: System.Data.CommandType.StoredProcedure);
+
+            return id;
+        }
     }
 }

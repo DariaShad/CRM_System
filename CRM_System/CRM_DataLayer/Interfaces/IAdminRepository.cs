@@ -10,5 +10,6 @@ namespace CRM.DataLayer.Interfaces
     public interface IAdminRepository
     {
         public Task<AdminDto> GetAdminByEmail(string email);
+        public Task<int> AddAdmin(AdminDto admin);
     }
 }
