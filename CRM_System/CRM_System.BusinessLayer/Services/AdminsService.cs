@@ -1,4 +1,5 @@
-﻿using CRM.DataLayer.Interfaces;
+﻿using CRM.DataLayer;
+using CRM.DataLayer.Interfaces;
 using CRM.DataLayer.Models;
 using CRM_System.BusinessLayer.Services.Interfaces;
 using System;
@@ -28,5 +29,19 @@ namespace CRM_System.BusinessLayer.Services
             else
                 return admin;
         }
+
+        public async Task <int> AddAdmin(AdminDto admin)
+        {
+            bool isUniqueEmail = await CheckEmailForUniqueness(admin.Email);
+            if (!isUniqueEmail)
+                throw new RegisteredEmailException($"This email is registered already");
+
+            else
+                admin.Password = PasswordHash.HashPassword(admin.Password);
+            admin.Role = Role.Regular;
+
+            return await _adminRepository.AddAdmin(admin);
+        }
+        private async Task<bool> CheckEmailForUniqueness(string email) => await _adminRepository.GetAdminByEmail(email) == null;
     }
 }

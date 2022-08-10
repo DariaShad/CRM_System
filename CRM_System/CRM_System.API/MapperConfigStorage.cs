@@ -22,6 +22,8 @@ public class MapperConfigStorage : Profile
         CreateMap<AccountDto, AccountResponse>();
         CreateMap<AccountDto, AccountsByLeadIdResponse>();
         CreateMap<AccountDto, AllAccountsResponse>();
+
+        CreateMap<AdminRegistrationRequest, AdminDto>();
     }
 }
 
