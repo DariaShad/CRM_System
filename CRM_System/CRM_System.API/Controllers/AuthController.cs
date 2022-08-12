@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_System.API.Controllers
 {
-    [Authorize]
+    [AllowAnonymous]
     [ApiController]
     [Produces("application/json")]
     [Route("[controller]")]
@@ -23,9 +23,9 @@ namespace CRM_System.API.Controllers
         }
 
         [HttpPost]
-        public string Login([FromBody] LoginRequest loginRequest)
+        public async Task <string> Login([FromBody] LoginRequest loginRequest)
         {
-            var user = _authService.Login(loginRequest);
+            var user = await _authService.Login(loginRequest);
 
             return _authService.GetToken(user);
         }
