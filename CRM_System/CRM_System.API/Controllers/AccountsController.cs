@@ -25,7 +25,7 @@ public class AccountsController : ControllerBase
         _mapper = mapper;
 
     }
-    [AuthorizeByRole(Role.Regular, Role.Vip)]
+    [AuthorizeByRole(Role.Regular, Role.Vip, Role.Admin)]
     [HttpGet]
     [ProducesResponseType(typeof(AccountResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
@@ -41,7 +41,7 @@ public class AccountsController : ControllerBase
             return Ok(_mapper.Map<AccountResponse>(result));
     }
 
-    [AuthorizeByRole()]
+    [AuthorizeByRole(Role.Admin)]
     [HttpGet]
     [ProducesResponseType(typeof(AllAccountsResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
@@ -52,7 +52,7 @@ public class AccountsController : ControllerBase
         return Ok(_mapper.Map<List<AllAccountsResponse>>(result));
     }
 
-    [AuthorizeByRole(Role.Regular, Role.Vip)]
+    [AuthorizeByRole(Role.Regular, Role.Vip, Role.Admin)]
     [HttpGet]
     [ProducesResponseType(typeof(AllAccountsResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]

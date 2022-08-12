@@ -53,7 +53,7 @@ public class LeadsController : ControllerBase
             return Ok(_mapper.Map<LeadMainInfoResponse>(lead));
     }
 
-    [AuthorizeByRole]
+    [AuthorizeByRole(Role.Admin)]
     [HttpGet]
     [ProducesResponseType(typeof(List<LeadMainInfoResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
@@ -94,7 +94,7 @@ public class LeadsController : ControllerBase
         return NoContent();
     }
 
-    [AuthorizeByRole(Role.Regular, Role.Vip)]
+    [AuthorizeByRole(Role.Regular, Role.Vip, Role.Admin)]
     [HttpDelete("{id}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
@@ -113,7 +113,7 @@ public class LeadsController : ControllerBase
             return NoContent();
     }
 
-    [AuthorizeByRole(Role.Regular, Role.Vip)]
+    [AuthorizeByRole(Role.Regular, Role.Vip, Role.Admin)]
     [HttpPatch("{id}/restore")]
     [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
