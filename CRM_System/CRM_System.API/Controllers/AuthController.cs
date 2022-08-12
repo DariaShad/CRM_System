@@ -1,12 +1,17 @@
-﻿using CRM_System.BusinessLayer.Models;
+﻿using AutoMapper;
+using CRM.DataLayer;
+using CRM.DataLayer.Models;
+using CRM_System.BusinessLayer;
+using CRM_System.BusinessLayer.Models;
 using CRM_System.BusinessLayer.Services.Interfaces;
-using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RouteAttribute = Microsoft.AspNetCore.Components.RouteAttribute;
 
 namespace CRM_System.API.Controllers
 {
+    [Authorize]
     [ApiController]
+    [Produces("application/json")]
     [Route("[controller]")]
     public class AuthController : ControllerBase
     {

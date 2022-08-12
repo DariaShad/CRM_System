@@ -26,7 +26,7 @@ public class AccountsController : ControllerBase
 
     }
     [AuthorizeByRole(Role.Regular, Role.Vip, Role.Admin)]
-    [HttpGet]
+    [HttpGet("{id}")]
     [ProducesResponseType(typeof(AccountResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
@@ -53,7 +53,7 @@ public class AccountsController : ControllerBase
     }
 
     [AuthorizeByRole(Role.Regular, Role.Vip, Role.Admin)]
-    [HttpGet]
+    [HttpGet("{leadId}")]
     [ProducesResponseType(typeof(AllAccountsResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
