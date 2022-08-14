@@ -53,7 +53,7 @@ public class AccountsController : ControllerBase
     }
 
     [AuthorizeByRole(Role.Regular, Role.Vip, Role.Admin)]
-    [HttpGet("{leadId}")]
+    [HttpGet("{id}/lead")]
     [ProducesResponseType(typeof(AllAccountsResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]

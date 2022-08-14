@@ -51,7 +51,6 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-builder.Services.AddAuthorization();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -71,6 +70,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //builder.Services.AddScoped<ILeadRepository, LeadRepository>();
 //builder.Services.AddScoped<ILeadService, LeadService>();
 //
+builder.Services.AddAuthorization();
 builder.Services.AddScoped<IAccountsRepository, AccountsRepository>();
 builder.Services.AddScoped<IAccountsService, AccountsService>();
 builder.Services.AddScoped<ILeadsRepository, LeadsRepository>();
