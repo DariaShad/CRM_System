@@ -27,22 +27,24 @@ namespace CRM_System.BusinessLayer.Services
         }
 
 
-        public ClaimModel Login (LoginRequest loginRequest)
+        public async Task <ClaimModel> Login (LoginRequest loginRequest)
         {
             ClaimModel claimModel = new ClaimModel ();
 
-            var lead = _leadsRepository.GetByEmail(loginRequest.Login);
+            var lead = await _leadsRepository.GetByEmail(loginRequest.Login);
             
-            if (lead is not null && loginRequest.Login == lead.Result.Email && 
-                PasswordHash.ValidatePassword(loginRequest.Password, lead.Result.Password) && !lead.Result.IsDeleted)
+            if (lead is not null && loginRequest.Login == lead.Email && 
+                PasswordHash.ValidatePassword(loginRequest.Password, lead.Password) && !lead.IsDeleted)
 
             {
                 claimModel.Email = loginRequest.Login;
-                if (lead.Result.Role == Role.Regular)
+                if (lead.Role == Role.Regular)
 
                 {
 
                     claimModel.Role = Role.Regular;
+                    claimModel.Id = lead.Id;
+                    claimModel.Email=lead.Email;
 
                 }
 
@@ -57,6 +59,8 @@ namespace CRM_System.BusinessLayer.Services
 
             {
                 claimModel.Role = Role.Admin;
+                claimModel.Id = admin.Result.Id;
+                claimModel.Email = admin.Result.Email;
             }
 
             return claimModel;

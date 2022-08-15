@@ -36,7 +36,7 @@ public class LeadsController : ControllerBase
         return Created($"{this.GetUrl()}/{result}", result);
     }
 
-    [AuthorizeByRole(Role.Regular, Role.Vip)]
+    [AuthorizeByRole(Role.Regular, Role.Vip, Role.Admin)]
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(LeadMainInfoResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]

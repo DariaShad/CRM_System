@@ -9,7 +9,7 @@ namespace CRM_System.BusinessLayer.Services.Interfaces
 {
     public interface IAuthService
     {
-        public ClaimModel Login(LoginRequest loginRequest);
-        public string GetToken(ClaimModel claimModel);
+        Task<ClaimModel> Login(LoginRequest loginRequest);
+        string GetToken(ClaimModel claimModel);
     }
 }

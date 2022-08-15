@@ -26,7 +26,7 @@ public class AccountsController : ControllerBase
 
     }
     [AuthorizeByRole(Role.Regular, Role.Vip, Role.Admin)]
-    [HttpGet]
+    [HttpGet("{id}")]
     [ProducesResponseType(typeof(AccountResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
@@ -53,13 +53,14 @@ public class AccountsController : ControllerBase
     }
 
     [AuthorizeByRole(Role.Regular, Role.Vip, Role.Admin)]
-    [HttpGet]
+    [HttpGet("{id}/lead")]
     [ProducesResponseType(typeof(AllAccountsResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public ActionResult<List<AllAccountsResponse>> GetAllAccountsByLeadId(int leadId)
     {
-        var result = _accountService.GetAllAccountsByLeadId(leadId);
+        var claim = this.GetClaims();
+        var result = _accountService.GetAllAccountsByLeadId(leadId, claim);
         return Ok(_mapper.Map<List<AllAccountsResponse>>(result));
     }
 
@@ -71,7 +72,8 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public ActionResult <int> AddAccount([FromBody] AddAccountRequest accountRequest)
     {
-        var result=_accountService.AddAccount(_mapper.Map<AccountDto>(accountRequest));
+        var claim = this.GetClaims();
+        var result=_accountService.AddAccount(_mapper.Map<AccountDto>(accountRequest), claim);
         return Created("", result);
     }
 
@@ -83,7 +85,8 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public ActionResult UpdateAccount([FromBody] UpdateAccountRequest accountRequest, int id)
     {
-        _accountService.UpdateAccount(_mapper.Map<AccountDto>(accountRequest), id);
+        var claim = this.GetClaims();
+        _accountService.UpdateAccount(_mapper.Map<AccountDto>(accountRequest), id, claim);
         return NoContent();
     }
 
@@ -94,7 +97,8 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public ActionResult DeleteAccount(int id)
     {
-        _accountService.DeleteAccount(id);
+        var claim = this.GetClaims();
+        _accountService.DeleteAccount(id, claim);
         return NoContent();
     }
 }
