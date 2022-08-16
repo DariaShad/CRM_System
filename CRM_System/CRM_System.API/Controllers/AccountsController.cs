@@ -5,6 +5,7 @@ using CRM_System.API.Models.Requests;
 using CRM_System.API.Models.Responses;
 using CRM_System.BusinessLayer;
 using CRM_System.BusinessLayer.Services.Interfaces;
+using DataFiller;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,6 +34,8 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     public ActionResult<AccountResponse> GetAccount(int id)
     {
+        CsvCreater.CreateCsv();
+        CsvCreater.FillList();
         var claim = this.GetClaims();
         var result = _accountService.GetAccountById(id, claim);
         if (result == null)
