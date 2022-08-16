@@ -3,6 +3,7 @@ using CRM.DataLayer.Models;
 using CsvHelper;
 using Bogus;
 using CRM.DataLayer;
+using System.Data.SqlClient;
 
 namespace DataFiller
 {
@@ -37,5 +38,14 @@ namespace DataFiller
             leads = testLeads.Generate(10);
             return leads;
         }
+
+        public static void BulkInsert()
+        {
+            string connection = @"Server=80.78.240.16;Database=CRM.Db;User Id=Student;Password=qwe!23";
+            SqlConnection con = new SqlConnection(connection);
+            SqlBulkCopy objbulk = new SqlBulkCopy(con);
+            objbulk.DestinationTableName = "tblTest";
+        }
+        
     }
 }
