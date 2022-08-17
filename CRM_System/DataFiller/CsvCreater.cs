@@ -27,8 +27,8 @@ namespace DataFiller
             .RuleFor(l => l.Patronymic, f => f.Person.LastName)
             .RuleFor(l => l.Birthday, f => f.Person.DateOfBirth.Date)
             .RuleFor(l => l.Email, f => f.Person.Email)
-            .RuleFor(l => l.Phone, f => f.Phone.PhoneNumber().Replace('.', '-'))
-            .RuleFor(l => l.Passport, f => f.Phone.PhoneNumber().Remove('.'))
+            //.RuleFor(l => l.Phone, f => f.Phone.PhoneNumber())
+            //.RuleFor(l => l.Passport, f => f.Phone.PhoneNumber())
             .RuleFor(l => l.City, f => f.Random.Enum<City>())
             .RuleFor(l => l.Address, f => f.Person.Address.Street)
             .RuleFor(l => l.Password, f => f.Person.Random.Word())
@@ -41,6 +41,8 @@ namespace DataFiller
             {
                 lead.Role = Role.Regular;
                 lead.IsDeleted = false;
+                lead.Passport = "4424837625";
+                lead.Phone = "89992483762";
             }
             return leads;
         }
@@ -55,11 +57,11 @@ namespace DataFiller
             tbl.Columns.Add(new DataColumn("Email", typeof(string)));
             tbl.Columns.Add(new DataColumn("Phone", typeof(string)));
             tbl.Columns.Add(new DataColumn("Passport", typeof(string)));
-            //tbl.Columns.Add(new DataColumn("City", typeof(Enum)));
+            tbl.Columns.Add(new DataColumn("City", typeof(Enum)));
             tbl.Columns.Add(new DataColumn("Address", typeof(string)));
             tbl.Columns.Add(new DataColumn("Role", typeof(Enum)));
-            //tbl.Columns.Add(new DataColumn("Password", typeof(string)));
-            //tbl.Columns.Add(new DataColumn("RegistrationDate", typeof(string)));
+            tbl.Columns.Add(new DataColumn("Password", typeof(string)));
+            tbl.Columns.Add(new DataColumn("RegistrationDate", typeof(string)));
             tbl.Columns.Add(new DataColumn("IsDeleted", typeof(bool)));
 
             List <LeadDto> leads = FillList();
@@ -74,14 +76,17 @@ namespace DataFiller
                 dr["Email"] = leads[i].Email;
                 dr["Phone"] = leads[i].Phone;
                 dr["Passport"] = leads[i].Passport;
+                dr["City"] = leads[i].City;
                 dr["Address"] = leads[i].Address;
                 dr["Role"] = leads[i].Role;
+                dr["Password"] = leads[i].Password;
+                dr["RegistrationDate"] = leads[i].RegistrationDate;
                 dr["IsDeleted"] = leads[i].IsDeleted;
 
                 tbl.Rows.Add(dr);
             }
 
-            string connection = @"Server=DESKTOP-PMA057A;Database=CRM_System.Db;";
+            string connection = @"Server=DESKTOP-PMA057A;Database=CRM_System.DB;";
             SqlConnection con = new SqlConnection(connection);
             SqlBulkCopy objbulk = new SqlBulkCopy(con);
             objbulk.DestinationTableName = "CRM_System.Db";
