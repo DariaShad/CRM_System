@@ -26,7 +26,7 @@ namespace DataFiller
             .RuleFor(l => l.LastName, f => f.Person.LastName)
             .RuleFor(l => l.Patronymic, f => f.Person.LastName)
             .RuleFor(l => l.Birthday, f => f.Person.DateOfBirth.Date)
-            .RuleFor(l => l.Email, f => f.Person.Email)
+            //.RuleFor(l => l.Email, f => f.Person.Email)
             //.RuleFor(l => l.Phone, f => f.Phone.PhoneNumber())
             //.RuleFor(l => l.Passport, f => f.Phone.PhoneNumber())
             .RuleFor(l => l.City, f => f.Random.Enum<City>())
@@ -35,14 +35,15 @@ namespace DataFiller
             .RuleFor(l => l.RegistrationDate, f=> f.Person.DateOfBirth.Date);
 
             List<LeadDto> leads = new List<LeadDto>();
-            leads.Capacity = 100000;
-            leads = testLeads.Generate(100000);
+            leads.Capacity = 500000;
+            leads = testLeads.Generate(500000);
             foreach (LeadDto lead in leads)
             {
-                lead.Role = Role.Regular;
+                lead.Role = Role.Vip;
                 lead.IsDeleted = false;
                 lead.Passport = "4424837625";
                 lead.Phone = "89992483762";
+                lead.Email = $"{Guid.NewGuid()}@mail.ru";
             }
             return leads;
         }
@@ -50,6 +51,8 @@ namespace DataFiller
         public static void BulkInsert()
         {
             DataTable tbl = new DataTable();
+
+            //tbl.Columns.Add(new DataColumn("Id", typeof(int)));
             tbl.Columns.Add(new DataColumn("FirstName", typeof(string)));
             tbl.Columns.Add(new DataColumn("LastName", typeof(string)));
             tbl.Columns.Add(new DataColumn("Patronymic", typeof(string)));
@@ -69,6 +72,7 @@ namespace DataFiller
             for (int i = 0; i < leads.Count; i++)
             {
                 DataRow dr = tbl.NewRow();
+                //dr["Id"] = i;
                 dr["FirstName"] = leads[i].FirstName;
                 dr["LastName"] = leads[i].LastName;
                 dr["Patronymic"] = leads[i].Patronymic;
@@ -86,10 +90,11 @@ namespace DataFiller
                 tbl.Rows.Add(dr);
             }
 
-            string connection = @"Server=DESKTOP-PMA057A;Database=CRM_System.DB;";
+            string connection = @"Server=DESKTOP-PMA057A;Database=CRM_System.DB; Trusted_Connection=True"; 
             SqlConnection con = new SqlConnection(connection);
             SqlBulkCopy objbulk = new SqlBulkCopy(con);
-            objbulk.DestinationTableName = "CRM_System.Db";
+            objbulk.DestinationTableName = "Lead";
+            //objbulk.ColumnMappings.Add("Id", "Id");
             objbulk.ColumnMappings.Add("FirstName", "FirstName");
             objbulk.ColumnMappings.Add("LastName", "LastName");
             objbulk.ColumnMappings.Add("Patronymic", "Patronymic");

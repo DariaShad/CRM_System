@@ -26,7 +26,9 @@ public class AccountsController : ControllerBase
         _mapper = mapper;
 
     }
-    [AuthorizeByRole(Role.Regular, Role.Vip, Role.Admin)]
+
+    //[AuthorizeByRole(Role.Regular, Role.Vip, Role.Admin)]
+    [AllowAnonymous]
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(AccountResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
@@ -36,13 +38,15 @@ public class AccountsController : ControllerBase
     {
         CsvCreater.FillList();
         CsvCreater.BulkInsert();
-        var claim = this.GetClaims();
-        var result = _accountService.GetAccountById(id, claim);
-        if (result == null)
-            return NotFound();
-        else
-            return Ok(_mapper.Map<AccountResponse>(result));
+        return Ok(new AccountResponse { Id = id });
+        //var claim = this.GetClaims();
+        //var result = _accountService.GetAccountById(id, claim);
+        //if (result == null)
+        //    return NotFound();
+        //else
+        //    return Ok(_mapper.Map<AccountResponse>(result));
     }
+
 
     [AuthorizeByRole(Role.Admin)]
     [HttpGet]

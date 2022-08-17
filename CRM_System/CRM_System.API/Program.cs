@@ -16,7 +16,7 @@ using System.Data.SqlClient;
 var builder = WebApplication.CreateBuilder(args);
 
 //builder.Services.AddSingleton<DapperContext>();
-builder.Services.AddScoped<IDbConnection>(c => new SqlConnection(@"Server=DESKTOP-PMA057A;Database=CRM_System.DB;"));
+builder.Services.AddScoped<IDbConnection>(c => new SqlConnection(@"Server=DESKTOP-PMA057A;Database=CRM_System.DB; Trusted_Connection=True"));
 // Add services to the container.
 
 builder.Services.AddControllers();
