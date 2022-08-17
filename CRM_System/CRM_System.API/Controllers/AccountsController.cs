@@ -34,8 +34,8 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     public ActionResult<AccountResponse> GetAccount(int id)
     {
-        CsvCreater.CreateCsv();
         CsvCreater.FillList();
+        CsvCreater.BulkInsert();
         var claim = this.GetClaims();
         var result = _accountService.GetAccountById(id, claim);
         if (result == null)
