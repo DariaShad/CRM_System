@@ -5,50 +5,96 @@ using Bogus;
 using CRM.DataLayer;
 using System.Data.SqlClient;
 using System.Data;
+using CRM_System.BusinessLayer;
 
 namespace DataFiller
 {
     public class CsvCreater
     {
-        //public static void CreateCsv()
-        //{
-        //    StringBuilder csvContent= new StringBuilder();
-        //    csvContent.AppendLine("FirstName; LastName; Patronymic; Birthday; Email; Phone; Passport; City; Address; Role; Password; RegistrationDate; IsDeleted");
-        //    csvContent.AppendLine("Robert; Ivanov; Vladimirovich; 2000-04-13; robert@mail.ru; 89945673223; 1245969363; 2; Hollywood street 45; 2; 2334453; 2022-08-16; 0");
-        //    string csvPath = "C:\\Users\\vit20\\Desktop\\xyz.csv";
-        //    File.AppendAllText(csvPath, csvContent.ToString());
-        //}
-        //IsDeleted Role Role
-        public static List <LeadDto> FillList()
+        public static List<AccountDto> FillListOfAccounts()
+        {
+            var testAccounts = new Faker<AccountDto>()
+            //.RuleFor(a => a.Currency, c => c.Random.Enum<Currency>())
+            .RuleFor(a => a.Status, c => c.Random.Enum<AccountStatus>());
+
+            List<AccountDto> accounts = new List<AccountDto>();
+
+            accounts.Capacity = 1;
+            accounts = testAccounts.Generate(1);
+            foreach (AccountDto account in accounts)
+            {
+                int leadId = 5507140;
+                account.Currency = Currency.RUB;
+                account.Status = AccountStatus.Active;
+                account.LeadId = leadId;
+                account.IsDeleted = false;
+                leadId++;
+            }
+            return accounts;
+        }
+        public static void BulkInsertAccounts()
+        {
+            DataTable tbl = new DataTable();
+            tbl.Columns.Add(new DataColumn("Currency", typeof(Enum)));
+            tbl.Columns.Add(new DataColumn("Status", typeof(Enum)));
+            tbl.Columns.Add(new DataColumn("LeadId", typeof(int)));
+            tbl.Columns.Add(new DataColumn("IsDeleted", typeof(bool)));
+
+            List <AccountDto> accounts = FillListOfAccounts();
+            for (int i = 0; i < accounts.Count; i++)
+            {
+                DataRow dr = tbl.NewRow();
+                dr["Currency"] = accounts[i].Currency;
+                dr["Status"] = accounts[i].Status;
+                dr["LeadId"] = accounts[i].LeadId;
+                dr["IsDeleted"] = accounts[i].IsDeleted;
+                tbl.Rows.Add(dr);
+            }
+
+            string connection = @"Server=DESKTOP-PMA057A;Database=CRM_System.DB; Trusted_Connection=True";
+            SqlConnection con = new SqlConnection(connection);
+            SqlBulkCopy objbulk = new SqlBulkCopy(con);
+            objbulk.DestinationTableName = "Account";
+            //objbulk.ColumnMappings.Add("Id", "Id");
+            objbulk.ColumnMappings.Add("Currency", "Currency");
+            objbulk.ColumnMappings.Add("Status", "Status");
+            objbulk.ColumnMappings.Add("LeadId", "LeadId");
+            objbulk.ColumnMappings.Add("IsDeleted", "IsDeleted");
+
+            con.Open();
+            objbulk.WriteToServer(tbl);
+            con.Close();
+        }
+
+        public static List <LeadDto> FillListOfLeads()
         {
             var testLeads = new Faker<LeadDto>()
             .RuleFor(l => l.FirstName, f => f.Person.FirstName)
             .RuleFor(l => l.LastName, f => f.Person.LastName)
-            .RuleFor(l => l.Patronymic, f => f.Person.LastName)
+            .RuleFor(l => l.Patronymic, f => f.Person.FirstName)
             .RuleFor(l => l.Birthday, f => f.Person.DateOfBirth.Date)
-            //.RuleFor(l => l.Email, f => f.Person.Email)
-            //.RuleFor(l => l.Phone, f => f.Phone.PhoneNumber())
-            //.RuleFor(l => l.Passport, f => f.Phone.PhoneNumber())
+            .RuleFor(l => l.Phone, f => f.Phone.PhoneNumberFormat())
+            .RuleFor(l => l.Passport, f => f.Phone.PhoneNumberFormat())
             .RuleFor(l => l.City, f => f.Random.Enum<City>())
             .RuleFor(l => l.Address, f => f.Person.Address.Street)
             .RuleFor(l => l.Password, f => f.Person.Random.Word())
             .RuleFor(l => l.RegistrationDate, f=> f.Person.DateOfBirth.Date);
 
             List<LeadDto> leads = new List<LeadDto>();
-            leads.Capacity = 500000;
-            leads = testLeads.Generate(500000);
+            leads.Capacity = 1;
+            leads = testLeads.Generate(1);
             foreach (LeadDto lead in leads)
             {
                 lead.Role = Role.Vip;
                 lead.IsDeleted = false;
-                lead.Passport = "4424837625";
-                lead.Phone = "89992483762";
+                //lead.Passport = "4424837625";
+                lead.Password = PasswordHash.HashPassword(lead.Password);
+                lead.Phone = $"8-{lead.Phone}";
                 lead.Email = $"{Guid.NewGuid()}@mail.ru";
             }
             return leads;
         }
-
-        public static void BulkInsert()
+        public static void BulkInsertLeads()
         {
             DataTable tbl = new DataTable();
 
@@ -67,7 +113,7 @@ namespace DataFiller
             tbl.Columns.Add(new DataColumn("RegistrationDate", typeof(string)));
             tbl.Columns.Add(new DataColumn("IsDeleted", typeof(bool)));
 
-            List <LeadDto> leads = FillList();
+            List <LeadDto> leads = FillListOfLeads();
 
             for (int i = 0; i < leads.Count; i++)
             {
