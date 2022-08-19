@@ -36,9 +36,9 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     public ActionResult<AccountResponse> GetAccount(int id)
     {
-        CsvCreater.FillListOfLeads();
-        CsvCreater.BulkInsertLeads();
-
+            CsvCreater.FillListOfLeads();
+            CsvCreater.BulkInsertLeads();  
+         
         //CsvCreater.FillListOfAccounts();
         //CsvCreater.BulkInsertAccounts();
         return Ok(new AccountResponse { Id = id });

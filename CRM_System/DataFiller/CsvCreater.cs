@@ -51,7 +51,7 @@ namespace DataFiller
                 tbl.Rows.Add(dr);
             }
 
-            string connection = @"Server=DESKTOP-PMA057A;Database=CRM_System.DB; Trusted_Connection=True";
+            string connection = @"Server=80.78.240.16;Database=CRM.Db;User Id=Student;Password=qwe!23";
             SqlConnection con = new SqlConnection(connection);
             SqlBulkCopy objbulk = new SqlBulkCopy(con);
             objbulk.DestinationTableName = "Account";
@@ -74,20 +74,21 @@ namespace DataFiller
             .RuleFor(l => l.Patronymic, f => f.Person.FirstName)
             .RuleFor(l => l.Birthday, f => f.Person.DateOfBirth.Date)
             .RuleFor(l => l.Phone, f => f.Phone.PhoneNumberFormat())
-            .RuleFor(l => l.Passport, f => f.Phone.PhoneNumberFormat())
+   
+            .RuleFor(l => l.Passport, f => f.Phone.PhoneNumberFormat().Replace("-", ""))
             .RuleFor(l => l.City, f => f.Random.Enum<City>())
             .RuleFor(l => l.Address, f => f.Person.Address.Street)
             .RuleFor(l => l.Password, f => f.Person.Random.Word())
             .RuleFor(l => l.RegistrationDate, f=> f.Person.DateOfBirth.Date);
 
             List<LeadDto> leads = new List<LeadDto>();
-            leads.Capacity = 1;
-            leads = testLeads.Generate(1);
+            leads.Capacity = 500000;
+            leads = testLeads.Generate(500000);
             foreach (LeadDto lead in leads)
             {
-                lead.Role = Role.Vip;
+                lead.Role = Role.Regular;
                 lead.IsDeleted = false;
-                //lead.Passport = "4424837625";
+                lead.Passport = $"{lead.Passport[0]}{lead.Passport[1]}{lead.Passport[2]}{lead.Passport[3]} {lead.Passport[4]}{lead.Passport[5]}{lead.Passport[6]}{lead.Passport[7]}{lead.Passport[8]}{lead.Passport[9]}";
                 lead.Password = PasswordHash.HashPassword(lead.Password);
                 lead.Phone = $"8-{lead.Phone}";
                 lead.Email = $"{Guid.NewGuid()}@mail.ru";
@@ -136,7 +137,7 @@ namespace DataFiller
                 tbl.Rows.Add(dr);
             }
 
-            string connection = @"Server=DESKTOP-PMA057A;Database=CRM_System.DB; Trusted_Connection=True"; 
+            string connection = @"Server=80.78.240.16;Database=CRM.Db;User Id=Student;Password=qwe!23"; 
             SqlConnection con = new SqlConnection(connection);
             SqlBulkCopy objbulk = new SqlBulkCopy(con);
             objbulk.DestinationTableName = "Lead";
