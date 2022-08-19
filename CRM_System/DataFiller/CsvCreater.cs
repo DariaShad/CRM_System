@@ -13,9 +13,9 @@ namespace DataFiller
     {
         public static List<AccountDto> FillListOfAccounts()
         {
-            var testAccounts = new Faker<AccountDto>()
+            var testAccounts = new Faker<AccountDto>();
             //.RuleFor(a => a.Currency, c => c.Random.Enum<Currency>())
-            .RuleFor(a => a.Status, c => c.Random.Enum<AccountStatus>());
+            //.RuleFor(a => a.Status, c => c.Random.Enum<AccountStatus>());
 
             List<AccountDto> accounts = new List<AccountDto>();
 
