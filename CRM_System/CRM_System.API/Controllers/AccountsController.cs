@@ -36,12 +36,16 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     public ActionResult<AccountResponse> GetAccount(int id)
     {
-            CsvCreater.FillListOfLeads();
-            CsvCreater.BulkInsertLeads();  
+        //for (int i=0; i<150; i++)
+        
+            //CsvCreater.BulkInsertLeads();  
+            CsvCreater.BulkInsertAccounts();
+        
+            return Ok(new AccountResponse { Id = id });
+            
          
         //CsvCreater.FillListOfAccounts();
         //CsvCreater.BulkInsertAccounts();
-        return Ok(new AccountResponse { Id = id });
         //var claim = this.GetClaims();
         //var result = _accountService.GetAccountById(id, claim);
         //if (result == null)

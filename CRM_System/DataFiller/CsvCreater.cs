@@ -19,12 +19,12 @@ namespace DataFiller
 
             List<AccountDto> accounts = new List<AccountDto>();
 
-            accounts.Capacity = 1;
-            accounts = testAccounts.Generate(1);
+            accounts.Capacity = 400000;
+            accounts = testAccounts.Generate(400000);
+            int leadId = 4550001;
             foreach (AccountDto account in accounts)
             {
-                int leadId = 5507140;
-                account.Currency = Currency.RUB;
+                account.Currency = Currency.JPY;
                 account.Status = AccountStatus.Active;
                 account.LeadId = leadId;
                 account.IsDeleted = false;
@@ -82,11 +82,11 @@ namespace DataFiller
             .RuleFor(l => l.RegistrationDate, f=> f.Person.DateOfBirth.Date);
 
             List<LeadDto> leads = new List<LeadDto>();
-            leads.Capacity = 500000;
-            leads = testLeads.Generate(500000);
+            leads.Capacity = 100000;
+            leads = testLeads.Generate(100000);
             foreach (LeadDto lead in leads)
             {
-                lead.Role = Role.Regular;
+                lead.Role = Role.Vip;
                 lead.IsDeleted = false;
                 lead.Passport = $"{lead.Passport[0]}{lead.Passport[1]}{lead.Passport[2]}{lead.Passport[3]} {lead.Passport[4]}{lead.Passport[5]}{lead.Passport[6]}{lead.Passport[7]}{lead.Passport[8]}{lead.Passport[9]}";
                 lead.Password = PasswordHash.HashPassword(lead.Password);
