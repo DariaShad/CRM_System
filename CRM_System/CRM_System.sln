@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32319.34
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRM.DataLayer", "CRM_DataLayer\CRM.DataLayer.csproj", "{3FBD2995-B7B3-434A-821B-E7136A3BCE30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRM_System.DataLayer", "CRM_DataLayer\CRM_System.DataLayer.csproj", "{3FBD2995-B7B3-434A-821B-E7136A3BCE30}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CRM_System.DB", "CRM_System.DB\CRM_System.DB.sqlproj", "{C37C13B5-AC5D-45B4-94CC-644C599591F9}"
 EndProject
@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRM_System.API.Tests", "CRM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRM_System.BusinessLayer.Tests", "CRM_System.BusinessLayer.Tests\CRM_System.BusinessLayer.Tests.csproj", "{A349E005-617F-42EE-8AE7-DD498B8870B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataFiller", "DataFiller\DataFiller.csproj", "{A6F2B760-1CF2-47F4-8F65-5CED6D852276}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataFiller", "DataFiller\DataFiller.csproj", "{A6F2B760-1CF2-47F4-8F65-5CED6D852276}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

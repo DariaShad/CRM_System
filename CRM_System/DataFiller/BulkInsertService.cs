@@ -6,6 +6,7 @@ using CRM.DataLayer;
 using System.Data.SqlClient;
 using System.Data;
 using CRM_System.BusinessLayer;
+using CRM_System.BusinessLayer.Infrastucture;
 
 namespace DataFiller
 {

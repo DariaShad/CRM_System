@@ -1,10 +1,11 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace CRM_System.BusinessLayer.Infrastuctures;
+namespace CRM_System.BusinessLayer.Infrastucture;
 
 public class AuthOptions
 {
+    // let's name it correctly)
     public const string Issuer = "MyAuthServer";
     public const string Audience = "MyAuthClient";
     const string Key = "mysupersecret_secretkey!123";

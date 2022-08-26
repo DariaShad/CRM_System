@@ -26,9 +26,9 @@ public class ExceptionMiddleware
         {
             await HandleExceptionAsync(httpContext, HttpStatusCode.Forbidden, error.Message);
         }
-        catch (RegisteredEmailException error)
+        catch (NotUniqueEmailException error)
         {
-            await HandleExceptionAsync(httpContext, HttpStatusCode.BadRequest, error.Message);
+            await HandleExceptionAsync(httpContext, HttpStatusCode.Conflict, error.Message);
         }
         catch (Exception error)
         {
@@ -41,7 +41,7 @@ public class ExceptionMiddleware
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)statusCode;
 
-        await context.Response.WriteAsync(new ErrorDetails()
+        await context.Response.WriteAsync(new ErrorResult()
         {
             StatusCode = context.Response.StatusCode,
             Message = message

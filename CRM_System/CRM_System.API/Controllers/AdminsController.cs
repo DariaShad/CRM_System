@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_System.API;
 
-[AllowAnonymous]
+[AuthorizeByRole(Role.Admin)]
 [ApiController]
 [Produces("application/json")]
 [Route("[controller]")]
@@ -35,15 +35,4 @@ public class AdminsController : ControllerBase
         var result = await _adminsService.AddAdmin(_mapper.Map<AdminDto>(adminRegistrationRequest));
         return Created($"{this.GetUrl()}/{result}", result);
     }
-    //[AuthorizeByRole(Role.Regular, Role.Vip)]
-    //[HttpGet("{email}")]
-    //[ProducesResponseType(typeof(LeadMainInfoResponse), StatusCodes.Status200OK)]
-    //[ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
-    //[ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    //[ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
-    //public async Task<ActionResult<LeadMainInfoResponse>> GetAdminByEmail(string ema)
-    //{
-
-    //}
-
 }

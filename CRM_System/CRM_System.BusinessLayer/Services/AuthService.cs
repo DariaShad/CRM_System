@@ -1,17 +1,11 @@
-﻿using CRM.DataLayer.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.IdentityModel.Tokens;
-using CRM_System.BusinessLayer.Models;
-using CRM_System.BusinessLayer.Infrastuctures;
-using System.Data;
-using CRM.DataLayer;
+﻿using CRM.DataLayer;
+using CRM.DataLayer.Interfaces;
+using CRM_System.BusinessLayer.Infrastucture;
 using CRM_System.BusinessLayer.Services.Interfaces;
+using Microsoft.IdentityModel.Tokens;
+using System.Data;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace CRM_System.BusinessLayer.Services
 {
@@ -26,55 +20,48 @@ namespace CRM_System.BusinessLayer.Services
             _adminRepository = adminRepository;
         }
 
-
-        public async Task <ClaimModel> Login (LoginRequest loginRequest)
+        public async Task<ClaimModel> Login(string login, string password)
         {
-            ClaimModel claimModel = new ClaimModel ();
+            ClaimModel claimModel = new ClaimModel();
 
-            var lead = await _leadsRepository.GetByEmail(loginRequest.Login);
-            
-            if (lead is not null && loginRequest.Login == lead.Email && 
-                PasswordHash.ValidatePassword(loginRequest.Password, lead.Password) && !lead.IsDeleted)
+            var lead = await _leadsRepository.GetByEmail(login);
 
+            // move to another class
+            if (lead is not null && login == lead.Email &&
+                PasswordHash.ValidatePassword(password, lead.Password) && !lead.IsDeleted)
             {
-                claimModel.Email = loginRequest.Login;
+                claimModel.Email = login;
                 if (lead.Role == Role.Regular)
-
                 {
-
                     claimModel.Role = Role.Regular;
                     claimModel.Id = lead.Id;
-                    claimModel.Email=lead.Email;
-
+                    claimModel.Email = lead.Email;
                 }
-
-                else claimModel.Role = Role.Vip;
-
+                else 
+                    claimModel.Role = Role.Vip;
             }
 
-            var admin = _adminRepository.GetAdminByEmail(loginRequest.Login);
+            var admin = await _adminRepository.GetAdminByEmail(login);
 
-            if (admin is not null && loginRequest.Login == admin.Result.Email &&
-                PasswordHash.ValidatePassword(loginRequest.Password, admin.Result.Password) && !admin.Result.IsDeleted)
-
+            // move to another class
+            if (admin is not null && login == admin.Email &&
+                PasswordHash.ValidatePassword(password, admin.Password) && !admin.IsDeleted)
             {
                 claimModel.Role = Role.Admin;
-                claimModel.Id = admin.Result.Id;
-                claimModel.Email = admin.Result.Email;
+                claimModel.Id = admin.Id;
+                claimModel.Email = admin.Email;
             }
 
             return claimModel;
         }
+
         public string GetToken(ClaimModel claimModel)
         {
             if (claimModel is null || claimModel.Email is null)
-            {
                 throw new DataException("There are empty properties");
-            }
 
             var claims = new List<Claim>
             {
-                { new Claim (ClaimTypes.Email, claimModel.Email) },
                 { new Claim (ClaimTypes.Role, claimModel.Role.ToString()) },
                 { new Claim (ClaimTypes.NameIdentifier, claimModel.Id.ToString()) }
             };
@@ -85,7 +72,6 @@ namespace CRM_System.BusinessLayer.Services
                 claims: claims,
                 expires: DateTime.UtcNow.Add(TimeSpan.FromDays(1)),
                 signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-                
 
             return new JwtSecurityTokenHandler().WriteToken(jwt);
         }

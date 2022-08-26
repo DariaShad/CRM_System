@@ -1,12 +1,8 @@
 ﻿using CRM.DataLayer;
 using CRM.DataLayer.Interfaces;
 using CRM.DataLayer.Models;
+using CRM_System.BusinessLayer.Infrastucture;
 using CRM_System.BusinessLayer.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CRM_System.BusinessLayer.Services
 {
@@ -34,7 +30,7 @@ namespace CRM_System.BusinessLayer.Services
         {
             bool isUniqueEmail = await CheckEmailForUniqueness(admin.Email);
             if (!isUniqueEmail)
-                throw new RegisteredEmailException($"This email is registered already");
+                throw new NotUniqueEmailException($"This email is registered already");
 
             else
                 admin.Password = PasswordHash.HashPassword(admin.Password);

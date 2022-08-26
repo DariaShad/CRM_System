@@ -3,15 +3,15 @@
 public enum City
 {
     Moscow = 1,
-    Saint_Peterburg,
+    SaintPetersburg,
     Novosibirsk,
     Ekaterinburg,
     Kazan,
-    Nizhny_Novgorod,
+    NizhnyNovgorod,
     Chelyabinsk,
     Samara,
     Ufa,
-    Rostov_on_Don,
+    RostovOnDon,
     Omsk,
     Krasnoyarsk,
     Voronezh,

@@ -13,33 +13,31 @@ namespace CRM_System.BusinessLayer.Services
         {
             _accountRepository = accountRepository;
         }
+
         public int AddAccount(AccountDto accountDTO, ClaimModel claim)
         {
             CheckAccessForLeadAndManager(accountDTO.Id, claim);
-            var result = _accountRepository.AddAccount(accountDTO);
-            return result;
+            return _accountRepository.AddAccount(accountDTO);
         }
 
         public void DeleteAccount(int id, ClaimModel claim)
         {
-            _accountRepository.DeleteAccount(id);
             CheckAccessForLeadAndManager(id, claim);
+            _accountRepository.DeleteAccount(id);
         }
 
         public AccountDto GetAccountById(int id, ClaimModel claim)
         {
             CheckAccessForLeadAndManager(id, claim); //Написано неправильно!!! нужно переделать под айди ЛИДА
-            var result = _accountRepository.GetAccountById(id);
-            return result;
+            return _accountRepository.GetAccountById(id);
         }
 
-        public List<AccountDto> GetAllAccounts() => _accountRepository.GetAllAccounts().ToList();
+        public List<AccountDto> GetAllAccounts() => _accountRepository.GetAllAccounts();
 
         public List<AccountDto> GetAllAccountsByLeadId(int leadId, ClaimModel claim)
         {
             CheckAccessForLeadAndManager(leadId, claim);
-            var result = _accountRepository.GetAllAccounts();
-            return result;
+            return _accountRepository.GetAllAccounts();
         }
 
         public void UpdateAccount(AccountDto account, int id, ClaimModel claim)
@@ -48,14 +46,15 @@ namespace CRM_System.BusinessLayer.Services
             _accountRepository.UpdateAccount(account, id);
         }
 
-        private async Task CheckAccessForLeadAndManager(int id, ClaimModel claims)
+
+        // move to another class
+        private void CheckAccessForLeadAndManager(int id, ClaimModel claims)
         {
             if (claims is not null && claims.Id != id ||
                 claims.Role != Role.Admin)
             {
                 throw new AccessDeniedException($"Access denied");
-            }    
-                
+            }
         }
 
     }

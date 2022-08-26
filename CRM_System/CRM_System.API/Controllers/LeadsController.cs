@@ -26,17 +26,16 @@ public class LeadsController : ControllerBase
     [AllowAnonymous]
     [HttpPost]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status409Conflict)]
     [ProducesResponseType(typeof(void), StatusCodes.Status422UnprocessableEntity)]
-    public async Task<ActionResult<int>> Add([FromBody] LeadRegistrationRequest request)
+    public async Task<ActionResult<int>> Register([FromBody] LeadRegistrationRequest request)
     {
+        // add validator
         var result = await _leadsService.Add(_mapper.Map<LeadDto>(request));
         return Created($"{this.GetUrl()}/{result}", result);
     }
 
-    [AuthorizeByRole(Role.Regular, Role.Vip, Role.Admin)]
+    [Authorize]
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(LeadMainInfoResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
@@ -57,15 +56,10 @@ public class LeadsController : ControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(List<LeadMainInfoResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<List<LeadMainInfoResponse>>> GetAll()
     {
         var leads = await _leadsService.GetAll();
-
-        if (leads is null)
-            return NotFound();
-        else
-            return Ok(_mapper.Map<List<LeadAllInfoResponse>>(leads));
+        return Ok(_mapper.Map<List<LeadAllInfoResponse>>(leads));
     }
 
     [AuthorizeByRole(Role.Regular, Role.Vip)]
@@ -74,11 +68,13 @@ public class LeadsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status422UnprocessableEntity)]
     public async Task<ActionResult> Update([FromBody] LeadUpdateRequest request, int id)
     {
+        // add validator
         var claims = this.GetClaims();
 
+        // automapping
         var newLead = new LeadDto()
         {
             FirstName = request.FirstName,
@@ -94,41 +90,31 @@ public class LeadsController : ControllerBase
         return NoContent();
     }
 
-    [AuthorizeByRole(Role.Regular, Role.Vip, Role.Admin)]
+    [Authorize]
     [HttpDelete("{id}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     public async Task<ActionResult> Remove(int id)
     {
         var claims = this.GetClaims();
-        var lead = await _leadsService.GetById(id, claims);
 
-        if (lead is null)
-            return NotFound();
-        else
-            await _leadsService.DeleteOrRestore(id, true, claims);
-            return NoContent();
+        await _leadsService.DeleteOrRestore(id, true, claims);
+        return NoContent();
     }
 
-    [AuthorizeByRole(Role.Regular, Role.Vip, Role.Admin)]
+    [AuthorizeByRole(Role.Admin)]
     [HttpPatch("{id}/restore")]
     [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     public async Task<ActionResult> Restore(int id)
     {
         var claims = this.GetClaims();
-        var lead = await _leadsService.GetById(id, claims);
 
-        if (lead is null)
-            return NotFound();
-        else
-            await _leadsService.DeleteOrRestore(id, false, claims);
-            return NoContent();
+        await _leadsService.DeleteOrRestore(id, false, claims);
+        return NoContent();
     }
 }

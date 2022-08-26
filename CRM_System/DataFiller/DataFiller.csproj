@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CRM_DataLayer\CRM.DataLayer.csproj" />
+    <ProjectReference Include="..\CRM_DataLayer\CRM_System.DataLayer.csproj" />
     <ProjectReference Include="..\CRM_System.BusinessLayer\CRM_System.BusinessLayer.csproj" />
   </ItemGroup>
 

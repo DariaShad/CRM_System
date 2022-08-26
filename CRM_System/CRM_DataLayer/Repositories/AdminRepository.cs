@@ -14,21 +14,20 @@ namespace CRM.DataLayer.Repositories
     {
         public AdminRepository(IDbConnection dbConnection) : base(dbConnection)
         {
-
         }
 
         public async Task<AdminDto> GetAdminByEmail(string email)
         {
-            var admin = await ConnectionString.QueryFirstOrDefaultAsync<AdminDto>(
+            var admin = await _connectionString.QueryFirstOrDefaultAsync<AdminDto>(
                 StoredProcedures.Admin_GetAdminByEmail,
                 param: new { email },
-                commandType: System.Data.CommandType.StoredProcedure);
+                commandType: CommandType.StoredProcedure);
             return admin;
         }
 
         public async Task<int> AddAdmin(AdminDto admin)
         {
-            var id = await ConnectionString.QuerySingleAsync<int>(
+            var id = await _connectionString.QuerySingleAsync<int>(
                 StoredProcedures.Admin_Add,
                 param : new 
                 {
@@ -36,7 +35,7 @@ namespace CRM.DataLayer.Repositories
                     admin.Email,
                     admin.Role
                 },
-                commandType: System.Data.CommandType.StoredProcedure);
+                commandType: CommandType.StoredProcedure);
 
             return id;
         }

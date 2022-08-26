@@ -1,5 +1,4 @@
 ﻿using CRM.DataLayer;
-using CRM.DataLayer.Enums;
 
 namespace CRM_System.API.Models.Requests
 {

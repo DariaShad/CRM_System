@@ -1,10 +1,9 @@
 using CRM.DataLayer;
 using CRM.DataLayer.Interfaces;
 using CRM.DataLayer.Repositories;
-//using CRM.DataLayer.Interfaces;
 using CRM_System.API;
-using CRM_System.API.Infrastucture;
 using CRM_System.BusinessLayer;
+using CRM_System.BusinessLayer.Infrastucture;
 using CRM_System.BusinessLayer.Services;
 using CRM_System.BusinessLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -16,12 +15,16 @@ using System.Data.SqlClient;
 var builder = WebApplication.CreateBuilder(args);
 
 //builder.Services.AddSingleton<DapperContext>();
+
+// to env variable
 builder.Services.AddScoped<IDbConnection>(c => new SqlConnection(@"Server=80.78.240.16;Database=CRM.Db;User Id=Student;Password=qwe!23"));
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+// to extension methods
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "CRM", Version = "v1" });
@@ -51,7 +54,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-
+// to extension methods
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -71,6 +74,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //builder.Services.AddScoped<ILeadService, LeadService>();
 //
 builder.Services.AddAuthorization();
+
+// to extension methods
 builder.Services.AddScoped<IAccountsRepository, AccountsRepository>();
 builder.Services.AddScoped<IAccountsService, AccountsService>();
 builder.Services.AddScoped<ILeadsRepository, LeadsRepository>();
@@ -81,7 +86,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAccountsRepository, AccountsRepository>();
 builder.Services.AddScoped<IAccountsService, AccountsService>();
 
-builder.Services.AddAutoMapper(typeof(MapperConfigStorage));
+builder.Services.AddAutoMapper(typeof(MapperConfig));
 
 var app = builder.Build();
 

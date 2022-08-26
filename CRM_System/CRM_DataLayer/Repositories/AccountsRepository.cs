@@ -1,12 +1,7 @@
 ﻿using CRM.DataLayer.Interfaces;
 using CRM.DataLayer.Models;
 using Dapper;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CRM.DataLayer.Repositories
 {
@@ -16,9 +11,11 @@ namespace CRM.DataLayer.Repositories
         {
         }
 
+        // rewrite all methods to async
+
         public int AddAccount(AccountDto accountDTO)
         {
-            var id = ConnectionString.QuerySingle<int>(
+            var id = _connectionString.QuerySingle<int>(
                 StoredProcedures.Account_Add,
                 param: new
                 {
@@ -26,16 +23,15 @@ namespace CRM.DataLayer.Repositories
                     accountDTO.Currency,
                     accountDTO.Status
                 },
-                commandType: System.Data.CommandType.StoredProcedure);
+                commandType: CommandType.StoredProcedure);
             return id;
-                
         }
 
         public List <AccountDto> GetAllAccounts()
         {
-            var accounts = ConnectionString.Query<AccountDto>(
+            var accounts = _connectionString.Query<AccountDto>(
                 StoredProcedures.Account_GetAll,
-                commandType: System.Data.CommandType.StoredProcedure)
+                commandType: CommandType.StoredProcedure)
                 .ToList();
             return accounts;
         }
@@ -43,32 +39,32 @@ namespace CRM.DataLayer.Repositories
         //GetBalance, Last transaction date
         public AccountDto GetAccountById (int id)
         {
-            var account = ConnectionString.QueryFirstOrDefault<AccountDto>(
+            var account = _connectionString.QueryFirstOrDefault<AccountDto>(
                StoredProcedures.Account_GetById,
                 param: new { id },
-                commandType: System.Data.CommandType.StoredProcedure);
+                commandType: CommandType.StoredProcedure);
 
             return account;
         }
 
         public void UpdateAccount(AccountDto account, int id)
         {
-            ConnectionString.QuerySingleOrDefault(
+            _connectionString.Execute(
                 StoredProcedures.Account_Update,
                 param: new
                 {
                     account.Currency
+                    // isDeleted
                 },
-                 commandType: System.Data.CommandType.StoredProcedure);
+                 commandType: CommandType.StoredProcedure);
         }
 
         public void DeleteAccount(int accountId)
         {
-            ConnectionString.QuerySingleOrDefault(
+            _connectionString.Execute(
                 StoredProcedures.Account_Delete,
                 param: new { id= accountId},
                 commandType: System.Data.CommandType.StoredProcedure);
         }
-        //GetBalance
     }
 }

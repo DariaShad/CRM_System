@@ -7,11 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CRM_DataLayer\CRM.DataLayer.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Exceptions\" />
+    <ProjectReference Include="..\CRM_DataLayer\CRM_System.DataLayer.csproj" />
   </ItemGroup>
 
   <ItemGroup>

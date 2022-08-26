@@ -3,6 +3,5 @@
 public enum AccountStatus
 {
     Active = 1,
-    Frozen,
-    Blocked
+    Frozen
 }

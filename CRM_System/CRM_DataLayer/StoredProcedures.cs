@@ -1,6 +1,6 @@
 ﻿namespace CRM.DataLayer;
 
-public class StoredProcedures
+public static class StoredProcedures
 {
     public const string Lead_Add = "Lead_Add";
     public const string Lead_GetAll = "Lead_GetAll";

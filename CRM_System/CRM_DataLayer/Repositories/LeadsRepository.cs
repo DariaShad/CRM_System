@@ -13,7 +13,7 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
 
     public async Task<int> Add(LeadDto leadDto)
     {
-        var id = await ConnectionString.QuerySingleAsync<int>(
+        var id = await _connectionString.QuerySingleAsync<int>(
             StoredProcedures.Lead_Add,
             param: new
             {
@@ -37,7 +37,7 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
 
     public async Task<List<LeadDto>> GetAll()
     {
-        var leads = ConnectionString.Query<LeadDto>(
+        var leads = _connectionString.Query<LeadDto>(
             StoredProcedures.Lead_GetAll,
             commandType: System.Data.CommandType.StoredProcedure)
             .ToList();
@@ -47,7 +47,8 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
 
     public async Task<LeadDto> GetById(int id)
     {
-        var lead = await ConnectionString.QueryFirstOrDefaultAsync<LeadDto>(
+        // SP must return accounts as well; need implement one-to-many mapping
+        var lead = await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
             StoredProcedures.Lead_GetAllInfoByLeadId,
             param: new { id },
             commandType: System.Data.CommandType.StoredProcedure);
@@ -57,7 +58,7 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
 
     public async Task<LeadDto> GetByEmail(string email)
     {
-        var lead = await ConnectionString.QueryFirstOrDefaultAsync<LeadDto>(
+        var lead = await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
             StoredProcedures.Lead_GetLeadByEmail,
             param: new { email },
             commandType: System.Data.CommandType.StoredProcedure);
@@ -67,7 +68,7 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
 
     public async Task Update(LeadDto leadDto)
     {
-        await ConnectionString.QueryFirstOrDefaultAsync<LeadDto>(
+        await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
             StoredProcedures.Account_Update,
             param: new
             {
@@ -85,13 +86,14 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
 
     public async Task DeleteOrRestore(int id, bool isDeleting)
     {
+        // rewrite to single SP with @IsDeleted param
         if (isDeleting)
-            await ConnectionString.QueryFirstOrDefaultAsync<LeadDto>(
+            await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
                 StoredProcedures.Lead_Delete,
                 param: new { id },
                 commandType: System.Data.CommandType.StoredProcedure);
         else
-            await ConnectionString.QueryFirstOrDefaultAsync<LeadDto>(
+            await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
                 StoredProcedures.Lead_Restore,
                 param: new { id },
                 commandType: System.Data.CommandType.StoredProcedure);

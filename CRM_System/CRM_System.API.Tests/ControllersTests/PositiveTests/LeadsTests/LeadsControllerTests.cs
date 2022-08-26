@@ -19,7 +19,7 @@ public class LeadsControllerTests
     public void SetUp()
     {
         _leadsServiceMock = new Mock<ILeadsService>();
-        _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<MapperConfigStorage>()));
+        _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<MapperConfig>()));
         _sut = new LeadsController(_leadsServiceMock.Object, _mapper);
         _claims = new();
     }
@@ -48,7 +48,7 @@ public class LeadsControllerTests
             .ReturnsAsync(1);
 
         //when
-        var actual = await _sut.Add(lead);
+        var actual = await _sut.Register(lead);
 
         //then
         var actualResult = actual.Result as CreatedResult;

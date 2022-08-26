@@ -29,7 +29,7 @@ namespace CRM_System.API.Tests.ControllersTests
         [SetUp]
         public void Setup()
         {
-            _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<MapperConfigStorage>()));
+            _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<MapperConfig>()));
             _claims = new ClaimModel();
             _accountsServiceMock= new Mock<IAccountsService>();
             _sut = new AccountsController(_accountsServiceMock.Object, _mapper);
@@ -47,18 +47,6 @@ namespace CRM_System.API.Tests.ControllersTests
 
             //then
             _accountsServiceMock.Verify(a => a.GetAccountById(It.Is<int>(i => i == accountId)), Times.Once);
-            var actualResult = actual.Result as ObjectResult;
-            Assert.AreEqual(StatusCodes.Status200OK, actualResult.StatusCode);
-        }
-
-        [Test]
-        public void GetAllAccounts_ObjectResultPassed()
-        {
-            //given
-            //when
-            var actual=_sut.GetAllAccounts();
-
-            //then
             var actualResult = actual.Result as ObjectResult;
             Assert.AreEqual(StatusCodes.Status200OK, actualResult.StatusCode);
         }

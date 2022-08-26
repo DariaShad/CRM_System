@@ -1,8 +1,4 @@
-﻿using AutoMapper;
-using CRM.DataLayer;
-using CRM.DataLayer.Models;
-using CRM_System.BusinessLayer;
-using CRM_System.BusinessLayer.Models;
+﻿using CRM_System.BusinessLayer.Models;
 using CRM_System.BusinessLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +21,7 @@ namespace CRM_System.API.Controllers
         [HttpPost]
         public async Task <string> Login([FromBody] LoginRequest loginRequest)
         {
-            var user = await _authService.Login(loginRequest);
+            var user = await _authService.Login(loginRequest.Login, loginRequest.Password);
 
             return _authService.GetToken(user);
         }
