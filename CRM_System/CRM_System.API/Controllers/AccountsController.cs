@@ -27,8 +27,7 @@ public class AccountsController : ControllerBase
 
     }
 
-    //[AuthorizeByRole(Role.Regular, Role.Vip, Role.Admin)]
-    [AllowAnonymous]
+    [AuthorizeByRole(Role.Regular, Role.Vip, Role.Admin)]
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(AccountResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
@@ -40,18 +39,15 @@ public class AccountsController : ControllerBase
         //BulkInsertService.FillListOfAccounts();
         //BulkInsertService.BulkInsertAccounts();
         //BulkInsertService.BulkInsertLeads();  
-        BulkInsertService.BulkInsertAccounts();
-        
-            return Ok(new AccountResponse { Id = id });
+        //BulkInsertService.BulkInsertAccounts();
+        // return Ok(new AccountResponse { Id = id });
 
-
-       
-        //var claim = this.GetClaims();
-        //var result = _accountService.GetAccountById(id, claim);
-        //if (result == null)
-        //    return NotFound();
-        //else
-        //    return Ok(_mapper.Map<AccountResponse>(result));
+        var claim = this.GetClaims();
+        var result = _accountService.GetAccountById(id, claim);
+        if (result == null)
+            return NotFound();
+        else
+            return Ok(_mapper.Map<AccountResponse>(result));
     }
 
 
