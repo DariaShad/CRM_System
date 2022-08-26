@@ -5,6 +5,7 @@ using CRM_System.API.Models.Requests;
 using CRM_System.API.Models.Responses;
 using CRM_System.BusinessLayer;
 using CRM_System.BusinessLayer.Services.Interfaces;
+using DataFiller;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,6 +26,7 @@ public class AccountsController : ControllerBase
         _mapper = mapper;
 
     }
+
     [AuthorizeByRole(Role.Regular, Role.Vip, Role.Admin)]
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(AccountResponse), StatusCodes.Status200OK)]
@@ -33,6 +35,13 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     public ActionResult<AccountResponse> GetAccount(int id)
     {
+        //for (int i=0; i<150; i++)
+        //BulkInsertService.FillListOfAccounts();
+        //BulkInsertService.BulkInsertAccounts();
+        //BulkInsertService.BulkInsertLeads();  
+        //BulkInsertService.BulkInsertAccounts();
+        // return Ok(new AccountResponse { Id = id });
+
         var claim = this.GetClaims();
         var result = _accountService.GetAccountById(id, claim);
         if (result == null)
@@ -40,6 +49,7 @@ public class AccountsController : ControllerBase
         else
             return Ok(_mapper.Map<AccountResponse>(result));
     }
+
 
     [AuthorizeByRole(Role.Admin)]
     [HttpGet]
