@@ -16,4 +16,10 @@
     <ProjectReference Include="..\CRM_System.BusinessLayer\CRM_System.BusinessLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="CsvCreater.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
 </Project>
