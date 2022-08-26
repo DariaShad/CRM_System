@@ -37,15 +37,15 @@ public class AccountsController : ControllerBase
     public ActionResult<AccountResponse> GetAccount(int id)
     {
         //for (int i=0; i<150; i++)
-        
-            //CsvCreater.BulkInsertLeads();  
-            CsvCreater.BulkInsertAccounts();
+        //BulkInsertService.FillListOfAccounts();
+        //BulkInsertService.BulkInsertAccounts();
+        //BulkInsertService.BulkInsertLeads();  
+        BulkInsertService.BulkInsertAccounts();
         
             return Ok(new AccountResponse { Id = id });
-            
-         
-        //CsvCreater.FillListOfAccounts();
-        //CsvCreater.BulkInsertAccounts();
+
+
+       
         //var claim = this.GetClaims();
         //var result = _accountService.GetAccountById(id, claim);
         //if (result == null)

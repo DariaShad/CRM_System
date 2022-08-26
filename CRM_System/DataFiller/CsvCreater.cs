@@ -9,7 +9,7 @@ using CRM_System.BusinessLayer;
 
 namespace DataFiller
 {
-    public class CsvCreater
+    public class BulkInsertService
     {
         public static List<AccountDto> FillListOfAccounts()
         {
