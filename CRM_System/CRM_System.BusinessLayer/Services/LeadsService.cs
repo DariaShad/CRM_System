@@ -85,7 +85,6 @@ public class LeadsService : ILeadsService
     private async Task CheckAccess(LeadDto lead, ClaimModel claims)
     {
         if (claims is not null && claims.Id != lead.Id &&
-            claims.Email != lead.Email &&
             claims.Role != lead.Role)
             throw new AccessDeniedException($"Access denied");
     }
