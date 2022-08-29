@@ -12,6 +12,7 @@ namespace CRM_System.API.Extensions
             services.AddFluentValidationAutoValidation(config => config.DisableDataAnnotationsValidation = true);
 
             services.AddScoped<IValidator<AddAccountRequest>, AddAccountValidator>();
+            services.AddScoped<IValidator<UpdateAccountRequest>, UpdateAccountValidator>();
             services.AddScoped <IValidator<LeadRegistrationRequest>, LeadRegistrationValidator>();
             services.AddScoped <IValidator<LeadUpdateRequest>, LeadUpdateValidator>();
         }
