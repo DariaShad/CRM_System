@@ -50,7 +50,7 @@ namespace CRM_System.BusinessLayer.Services
         // move to another class
         private void CheckAccessForLeadAndManager(int id, ClaimModel claims)
         {
-            if (claims is not null && claims.Id != id ||
+            if (claims is not null && claims.Id != id &&
                 claims.Role != Role.Admin)
             {
                 throw new AccessDeniedException($"Access denied");
