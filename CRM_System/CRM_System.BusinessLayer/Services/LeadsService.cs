@@ -10,6 +10,8 @@ public class LeadsService : ILeadsService
 {
     private readonly ILeadsRepository _leadRepository;
 
+    private readonly IAccountsRepository _accountRepository;
+
     public LeadsService(ILeadsRepository leadRepository)
     {
         _leadRepository = leadRepository;
@@ -23,7 +25,14 @@ public class LeadsService : ILeadsService
 
         lead.Password = PasswordHash.HashPassword(lead.Password);
         lead.Role = Role.Regular;
-        //accounts
+
+        AccountDto account = new AccountDto()
+        {
+            Currency = Currency.RUB,
+            Status = AccountStatus.Active,
+            LeadId = lead.Id,
+        };
+        _accountRepository.AddAccount(account);
 
         return await _leadRepository.Add(lead);
     }
