@@ -6,6 +6,5 @@ public class ClaimModel
 {
     public int Id { get; set; }
     // remove Email
-    public string Email { get; set; }
     public Role Role { get; set; }
 }

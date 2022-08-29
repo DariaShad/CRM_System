@@ -30,12 +30,11 @@ namespace CRM_System.BusinessLayer.Services
             if (lead is not null && login == lead.Email &&
                 PasswordHash.ValidatePassword(password, lead.Password) && !lead.IsDeleted)
             {
-                claimModel.Email = login;
+
                 if (lead.Role == Role.Regular)
                 {
                     claimModel.Role = Role.Regular;
                     claimModel.Id = lead.Id;
-                    claimModel.Email = lead.Email;
                 }
                 else 
                     claimModel.Role = Role.Vip;
@@ -49,7 +48,6 @@ namespace CRM_System.BusinessLayer.Services
             {
                 claimModel.Role = Role.Admin;
                 claimModel.Id = admin.Id;
-                claimModel.Email = admin.Email;
             }
 
             return claimModel;
@@ -57,7 +55,7 @@ namespace CRM_System.BusinessLayer.Services
 
         public string GetToken(ClaimModel claimModel)
         {
-            if (claimModel is null || claimModel.Email is null)
+            if (claimModel is null)
                 throw new DataException("There are empty properties");
 
             var claims = new List<Claim>
