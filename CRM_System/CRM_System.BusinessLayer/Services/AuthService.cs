@@ -65,11 +65,11 @@ namespace CRM_System.BusinessLayer.Services
             };
 
             var jwt = new JwtSecurityToken(
-                issuer: AuthOptions.Issuer,
-                audience: AuthOptions.Audience,
+                issuer: TokenOptions.Issuer,
+                audience: TokenOptions.Audience,
                 claims: claims,
                 expires: DateTime.UtcNow.Add(TimeSpan.FromDays(1)),
-                signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+                signingCredentials: new SigningCredentials(TokenOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
             return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
