@@ -3,6 +3,7 @@ using CRM.DataLayer;
 using CRM.DataLayer.Models;
 using CRM_System.API.Models.Requests;
 using CRM_System.API.Models.Responses;
+using CRM_System.API.Validators;
 using CRM_System.BusinessLayer;
 using CRM_System.BusinessLayer.Services.Interfaces;
 using DataFiller;
@@ -86,6 +87,7 @@ public class AccountsController : ControllerBase
     public ActionResult UpdateAccount([FromBody] UpdateAccountRequest accountRequest, int id)
     {
         // add validation 
+
         var claim = this.GetClaims();
         _accountService.UpdateAccount(_mapper.Map<AccountDto>(accountRequest), id, claim);
         return NoContent();
