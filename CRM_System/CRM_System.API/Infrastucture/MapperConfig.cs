@@ -21,7 +21,6 @@ public class MapperConfig : Profile
         CreateMap<UpdateAccountRequest, AccountDto>();
         CreateMap<AccountDto, AccountResponse>();
 
-        CreateMap<AdminRegistrationRequest, AdminDto>();
     }
 }
 

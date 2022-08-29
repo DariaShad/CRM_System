@@ -35,13 +35,6 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     public ActionResult<AccountResponse> GetAccount(int id)
     {
-        //for (int i=0; i<150; i++)
-        //BulkInsertService.FillListOfAccounts();
-        //BulkInsertService.BulkInsertAccounts();
-        //BulkInsertService.BulkInsertLeads();  
-        //BulkInsertService.BulkInsertAccounts();
-        // return Ok(new AccountResponse { Id = id });
-
         var claim = this.GetClaims();
         var result = _accountService.GetAccountById(id, claim);
         if (result == null)

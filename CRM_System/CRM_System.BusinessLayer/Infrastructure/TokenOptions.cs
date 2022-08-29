@@ -3,7 +3,7 @@ using System.Text;
 
 namespace CRM_System.BusinessLayer.Infrastucture;
 
-public class AuthOptions
+public class TokenOptions
 {
     // let's name it correctly)
     public const string Issuer = "MyAuthServer";
