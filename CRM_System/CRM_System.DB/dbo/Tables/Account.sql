@@ -7,3 +7,10 @@
 	[IsDeleted] BIT DEFAULT 0 NOT NULL,
 	FOREIGN KEY ([LeadId]) REFERENCES [dbo].[Lead] ([Id])
 );
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220829-171313] ON [dbo].[Account]
+(
+	[LeadId] ASC
+)
+INCLUDE([Id],[Currency],[Status]) ON [PRIMARY]
+GO
