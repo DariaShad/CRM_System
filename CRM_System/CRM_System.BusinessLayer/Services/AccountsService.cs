@@ -28,7 +28,7 @@ namespace CRM_System.BusinessLayer.Services
 
         public AccountDto GetAccountById(int id, ClaimModel claim)
         {
-            AccessService.CheckAccessForLeadAndManager(id, claim); //Написано неправильно!!! нужно переделать под айди ЛИДА
+            AccessService.CheckAccessForLeadAndManager(id, claim); //Написано неправильно!!! нужно переделать под айди ЛИДА. А СЕЙЧАС ПОД АЙДИ АККАУНТА
             return _accountRepository.GetAccountById(id);
         }
 

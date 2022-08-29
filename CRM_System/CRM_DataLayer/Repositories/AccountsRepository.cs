@@ -52,8 +52,8 @@ namespace CRM.DataLayer.Repositories
                 StoredProcedures.Account_Update,
                 param: new
                 {
-                    account.Currency
-                    // isDeleted
+                    account.Currency,
+                    account.IsDeleted
                 },
                  commandType: CommandType.StoredProcedure);
         }
