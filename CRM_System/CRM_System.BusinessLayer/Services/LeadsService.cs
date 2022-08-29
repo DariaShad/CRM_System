@@ -82,5 +82,4 @@ public class LeadsService : ILeadsService
 
     private async Task<bool> CheckEmailForUniqueness(string email) => await _leadRepository.GetByEmail(email) == default;
 
-    // move to another class; allow admin; disallow only by Id
 }

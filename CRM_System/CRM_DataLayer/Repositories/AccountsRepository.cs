@@ -36,7 +36,6 @@ namespace CRM.DataLayer.Repositories
             return accounts;
         }
 
-        //GetBalance, Last transaction date
         public AccountDto GetAccountById (int id)
         {
             var account = _connectionString.QueryFirstOrDefault<AccountDto>(
