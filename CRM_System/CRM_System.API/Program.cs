@@ -2,6 +2,7 @@ using CRM.DataLayer;
 using CRM.DataLayer.Interfaces;
 using CRM.DataLayer.Repositories;
 using CRM_System.API;
+using CRM_System.API.Extensions;
 using CRM_System.BusinessLayer;
 using CRM_System.BusinessLayer.Infrastucture;
 using CRM_System.BusinessLayer.Services;
@@ -21,6 +22,7 @@ builder.Services.AddScoped<IDbConnection>(c => new SqlConnection(@"Server=80.78.
 // Add services to the container.
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
@@ -70,9 +72,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-//builder.Services.AddScoped<ILeadRepository, LeadRepository>();
-//builder.Services.AddScoped<ILeadService, LeadService>();
-//
+
 builder.Services.AddAuthorization();
 
 // to extension methods
@@ -85,6 +85,8 @@ builder.Services.AddScoped<IAdminsService, AdminsService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAccountsRepository, AccountsRepository>();
 builder.Services.AddScoped<IAccountsService, AccountsService>();
+
+builder.Services.AddFluentValidation();
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 

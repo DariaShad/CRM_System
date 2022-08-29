@@ -5,7 +5,6 @@ namespace CRM_System.BusinessLayer.Infrastucture;
 
 public class TokenOptions
 {
-    // let's name it correctly)
     public const string Issuer = "MyAuthServer";
     public const string Audience = "MyAuthClient";
     const string Key = "mysupersecret_secretkey!123";
