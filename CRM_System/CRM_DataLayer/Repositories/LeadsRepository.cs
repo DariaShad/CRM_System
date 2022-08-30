@@ -86,15 +86,14 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
 
     public async Task DeleteOrRestore(int id, bool isDeleting)
     {
-        // rewrite to single SP with @IsDeleted param
         if (isDeleting)
             await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
                 StoredProcedures.Lead_Delete,
-                param: new { id},
+                param: new { id },
                 commandType: System.Data.CommandType.StoredProcedure);
         else
             await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
-                StoredProcedures.Lead_Restore,
+                StoredProcedures.Lead_Delete,
                 param: new { id },
                 commandType: System.Data.CommandType.StoredProcedure);
     }
