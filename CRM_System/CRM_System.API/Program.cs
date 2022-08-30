@@ -2,6 +2,7 @@ using CRM.DataLayer;
 using CRM.DataLayer.Interfaces;
 using CRM.DataLayer.Repositories;
 using CRM_System.API;
+using CRM_System.API.Extensions;
 using CRM_System.BusinessLayer;
 using CRM_System.BusinessLayer.Infrastucture;
 using CRM_System.BusinessLayer.Services;
@@ -14,77 +15,26 @@ using System.Data.SqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.Services.AddSingleton<DapperContext>();
 
 // to env variable
 builder.Services.AddScoped<IDbConnection>(c => new SqlConnection(@"Server=80.78.240.16;Database=CRM.Db;User Id=Student;Password=qwe!23"));
-// Add services to the container.
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
-// to extension methods
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new OpenApiInfo { Title = "CRM", Version = "v1" });
 
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Description = "Authorization: Bearer JWT",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        BearerFormat = "JWT",
-        Scheme = "Bearer",
-    });
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer",
-                },
-            },
-            Array.Empty<string>()
-        },
-    });
-});
+builder.Services.AddSwaggerGen();
 
-// to extension methods
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidIssuer = AuthOptions.Issuer,
-            ValidateAudience = true,
-            ValidAudience = AuthOptions.Audience,
-            ValidateLifetime = true,
-            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-            ValidateIssuerSigningKey = true,
-        };
-    });
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
 
-//builder.Services.AddScoped<ILeadRepository, LeadRepository>();
-//builder.Services.AddScoped<ILeadService, LeadService>();
-//
+
 builder.Services.AddAuthorization();
 
-// to extension methods
-builder.Services.AddScoped<IAccountsRepository, AccountsRepository>();
-builder.Services.AddScoped<IAccountsService, AccountsService>();
-builder.Services.AddScoped<ILeadsRepository, LeadsRepository>();
-builder.Services.AddScoped<ILeadsService, LeadsService>();
-builder.Services.AddScoped<IAdminRepository, AdminRepository>();
-builder.Services.AddScoped<IAdminsService, AdminsService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IAccountsRepository, AccountsRepository>();
-builder.Services.AddScoped<IAccountsService, AccountsService>();
+builder.Services.AddServices();
+
+builder.Services.AddFluentValidation();
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 

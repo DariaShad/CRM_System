@@ -81,7 +81,6 @@
     <Build Include="dbo\Stored Procedures\Lead_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Lead_GetAllInfoByLeadId.sql" />
     <Build Include="dbo\Stored Procedures\Lead_GetLeadByEmail.sql" />
-    <Build Include="dbo\Stored Procedures\Lead_Restore.sql" />
     <Build Include="dbo\Tables\Admin.sql" />
     <Build Include="dbo\Stored Procedures\Admin_GetAdminByEmail.sql" />
     <Build Include="dbo\Stored Procedures\Admin_Add.sql" />

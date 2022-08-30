@@ -5,20 +5,25 @@ AS
 BEGIN
 
 	SELECT 
-		Id, 
-		FirstName, 
-		LastName, 
-		Patronymic, 
-		Birthday, 
-		Email, 
-		Phone,
-		Passport, 
-		City, 
-		[Address], 
-		[Role], 
-		RegistrationDate,
-		IsDeleted
-	FROM dbo.[Lead]
-	WHERE Id = @Id
+		L.Id, 
+		L.FirstName, 
+		L.LastName, 
+		L.Patronymic, 
+		L.Birthday, 
+		L.Email, 
+		L.Phone,
+		L.Passport, 
+		L.City, 
+		L.[Address], 
+		L.[Role], 
+		L.RegistrationDate,
+		L.IsDeleted,
+		A.Id,
+		A.Currency,
+		A.[Status]
+	FROM dbo.[Lead] as L
+	
+	LEFT JOIN dbo.Account as A on (A.LeadId = L.Id)
 
+	WHERE L.Id = @Id
 END

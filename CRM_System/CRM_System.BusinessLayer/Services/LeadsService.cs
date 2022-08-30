@@ -2,12 +2,15 @@
 using CRM.DataLayer.Interfaces;
 using CRM.DataLayer.Models;
 using CRM_System.BusinessLayer.Infrastucture;
+using CRM_System.BusinessLayer.Services;
 
 namespace CRM_System.BusinessLayer;
 
 public class LeadsService : ILeadsService
 {
     private readonly ILeadsRepository _leadRepository;
+
+    private readonly IAccountsRepository _accountRepository;
 
     public LeadsService(ILeadsRepository leadRepository)
     {
@@ -22,7 +25,14 @@ public class LeadsService : ILeadsService
 
         lead.Password = PasswordHash.HashPassword(lead.Password);
         lead.Role = Role.Regular;
-        //accounts
+
+        AccountDto account = new AccountDto()
+        {
+            Currency = Currency.RUB,
+            Status = AccountStatus.Active,
+            LeadId = lead.Id,
+        };
+        _accountRepository.AddAccount(account);
 
         return await _leadRepository.Add(lead);
     }
@@ -30,7 +40,7 @@ public class LeadsService : ILeadsService
     public async Task<LeadDto> GetById(int id, ClaimModel claims)
     {
         var lead = await _leadRepository.GetById(id);
-        await CheckAccess(lead, claims);
+        AccessService.CheckAccessForLeadAndManager(lead.Id, claims);
 
         return lead;
     }
@@ -54,8 +64,8 @@ public class LeadsService : ILeadsService
 
         if (lead is null || newLead is null)
             throw new NotFoundException($"Lead with {lead.Id} was not found");
-        
-        await CheckAccess(lead, claims);
+
+        AccessService.CheckAccessForLeadAndManager(lead.Id, claims);
 
         lead.FirstName = newLead.FirstName;
         lead.LastName = newLead.LastName;
@@ -75,17 +85,10 @@ public class LeadsService : ILeadsService
         if (lead is null)
             throw new NotFoundException($"Lead with {id} was not found");
                 
-        await CheckAccess(lead, claims);
+        AccessService.CheckAccessForLeadAndManager(lead.Id, claims);
         await _leadRepository.DeleteOrRestore(id, isDeleted);
     }
 
     private async Task<bool> CheckEmailForUniqueness(string email) => await _leadRepository.GetByEmail(email) == default;
 
-    // move to another class; allow admin; disallow only by Id
-    private async Task CheckAccess(LeadDto lead, ClaimModel claims)
-    {
-        if (claims is not null && claims.Id != lead.Id &&
-            claims.Role != lead.Role)
-            throw new AccessDeniedException($"Access denied");
-    }
 }

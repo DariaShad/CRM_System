@@ -36,7 +36,6 @@ namespace CRM.DataLayer.Repositories
             return accounts;
         }
 
-        //GetBalance, Last transaction date
         public AccountDto GetAccountById (int id)
         {
             var account = _connectionString.QueryFirstOrDefault<AccountDto>(
@@ -53,8 +52,8 @@ namespace CRM.DataLayer.Repositories
                 StoredProcedures.Account_Update,
                 param: new
                 {
-                    account.Currency
-                    // isDeleted
+                    account.Currency,
+                    account.IsDeleted
                 },
                  commandType: CommandType.StoredProcedure);
         }

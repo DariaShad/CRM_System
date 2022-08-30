@@ -3,6 +3,7 @@ using CRM.DataLayer;
 using CRM.DataLayer.Models;
 using CRM_System.API.Models.Requests;
 using CRM_System.API.Models.Responses;
+using CRM_System.API.Validators;
 using CRM_System.BusinessLayer;
 using CRM_System.BusinessLayer.Services.Interfaces;
 using DataFiller;
@@ -34,13 +35,6 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     public ActionResult<AccountResponse> GetAccount(int id)
     {
-        //for (int i=0; i<150; i++)
-        //BulkInsertService.FillListOfAccounts();
-        //BulkInsertService.BulkInsertAccounts();
-        //BulkInsertService.BulkInsertLeads();  
-        //BulkInsertService.BulkInsertAccounts();
-        // return Ok(new AccountResponse { Id = id });
-
         var claim = this.GetClaims();
         var result = _accountService.GetAccountById(id, claim);
         if (result == null)
@@ -69,14 +63,13 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public ActionResult <int> AddAccount([FromBody] AddAccountRequest accountRequest)
     {
-        // add validation 
         var claim = this.GetClaims();
         var result=_accountService.AddAccount(_mapper.Map<AccountDto>(accountRequest), claim);
         return Created("", result);
     }
 
     [AuthorizeByRole(Role.Regular, Role.Vip)]
-    [HttpPut] // add id
+    [HttpPut("{id}")] 
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
@@ -85,14 +78,13 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status422UnprocessableEntity)]
     public ActionResult UpdateAccount([FromBody] UpdateAccountRequest accountRequest, int id)
     {
-        // add validation 
         var claim = this.GetClaims();
         _accountService.UpdateAccount(_mapper.Map<AccountDto>(accountRequest), id, claim);
         return NoContent();
     }
 
     [AuthorizeByRole(Role.Regular, Role.Vip)]
-    [HttpDelete] // add id
+    [HttpDelete("{id}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]

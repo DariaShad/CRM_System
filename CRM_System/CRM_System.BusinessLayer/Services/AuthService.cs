@@ -26,29 +26,11 @@ namespace CRM_System.BusinessLayer.Services
 
             var lead = await _leadsRepository.GetByEmail(login);
 
-            // move to another class
-            if (lead is not null && login == lead.Email &&
-                PasswordHash.ValidatePassword(password, lead.Password) && !lead.IsDeleted)
-            {
-
-                if (lead.Role == Role.Regular)
-                {
-                    claimModel.Role = Role.Regular;
-                    claimModel.Id = lead.Id;
-                }
-                else 
-                    claimModel.Role = Role.Vip;
-            }
+            ClaimModelReturnerService.ReturnLead(lead, login, password, claimModel);
 
             var admin = await _adminRepository.GetAdminByEmail(login);
 
-            // move to another class
-            if (admin is not null && login == admin.Email &&
-                PasswordHash.ValidatePassword(password, admin.Password) && !admin.IsDeleted)
-            {
-                claimModel.Role = Role.Admin;
-                claimModel.Id = admin.Id;
-            }
+            ClaimModelReturnerService.ReturnAdmin(admin, login, password, claimModel);
 
             return claimModel;
         }
@@ -65,11 +47,11 @@ namespace CRM_System.BusinessLayer.Services
             };
 
             var jwt = new JwtSecurityToken(
-                issuer: AuthOptions.Issuer,
-                audience: AuthOptions.Audience,
+                issuer: TokenOptions.Issuer,
+                audience: TokenOptions.Audience,
                 claims: claims,
                 expires: DateTime.UtcNow.Add(TimeSpan.FromDays(1)),
-                signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+                signingCredentials: new SigningCredentials(TokenOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
             return new JwtSecurityTokenHandler().WriteToken(jwt);
         }

@@ -30,7 +30,6 @@ public class LeadsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status422UnprocessableEntity)]
     public async Task<ActionResult<int>> Register([FromBody] LeadRegistrationRequest request)
     {
-        // add validator
         var result = await _leadsService.Add(_mapper.Map<LeadDto>(request));
         return Created($"{this.GetUrl()}/{result}", result);
     }
@@ -71,22 +70,9 @@ public class LeadsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status422UnprocessableEntity)]
     public async Task<ActionResult> Update([FromBody] LeadUpdateRequest request, int id)
     {
-        // add validator
         var claims = this.GetClaims();
 
-        // automapping
-        var newLead = new LeadDto()
-        {
-            FirstName = request.FirstName,
-            LastName = request.LastName,
-            Patronymic = request.Patronymic,
-            Birthday = request.Birthday,
-            Phone = request.Phone,
-            City = request.City,
-            Address = request.Address
-        };
-
-        await _leadsService.Update(newLead, id, claims);
+        await _leadsService.Update(_mapper.Map<LeadDto>(request), id, claims);
         return NoContent();
     }
 

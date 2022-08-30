@@ -16,19 +16,19 @@ namespace CRM_System.BusinessLayer.Services
 
         public int AddAccount(AccountDto accountDTO, ClaimModel claim)
         {
-            CheckAccessForLeadAndManager(accountDTO.Id, claim);
+            AccessService.CheckAccessForLeadAndManager(accountDTO.Id, claim);
             return _accountRepository.AddAccount(accountDTO);
         }
 
         public void DeleteAccount(int id, ClaimModel claim)
         {
-            CheckAccessForLeadAndManager(id, claim);
+            AccessService.CheckAccessForLeadAndManager(id, claim);
             _accountRepository.DeleteAccount(id);
         }
 
         public AccountDto GetAccountById(int id, ClaimModel claim)
         {
-            CheckAccessForLeadAndManager(id, claim); //Написано неправильно!!! нужно переделать под айди ЛИДА
+            AccessService.CheckAccessForLeadAndManager(id, claim); //Написано неправильно!!! нужно переделать под айди ЛИДА. А СЕЙЧАС ПОД АЙДИ АККАУНТА
             return _accountRepository.GetAccountById(id);
         }
 
@@ -36,25 +36,14 @@ namespace CRM_System.BusinessLayer.Services
 
         public List<AccountDto> GetAllAccountsByLeadId(int leadId, ClaimModel claim)
         {
-            CheckAccessForLeadAndManager(leadId, claim);
+            AccessService.CheckAccessForLeadAndManager(leadId, claim);
             return _accountRepository.GetAllAccounts();
         }
 
         public void UpdateAccount(AccountDto account, int id, ClaimModel claim)
         {
-            CheckAccessForLeadAndManager(id, claim);
+            AccessService.CheckAccessForLeadAndManager(id, claim);
             _accountRepository.UpdateAccount(account, id);
-        }
-
-
-        // move to another class
-        private void CheckAccessForLeadAndManager(int id, ClaimModel claims)
-        {
-            if (claims is not null && claims.Id != id &&
-                claims.Role != Role.Admin)
-            {
-                throw new AccessDeniedException($"Access denied");
-            }
         }
 
     }
