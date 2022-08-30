@@ -47,7 +47,6 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
 
     public async Task<LeadDto> GetById(int id)
     {
-        // SP must return accounts as well; need implement one-to-many mapping
         var lead = await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
             StoredProcedures.Lead_GetAllInfoByLeadId,
             param: new { id },
