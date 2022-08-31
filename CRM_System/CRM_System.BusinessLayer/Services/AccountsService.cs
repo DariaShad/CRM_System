@@ -32,7 +32,7 @@ namespace CRM_System.BusinessLayer.Services
             return await _accountRepository.GetAccountById(id);
         }
 
-        public async Task <List<AccountDto>> GetAllAccounts() => _accountRepository.GetAllAccounts();
+        public async Task <List<AccountDto>> GetAllAccounts() => await _accountRepository.GetAllAccounts();
 
         public async Task <List<AccountDto>> GetAllAccountsByLeadId(int leadId, ClaimModel claim)
         {
