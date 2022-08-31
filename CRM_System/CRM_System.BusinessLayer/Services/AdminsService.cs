@@ -34,7 +34,6 @@ namespace CRM_System.BusinessLayer.Services
 
             else
                 admin.Password = PasswordHash.HashPassword(admin.Password);
-            admin.Role = Role.Admin;
 
             return await _adminRepository.AddAdmin(admin);
         }

@@ -9,6 +9,8 @@ public static class ControllerExtensions
     public static string GetUrl(this ControllerBase controller) =>
         $"{controller.Request?.Scheme}://{controller.Request?.Host.Value}{controller.Request?.Path.Value}";
 
+    public static string GetShemeAndHostString(this ControllerBase controller) =>
+        $"{controller.Request?.Scheme}://{controller.Request?.Host.Value}";
 
     public static ClaimModel GetClaims(this ControllerBase controller)
     {

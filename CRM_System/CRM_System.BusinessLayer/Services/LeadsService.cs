@@ -3,6 +3,7 @@ using CRM.DataLayer.Interfaces;
 using CRM.DataLayer.Models;
 using CRM_System.BusinessLayer.Infrastucture;
 using CRM_System.BusinessLayer.Services;
+using CRM_System.DataLayer;
 
 namespace CRM_System.BusinessLayer;
 
