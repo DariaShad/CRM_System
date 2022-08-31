@@ -4,11 +4,11 @@ namespace CRM_System.BusinessLayer.Services.Interfaces
 {
     public interface IAccountsService
     {
-        public int AddAccount(AccountDto accountDTO, ClaimModel claim);
-        public List<AccountDto> GetAllAccounts();
-        public AccountDto GetAccountById(int id, ClaimModel claim);
-        public List<AccountDto> GetAllAccountsByLeadId(int leadId, ClaimModel claim);
-        public void UpdateAccount(AccountDto account, int id, ClaimModel claim);
-        public void DeleteAccount(int id, ClaimModel claim);
+        public Task <int> AddAccount(AccountDto accountDTO, ClaimModel claim);
+        public Task <List<AccountDto>> GetAllAccounts();
+        public Task <AccountDto> GetAccountById(int id, ClaimModel claim);
+        public Task <List<AccountDto>> GetAllAccountsByLeadId(int leadId, ClaimModel claim);
+        public Task UpdateAccount(AccountDto account, int id, ClaimModel claim);
+        public Task DeleteAccount(int id, ClaimModel claim);
     }
 }

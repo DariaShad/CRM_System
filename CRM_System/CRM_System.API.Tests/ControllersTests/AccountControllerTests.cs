@@ -36,28 +36,33 @@ namespace CRM_System.API.Tests.ControllersTests
         }
 
         [Test]
-        public void GetAccount_ObjectResultPassed()
+        public async Task GetAccount_ObjectResultPassed()
         {
             //given
             var accountId = 1;
-            _accountsServiceMock.Setup(a => a.GetAccountById(It.Is<int>(i => i == accountId))).Returns(new AccountDto());
+            ClaimModel claimModel = new ClaimModel()
+            {
+                Id = accountId,
+                Role = Role.Regular
+            };
+            _accountsServiceMock.Setup(a => a.GetAccountById(It.Is<int>(i => i == accountId), It.Is<ClaimModel>(c => c.Id==accountId))).ReturnsAsync(new AccountDto());
             
             //when
-            var actual=_sut.GetAccount(accountId);
+            var actual= await _sut.GetAccount(accountId);
 
             //then
-            _accountsServiceMock.Verify(a => a.GetAccountById(It.Is<int>(i => i == accountId)), Times.Once);
+            _accountsServiceMock.Verify(a => a.GetAccountById(It.Is<int>(i => i == accountId), It.Is<ClaimModel>(c => c.Id == accountId)), Times.Once);
             var actualResult = actual.Result as ObjectResult;
             Assert.AreEqual(StatusCodes.Status200OK, actualResult.StatusCode);
         }
 
         [Test]
-        public void GetAllAccountsByLeadId()
+        public async Task GetAllAccountsByLeadId()
         {
             //given
             int leadId = 1;
             //when
-            var actual = _sut.GetAllAccountsByLeadId(leadId);
+            var actual = await _sut.GetAllAccountsByLeadId(leadId);
 
             //then
             var actualResult = actual.Result as ObjectResult;
@@ -65,7 +70,7 @@ namespace CRM_System.API.Tests.ControllersTests
         }
 
         [Test]
-        public void AddAccount_ValidRequestPassed_CreatedResultReceived()
+        public async Task AddAccount_ValidRequestPassed_CreatedResultReceived()
         {
             //given
             var account = new AddAccountRequest
@@ -76,7 +81,7 @@ namespace CRM_System.API.Tests.ControllersTests
             };
 
             //when
-            var actual = _sut.AddAccount(account);
+            var actual = await _sut.AddAccount(account);
 
             //then
             var actualResult = actual.Result as CreatedResult;
@@ -84,7 +89,7 @@ namespace CRM_System.API.Tests.ControllersTests
         }
 
         [Test]
-        public void UpdateAccount_NoContentResult()
+        public async Task UpdateAccount_NoContentResult()
         {
             //given
             var account = new UpdateAccountRequest
@@ -97,12 +102,12 @@ namespace CRM_System.API.Tests.ControllersTests
             var actual = _sut.UpdateAccount(account, accountId);
 
             //then
-            var actualResult = actual as NoContentResult;
+            var actualResult = await actual as NoContentResult;
             Assert.AreEqual(StatusCodes.Status204NoContent, actualResult.StatusCode);
         }
 
         [Test]
-        public void DeleteAccount_NoContentResult()
+        public async Task DeleteAccount_NoContentResult()
         {
             //given
             int accountId = 1;
@@ -111,7 +116,7 @@ namespace CRM_System.API.Tests.ControllersTests
             var actual = _sut.DeleteAccount(accountId);
 
             //then
-            var actualResult = actual as NoContentResult;
+            var actualResult = await actual as NoContentResult;
             Assert.AreEqual(StatusCodes.Status204NoContent, actualResult.StatusCode);
         }
 

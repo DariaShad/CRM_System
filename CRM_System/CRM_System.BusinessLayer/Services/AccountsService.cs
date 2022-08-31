@@ -14,36 +14,36 @@ namespace CRM_System.BusinessLayer.Services
             _accountRepository = accountRepository;
         }
 
-        public int AddAccount(AccountDto accountDTO, ClaimModel claim)
+        public async Task <int> AddAccount(AccountDto accountDTO, ClaimModel claim)
         {
             AccessService.CheckAccessForLeadAndManager(accountDTO.Id, claim);
-            return _accountRepository.AddAccount(accountDTO);
+            return await _accountRepository.AddAccount(accountDTO);
         }
 
-        public void DeleteAccount(int id, ClaimModel claim)
+        public async Task DeleteAccount(int id, ClaimModel claim)
         {
             AccessService.CheckAccessForLeadAndManager(id, claim);
-            _accountRepository.DeleteAccount(id);
+            await _accountRepository.DeleteAccount(id);
         }
 
-        public AccountDto GetAccountById(int id, ClaimModel claim)
+        public async Task <AccountDto> GetAccountById(int id, ClaimModel claim)
         {
             AccessService.CheckAccessForLeadAndManager(id, claim); //Написано неправильно!!! нужно переделать под айди ЛИДА. А СЕЙЧАС ПОД АЙДИ АККАУНТА
-            return _accountRepository.GetAccountById(id);
+            return await _accountRepository.GetAccountById(id);
         }
 
-        public List<AccountDto> GetAllAccounts() => _accountRepository.GetAllAccounts();
+        public async Task <List<AccountDto>> GetAllAccounts() => await _accountRepository.GetAllAccounts();
 
-        public List<AccountDto> GetAllAccountsByLeadId(int leadId, ClaimModel claim)
+        public async Task <List<AccountDto>> GetAllAccountsByLeadId(int leadId, ClaimModel claim)
         {
             AccessService.CheckAccessForLeadAndManager(leadId, claim);
-            return _accountRepository.GetAllAccounts();
+            return await _accountRepository.GetAllAccounts();
         }
 
-        public void UpdateAccount(AccountDto account, int id, ClaimModel claim)
+        public async Task UpdateAccount(AccountDto account, int id, ClaimModel claim)
         {
             AccessService.CheckAccessForLeadAndManager(id, claim);
-            _accountRepository.UpdateAccount(account, id);
+            await _accountRepository.UpdateAccount(account, id);
         }
 
     }

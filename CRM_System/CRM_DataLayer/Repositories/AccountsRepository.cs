@@ -13,7 +13,7 @@ namespace CRM.DataLayer.Repositories
 
         // rewrite all methods to async
 
-        public int AddAccount(AccountDto accountDTO)
+        public async Task <int> AddAccount(AccountDto accountDTO)
         {
             var id = _connectionString.QuerySingle<int>(
                 StoredProcedures.Account_Add,
@@ -27,7 +27,7 @@ namespace CRM.DataLayer.Repositories
             return id;
         }
 
-        public List <AccountDto> GetAllAccounts()
+        public async Task<List <AccountDto>> GetAllAccounts()
         {
             var accounts = _connectionString.Query<AccountDto>(
                 StoredProcedures.Account_GetAll,
@@ -36,7 +36,7 @@ namespace CRM.DataLayer.Repositories
             return accounts;
         }
 
-        public AccountDto GetAccountById (int id)
+        public async Task<AccountDto> GetAccountById (int id)
         {
             var account = _connectionString.QueryFirstOrDefault<AccountDto>(
                StoredProcedures.Account_GetById,
@@ -46,7 +46,7 @@ namespace CRM.DataLayer.Repositories
             return account;
         }
 
-        public void UpdateAccount(AccountDto account, int id)
+        public async Task UpdateAccount(AccountDto account, int id)
         {
             _connectionString.Execute(
                 StoredProcedures.Account_Update,
@@ -58,7 +58,7 @@ namespace CRM.DataLayer.Repositories
                  commandType: CommandType.StoredProcedure);
         }
 
-        public void DeleteAccount(int accountId)
+        public async Task DeleteAccount(int accountId)
         {
             _connectionString.Execute(
                 StoredProcedures.Account_Delete,
