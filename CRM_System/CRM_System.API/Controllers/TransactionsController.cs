@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_System.API;
 
-[Authorize]
 [ApiController]
 [Produces("application/json")]
 [Route("[controller]")]

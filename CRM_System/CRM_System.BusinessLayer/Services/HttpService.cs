@@ -10,7 +10,7 @@ public class HttpService : IHttpService
 
     public HttpService()
     {
-        _httpClient.BaseAddress = new Uri("https://piter-education.ru:6060/swagger");
+        _httpClient.BaseAddress = new Uri("https://piter-education.ru:6060/api/");
         _httpClient.Timeout = new TimeSpan(0, 0, 30);
 
         _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
