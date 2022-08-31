@@ -9,11 +9,11 @@ namespace CRM.DataLayer.Interfaces
 {
     public interface IAccountsRepository
     {
-        public int AddAccount(AccountDto accountDTO);
-        public List<AccountDto> GetAllAccounts();
-        public AccountDto GetAccountById(int id);
-        public void UpdateAccount(AccountDto account, int id);
-        public void DeleteAccount(int id);
+        public Task <int> AddAccount(AccountDto accountDTO);
+        public Task <List<AccountDto>> GetAllAccounts();
+        public Task <AccountDto> GetAccountById(int id);
+        public Task UpdateAccount(AccountDto account, int id);
+        public Task DeleteAccount(int id);
 
     }
 }

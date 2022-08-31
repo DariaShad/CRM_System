@@ -33,10 +33,10 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
-    public ActionResult<AccountResponse> GetAccount(int id)
+    public async Task <ActionResult<AccountResponse>> GetAccount(int id)
     {
         var claim = this.GetClaims();
-        var result = _accountService.GetAccountById(id, claim);
+        var result = await _accountService.GetAccountById(id, claim);
         if (result == null)
             return NotFound();
         else
@@ -48,10 +48,10 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(AccountResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public ActionResult<List<AccountResponse>> GetAllAccountsByLeadId(int leadId)
+    public async Task <ActionResult<List<AccountResponse>>> GetAllAccountsByLeadId(int leadId)
     {
         var claim = this.GetClaims();
-        var result = _accountService.GetAllAccountsByLeadId(leadId, claim);
+        var result = await _accountService.GetAllAccountsByLeadId(leadId, claim);
         return Ok(_mapper.Map<List<AccountResponse>>(result));
     }
 
@@ -61,10 +61,10 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public ActionResult <int> AddAccount([FromBody] AddAccountRequest accountRequest)
+    public async Task <ActionResult<int>> AddAccount([FromBody] AddAccountRequest accountRequest)
     {
         var claim = this.GetClaims();
-        var result=_accountService.AddAccount(_mapper.Map<AccountDto>(accountRequest), claim);
+        var result= await _accountService.AddAccount(_mapper.Map<AccountDto>(accountRequest), claim);
         return Created("", result);
     }
 
@@ -76,10 +76,10 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(void), StatusCodes.Status422UnprocessableEntity)]
-    public ActionResult UpdateAccount([FromBody] UpdateAccountRequest accountRequest, int id)
+    public async Task <ActionResult> UpdateAccount([FromBody] UpdateAccountRequest accountRequest, int id)
     {
         var claim = this.GetClaims();
-        _accountService.UpdateAccount(_mapper.Map<AccountDto>(accountRequest), id, claim);
+        await _accountService.UpdateAccount(_mapper.Map<AccountDto>(accountRequest), id, claim);
         return NoContent();
     }
 
@@ -88,10 +88,10 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public ActionResult DeleteAccount(int id)
+    public async Task <ActionResult> DeleteAccount(int id)
     {
         var claim = this.GetClaims();
-        _accountService.DeleteAccount(id, claim);
+        await _accountService.DeleteAccount(id, claim);
         return NoContent();
     }
 
