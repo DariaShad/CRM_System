@@ -1,12 +1,7 @@
 ﻿using CRM.DataLayer.Interfaces;
 using CRM.DataLayer.Models;
 using Dapper;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CRM.DataLayer.Repositories
 {
@@ -32,8 +27,7 @@ namespace CRM.DataLayer.Repositories
                 param : new 
                 {
                     admin.Password,
-                    admin.Email,
-                    admin.Role
+                    admin.Email
                 },
                 commandType: CommandType.StoredProcedure);
 

@@ -1,18 +1,15 @@
 ﻿CREATE PROCEDURE [dbo].[Admin_Add]
 	@Email nvarchar(50),
-	@Password nvarchar(255),
-	@Role tinyint
+	@Password nvarchar(255)
 
 AS
 BEGIN
 INSERT INTO dbo.[Admin](
 	Email,
-	[Password],
-	[Role])
+	[Password])
 VALUES(
 	@Email,
-	@Password,
-	@Role)
+	@Password)
 
 SELECT @@IDENTITY
 END

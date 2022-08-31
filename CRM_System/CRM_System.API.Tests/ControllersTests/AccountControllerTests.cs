@@ -5,14 +5,10 @@ using CRM_System.API.Controllers;
 using CRM_System.API.Models.Requests;
 using CRM_System.BusinessLayer;
 using CRM_System.BusinessLayer.Services.Interfaces;
+using CRM_System.DataLayer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CRM_System.API.Tests.ControllersTests
 {
