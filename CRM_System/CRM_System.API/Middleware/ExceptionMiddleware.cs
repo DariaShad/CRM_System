@@ -32,7 +32,7 @@ public class ExceptionMiddleware
         }
         catch (Exception error)
         {
-            await HandleExceptionAsync(httpContext, HttpStatusCode.InternalServerError, error.Message);
+            await HandleExceptionAsync(httpContext, HttpStatusCode.InternalServerError, error.StackTrace);
         }
     }
 

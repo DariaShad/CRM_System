@@ -28,7 +28,7 @@ public class LeadsService : ILeadsService
             Status = AccountStatus.Active,
             LeadId = lead.Id,
         };
-        _accountRepository.AddAccount(account);
+        //_accountRepository.AddAccount(account);
 
         return await _leadRepository.Add(lead);
     }

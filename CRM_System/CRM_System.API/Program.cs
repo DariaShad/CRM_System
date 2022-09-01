@@ -1,5 +1,6 @@
 using CRM_System.API;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using NLog.Web;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -7,6 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 // to env variable
+
+builder.Host.UseNLog();
+
 builder.Services.AddScoped<IDbConnection>(c => new SqlConnection(@"Server=80.78.240.16;Database=CRM.Db;User Id=Student;Password=qwe!23"));
 
 builder.Services.AddControllers();

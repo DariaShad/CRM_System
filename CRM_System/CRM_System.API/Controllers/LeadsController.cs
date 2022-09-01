@@ -15,11 +15,13 @@ public class LeadsController : ControllerBase
     public ClaimModel _claims;
     private readonly ILeadsService _leadsService;
     private readonly IMapper _mapper;
+    private readonly ILogger<LeadsController> _logger;
 
-    public LeadsController(ILeadsService leadsService, IMapper mapper)
+    public LeadsController(ILeadsService leadsService, IMapper mapper, ILogger<LeadsController> logger)
     {
         _leadsService = leadsService;
         _mapper = mapper;
+        _logger = logger;
     }
 
     [AllowAnonymous]
@@ -29,6 +31,10 @@ public class LeadsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status422UnprocessableEntity)]
     public async Task<ActionResult<int>> Register([FromBody] LeadRegistrationRequest request)
     {
+        if (_logger == default)
+             return 15;
+
+        _logger.LogInformation("Всем привет");
         var result = await _leadsService.Add(_mapper.Map<LeadDto>(request));
         return Created($"{this.GetUrl()}/{result}", result);
     }
