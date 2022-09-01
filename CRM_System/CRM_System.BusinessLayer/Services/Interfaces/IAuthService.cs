@@ -1,4 +1,4 @@
-﻿namespace CRM_System.BusinessLayer.Services.Interfaces;
+﻿namespace CRM_System.BusinessLayer;
 
 public interface IAuthService
 {

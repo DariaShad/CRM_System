@@ -1,4 +1,4 @@
-﻿namespace CRM.DataLayer;
+﻿namespace CRM_System.DataLayer;
 
 public static class StoredProcedures
 {

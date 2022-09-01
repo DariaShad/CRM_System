@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
 
-namespace CRM.DataLayer;
+namespace CRM_System.DataLayer;
 
 public class BaseRepository
 {

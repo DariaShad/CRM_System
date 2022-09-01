@@ -1,4 +1,4 @@
-﻿using CRM.DataLayer;
+﻿using CRM_System.DataLayer;
 
 namespace CRM_System;
 public class LeadMainInfoResponse

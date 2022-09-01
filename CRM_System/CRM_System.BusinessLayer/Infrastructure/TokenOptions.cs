@@ -1,7 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace CRM_System.BusinessLayer.Infrastucture;
+namespace CRM_System.BusinessLayer;
 
 public class TokenOptions
 {

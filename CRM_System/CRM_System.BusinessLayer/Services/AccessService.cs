@@ -1,21 +1,15 @@
-﻿using CRM.DataLayer;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CRM_System.DataLayer;
 
-namespace CRM_System.BusinessLayer.Services
+namespace CRM_System.BusinessLayer;
+
+public class AccessService
 {
-    public class AccessService
+    public static void CheckAccessForLeadAndManager(int id, ClaimModel claims)
     {
-        public static void CheckAccessForLeadAndManager(int id, ClaimModel claims)
+        if (claims is not null && claims.Id != id &&
+            claims.Role != Role.Admin)
         {
-            if (claims is not null && claims.Id != id &&
-                claims.Role != Role.Admin)
-            {
-                throw new AccessDeniedException($"Access denied");
-            }
+            throw new AccessDeniedException($"Access denied");
         }
     }
 }

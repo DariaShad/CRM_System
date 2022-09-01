@@ -1,6 +1,4 @@
-﻿using CRM_System.DataLayer;
-
-namespace CRM.DataLayer.Models;
+﻿namespace CRM_System.DataLayer;
 
 public class AccountDto
 {

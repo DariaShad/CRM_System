@@ -1,13 +1,8 @@
-﻿using System.Text;
-using CRM.DataLayer.Models;
-using CsvHelper;
-using Bogus;
-using CRM.DataLayer;
-using System.Data.SqlClient;
-using System.Data;
+﻿using Bogus;
 using CRM_System.BusinessLayer;
-using CRM_System.BusinessLayer.Infrastucture;
 using CRM_System.DataLayer;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace DataFiller
 {

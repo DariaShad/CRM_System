@@ -1,29 +1,28 @@
-﻿using CRM_System.BusinessLayer.Models;
-using CRM_System.BusinessLayer.Services.Interfaces;
+﻿using CRM_System.BusinessLayer;
+using CRM_System.BusinessLayer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CRM_System.API.Controllers
+namespace CRM_System.API;
+
+[AllowAnonymous]
+[ApiController]
+[Produces("application/json")]
+[Route("[controller]")]
+public class AuthController : ControllerBase
 {
-    [AllowAnonymous]
-    [ApiController]
-    [Produces("application/json")]
-    [Route("[controller]")]
-    public class AuthController : ControllerBase
+    private readonly IAuthService _authService;
+
+    public AuthController(IAuthService authService)
     {
-        private readonly IAuthService _authService;
+        _authService = authService;
+    }
 
-        public AuthController(IAuthService authService)
-        {
-            _authService = authService;
-        }
+    [HttpPost]
+    public async Task <string> Login([FromBody] LoginRequest loginRequest)
+    {
+        var user = await _authService.Login(loginRequest.Login, loginRequest.Password);
 
-        [HttpPost]
-        public async Task <string> Login([FromBody] LoginRequest loginRequest)
-        {
-            var user = await _authService.Login(loginRequest.Login, loginRequest.Password);
-
-            return _authService.GetToken(user);
-        }
+        return _authService.GetToken(user);
     }
 }

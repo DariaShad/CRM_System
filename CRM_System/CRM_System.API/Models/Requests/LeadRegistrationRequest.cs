@@ -1,6 +1,4 @@
-﻿using CRM.DataLayer;
-
-namespace CRM_System.API;
+﻿namespace CRM_System.API;
 
 public class LeadRegistrationRequest : LeadUpdateRequest
 {

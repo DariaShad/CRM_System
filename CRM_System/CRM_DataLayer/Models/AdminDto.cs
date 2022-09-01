@@ -1,4 +1,4 @@
-﻿namespace CRM.DataLayer.Models;
+﻿namespace CRM_System.DataLayer;
 
 public class AdminDto
 {

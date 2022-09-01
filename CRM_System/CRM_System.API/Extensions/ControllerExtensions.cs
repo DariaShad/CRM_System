@@ -1,5 +1,5 @@
-﻿using CRM.DataLayer;
-using CRM_System.BusinessLayer;
+﻿using CRM_System.BusinessLayer;
+using CRM_System.DataLayer;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_System.API;

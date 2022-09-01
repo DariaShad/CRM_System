@@ -1,16 +1,12 @@
 ﻿using AutoMapper;
-using CRM.DataLayer;
-using CRM.DataLayer.Models;
 using CRM_System.API.Models.Requests;
 using CRM_System.API.Models.Responses;
-using CRM_System.API.Validators;
 using CRM_System.BusinessLayer;
-using CRM_System.BusinessLayer.Services.Interfaces;
-using DataFiller;
+using CRM_System.DataLayer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CRM_System.API.Controllers;
+namespace CRM_System.API;
 
 [Authorize]
 [ApiController]

@@ -1,9 +1,4 @@
-﻿using CRM.DataLayer;
-using CRM.DataLayer.Interfaces;
-using CRM.DataLayer.Models;
-using CRM_System.BusinessLayer.Infrastucture;
-using CRM_System.BusinessLayer.Services;
-using CRM_System.DataLayer;
+﻿using CRM_System.DataLayer;
 
 namespace CRM_System.BusinessLayer;
 
@@ -51,7 +46,7 @@ public class LeadsService : ILeadsService
         var lead = await _leadRepository.GetByEmail(email);
 
         if (lead is null)
-            throw new NotFoundException($"Lead with {email} was not found");
+            throw new NotFoundException($"Lead with email '{email}' was not found");
 
         else
             return lead;
@@ -64,7 +59,7 @@ public class LeadsService : ILeadsService
         var lead = await _leadRepository.GetById(id);
 
         if (lead is null || newLead is null)
-            throw new NotFoundException($"Lead with {lead.Id} was not found");
+            throw new NotFoundException($"Lead with id '{lead.Id}' was not found");
 
         AccessService.CheckAccessForLeadAndManager(lead.Id, claims);
 
@@ -84,7 +79,7 @@ public class LeadsService : ILeadsService
         var lead = await _leadRepository.GetById(id);
 
         if (lead is null)
-            throw new NotFoundException($"Lead with {id} was not found");
+            throw new NotFoundException($"Lead with id '{id}' was not found");
                 
         AccessService.CheckAccessForLeadAndManager(lead.Id, claims);
         await _leadRepository.DeleteOrRestore(id, isDeleted);

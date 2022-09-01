@@ -1,9 +1,7 @@
-﻿using CRM.DataLayer.Interfaces;
-using CRM.DataLayer.Models;
-using Dapper;
+﻿using Dapper;
 using System.Data;
 
-namespace CRM.DataLayer;
+namespace CRM_System.DataLayer;
 
 public class LeadsRepository : BaseRepository, ILeadsRepository
 {
