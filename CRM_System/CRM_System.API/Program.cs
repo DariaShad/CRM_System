@@ -1,15 +1,5 @@
-using CRM.DataLayer;
-using CRM.DataLayer.Interfaces;
-using CRM.DataLayer.Repositories;
 using CRM_System.API;
-using CRM_System.API.Extensions;
-using CRM_System.BusinessLayer;
-using CRM_System.BusinessLayer.Infrastucture;
-using CRM_System.BusinessLayer.Services;
-using CRM_System.BusinessLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using System.Data;
 using System.Data.SqlClient;
 

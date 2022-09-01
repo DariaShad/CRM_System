@@ -1,10 +1,9 @@
-﻿using Moq;
-using AutoMapper;
+﻿using AutoMapper;
+using CRM_System.BusinessLayer;
+using CRM_System.DataLayer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using CRM_System.BusinessLayer;
-using CRM.DataLayer;
-using CRM.DataLayer.Models;
+using Moq;
 
 namespace CRM_System.API.Tests;
 

@@ -1,8 +1,4 @@
-﻿using CRM.DataLayer;
-using CRM.DataLayer.Interfaces;
-using CRM.DataLayer.Models;
-using CRM_System.BusinessLayer.Infrastucture;
-using CRM_System.BusinessLayer.Services.Interfaces;
+﻿using CRM_System.DataLayer;
 
 namespace CRM_System.BusinessLayer.Services
 {
@@ -20,7 +16,7 @@ namespace CRM_System.BusinessLayer.Services
             var admin = await _adminRepository.GetAdminByEmail(email);
 
             if (admin is null)
-                throw new NotFoundException($"Admin with {email} was not found");
+                throw new NotFoundException($"Admin with email '{email}' was not found");
 
             else
                 return admin;

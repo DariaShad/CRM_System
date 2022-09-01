@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
-using CRM.DataLayer;
-using CRM.DataLayer.Models;
 using CRM_System.BusinessLayer;
+using CRM_System.DataLayer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
