@@ -45,7 +45,7 @@ public static class ServiceCollectionExtensions
         });
     }
 
-    public static void AddAuthentication(this IServiceCollection services)
+    public static void AddAuthentications(this IServiceCollection services)
     {
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>

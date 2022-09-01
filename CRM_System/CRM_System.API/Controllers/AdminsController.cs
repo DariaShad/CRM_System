@@ -2,11 +2,13 @@
 using CRM_System.BusinessLayer;
 using CRM_System.BusinessLayer.Models;
 using CRM_System.DataLayer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_System.API;
 
-[AuthorizeByRole(Role.Admin)]
+//[AuthorizeByRole(Role.Admin)]
+
 [ApiController]
 [Produces("application/json")]
 [Route("[controller]")]
@@ -20,7 +22,7 @@ public class AdminsController : ControllerBase
         _adminsService = adminsService;
         _mapper = mapper;
     }
-
+    [AllowAnonymous]
     [HttpPost]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
