@@ -17,10 +17,11 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
 
 
 builder.Services.AddAuthorization();
+
+builder.Services.AddAuthentications();
 
 builder.Services.AddServices();
 
