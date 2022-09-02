@@ -9,8 +9,7 @@
 	@City tinyint,
 	@Address nvarchar(60),
 	@Role tinyint,
-	@Password nvarchar(255),
-	@RegistarionDate datetime
+	@Password nvarchar(255)
 AS
 BEGIN
 INSERT INTO dbo.[Lead](

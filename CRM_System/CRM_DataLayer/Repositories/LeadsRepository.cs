@@ -25,8 +25,7 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
                 leadDto.City,
                 leadDto.Address,
                 leadDto.Role,
-                leadDto.Password,
-                leadDto.RegistrationDate
+                leadDto.Password
             },
             commandType: System.Data.CommandType.StoredProcedure);
 
