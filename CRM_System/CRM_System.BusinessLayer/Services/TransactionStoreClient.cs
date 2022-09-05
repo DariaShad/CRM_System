@@ -7,10 +7,11 @@ public class TransactionStoreClient : IHttpService
 {
     private static readonly HttpClient _httpClient = new HttpClient();
     private readonly JsonSerializerOptions _options;
+    public const string Accounts = "accounts";
 
     public TransactionStoreClient()
     {
-        string baseAddress ="https://piter-education.ru:6060/transactions/";
+        string baseAddress ="https://piter-education.ru:6060/";
 
         if (_httpClient.BaseAddress == null)
         {
@@ -34,9 +35,26 @@ public class TransactionStoreClient : IHttpService
         return result;
     }
 
-    public async Task<string> GetTransactions(int accoundId)
+    public async Task<string> GetTransaction(int transactionId)
     {
-        var response = await _httpClient.GetAsync(accoundId.ToString());
+        var response = await _httpClient.GetAsync($"transactions/{transactionId}");
+        response.EnsureSuccessStatusCode();
+
+        var content = await response.Content.ReadAsStringAsync();
+        return content;
+    }
+    public async Task<string> GetTransactionsByAccountId(int accountId)
+    {
+        var response = await _httpClient.GetAsync($"accounts/{accountId}/transactions");
+        response.EnsureSuccessStatusCode();
+
+        var content = await response.Content.ReadAsStringAsync();
+        return content;
+    }
+
+    public async Task<string> GetBalanceByAccountsId(int accountId)
+    {
+        var response = await _httpClient.GetAsync($"accounts/{accountId}/balance");
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();

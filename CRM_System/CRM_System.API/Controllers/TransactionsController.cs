@@ -58,7 +58,20 @@ public class TransactionsController : Controller
     }
 
     [Authorize]
-    [HttpGet("{accountId}")]
+    [HttpGet("{transactionId}")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult<string>> GetTransactionById(int transactionId)
+    {
+        var claims = this.GetClaims();
+        var transactions = await _transactionsService.GetTransactionById(transactionId);
+        return Json(transactions);
+    }
+
+    [Authorize]
+    [HttpGet("/byAccountId{accountId}")]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
@@ -67,6 +80,19 @@ public class TransactionsController : Controller
     {
         var claims = this.GetClaims();
         var transactions = await _transactionsService.GetTransactionsByAccountId(accountId);
+        return Json(transactions);
+    }
+
+    [Authorize]
+    [HttpGet("/accounts{accountId}/balance")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult<string>> GetBalanceByAccountsId(int accountId)
+    {
+        var claims = this.GetClaims();
+        var transactions = await _transactionsService.GetBalanceByAccountsId(accountId);
         return Json(transactions);
     }
 }

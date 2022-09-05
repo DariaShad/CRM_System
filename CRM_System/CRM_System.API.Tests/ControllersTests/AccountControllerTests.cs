@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using Castle.Core.Logging;
 using CRM_System.API.Models.Requests;
 using CRM_System.BusinessLayer;
 using CRM_System.DataLayer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace CRM_System.API.Tests;
@@ -18,13 +20,15 @@ public class AccountControllerTests
 
     private ClaimModel _claims;
 
+    private ILogger<AccountsController> _logger;
+
     [SetUp]
     public void Setup()
     {
         _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<MapperConfig>()));
         _claims = new ClaimModel();
         _accountsServiceMock= new Mock<IAccountsService>();
-        _sut = new AccountsController(_accountsServiceMock.Object, _mapper);
+        _sut = new AccountsController(_accountsServiceMock.Object, _mapper, _logger);
     }
 
     [Test]
