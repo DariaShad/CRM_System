@@ -1,5 +1,6 @@
 ﻿using CRM_System.BusinessLayer;
 using CRM_System.DataLayer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_System.API;
@@ -17,7 +18,7 @@ public class TransactionsController : Controller
         _transactionsService = transactionsService;
     }
 
-    [AuthorizeByRole(Role.Regular, Role.Vip)]
+    [Authorize]
     [HttpPost("deposit")]
     [ProducesResponseType(typeof(long), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
@@ -30,7 +31,7 @@ public class TransactionsController : Controller
         return Created($"{this.GetShemeAndHostString()}/transactions/{transactionId}", transactionId);
     }
 
-    [AuthorizeByRole(Role.Regular, Role.Vip)]
+    [Authorize]
     [HttpPost("withdraw")]
     [ProducesResponseType(typeof(long), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
@@ -43,7 +44,7 @@ public class TransactionsController : Controller
         return Created($"{this.GetShemeAndHostString()}/transactions/{transactionId}", transactionId);
     }
 
-    [AuthorizeByRole(Role.Regular, Role.Vip)]
+    [Authorize]
     [HttpPost("transfer")]
     [ProducesResponseType(typeof(long), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
@@ -56,7 +57,7 @@ public class TransactionsController : Controller
         return Created($"{this.GetShemeAndHostString()}/transactions/{transactionId}", transactionId);
     }
 
-    [AuthorizeByRole(Role.Regular, Role.Vip, Role.Admin)]
+    [Authorize]
     [HttpGet("{accountId}")]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
