@@ -15,12 +15,13 @@ public class AccountsController : ControllerBase
 {
     private readonly IAccountsService _accountService;
     private readonly IMapper _mapper;
+    private readonly ILogger<AccountsController> _logger;
 
-    public AccountsController (IAccountsService accountService, IMapper mapper)
+    public AccountsController (IAccountsService accountService, IMapper mapper, ILogger<AccountsController> logger)
     {
         _accountService = accountService;
         _mapper = mapper;
-
+        _logger=logger;
     }
 
     [Authorize]
@@ -31,6 +32,7 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     public async Task <ActionResult<AccountResponse>> GetAccount(int id)
     {
+        _logger.LogInformation("Controller: Get an account by id");
         var claim = this.GetClaims();
         var result = await _accountService.GetAccountById(id, claim);
         if (result == null)
@@ -46,6 +48,7 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task <ActionResult<List<AccountResponse>>> GetAllAccountsByLeadId(int leadId)
     {
+        _logger.LogInformation("Controller: Get all accounts by lead id");
         var claim = this.GetClaims();
         var result = await _accountService.GetAllAccountsByLeadId(leadId, claim);
         return Ok(_mapper.Map<List<AccountResponse>>(result));
@@ -59,6 +62,7 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public async Task <ActionResult<int>> AddAccount([FromBody] AddAccountRequest accountRequest)
     {
+        _logger.LogInformation("Controller: Add an account");
         var claim = this.GetClaims();
         var result= await _accountService.AddAccount(_mapper.Map<AccountDto>(accountRequest), claim);
         return Created("", result);
@@ -74,6 +78,7 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status422UnprocessableEntity)]
     public async Task <ActionResult> UpdateAccount([FromBody] UpdateAccountRequest accountRequest, int id)
     {
+        _logger.LogInformation("Controller: Update an account");
         var claim = this.GetClaims();
         await _accountService.UpdateAccount(_mapper.Map<AccountDto>(accountRequest), id, claim);
         return NoContent();
@@ -86,6 +91,7 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task <ActionResult> DeleteAccount(int id)
     {
+        _logger.LogInformation("Controller: Delete an account");
         var claim = this.GetClaims();
         await _accountService.DeleteAccount(id, claim);
         return NoContent();

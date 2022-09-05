@@ -13,15 +13,20 @@ public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
 
-    public AuthController(IAuthService authService)
+    private readonly ILogger<AuthController> _logger;
+
+    public AuthController(IAuthService authService, ILogger<AuthController> logger)
     {
         _authService = authService;
+        _logger = logger;
     }
 
     [HttpPost]
     public async Task <string> Login([FromBody] LoginRequest loginRequest)
     {
         var user = await _authService.Login(loginRequest.Login, loginRequest.Password);
+
+        _logger.LogInformation("Controllers: Login is successful");
 
         return _authService.GetToken(user);
     }
