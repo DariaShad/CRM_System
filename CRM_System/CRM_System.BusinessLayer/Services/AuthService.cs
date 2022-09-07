@@ -1,4 +1,5 @@
 ﻿using CRM_System.DataLayer;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,15 +11,18 @@ public class AuthService : IAuthService
 {
     private readonly ILeadsRepository _leadsRepository;
     private readonly IAdminRepository _adminRepository;
+    private readonly ILogger<AuthService> _logger;
 
-    public AuthService(ILeadsRepository leadsRepository, IAdminRepository adminRepository)
+    public AuthService(ILeadsRepository leadsRepository, IAdminRepository adminRepository, ILogger<AuthService> logger)
     {
         _leadsRepository = leadsRepository;
         _adminRepository = adminRepository;
+        _logger= logger;
     }
 
     public async Task<ClaimModel> Login(string login, string password)
     {
+        _logger.LogInformation("Business layer: Database query for login");
         ClaimModel claimModel = new ClaimModel();
 
         var lead = await _leadsRepository.GetByEmail(login);
@@ -34,6 +38,7 @@ public class AuthService : IAuthService
 
     public string GetToken(ClaimModel claimModel)
     {
+        _logger.LogInformation("Business layer: Database query for getting token");
         if (claimModel is null)
             throw new DataException("There are empty properties");
 

@@ -31,10 +31,7 @@ public class LeadsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status422UnprocessableEntity)]
     public async Task<ActionResult<int>> Register([FromBody] LeadRegistrationRequest request)
     {
-        if (_logger == default)
-             return 15;
-
-        _logger.LogInformation("Всем привет");
+        _logger.LogInformation("Controller: Lead registration");
         var result = await _leadsService.Add(_mapper.Map<LeadDto>(request));
         return Created($"{this.GetUrl()}/{result}", result);
     }
@@ -47,6 +44,7 @@ public class LeadsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<LeadMainInfoResponse>> GetById(int id)
     {
+        _logger.LogInformation("Controller: Get lead by id");
         var claims = this.GetClaims();
         var lead = await _leadsService.GetById(id, claims);
 
@@ -62,6 +60,7 @@ public class LeadsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<List<LeadMainInfoResponse>>> GetAll()
     {
+        _logger.LogInformation("Controller: Get all leads");
         var leads = await _leadsService.GetAll();
         return Ok(_mapper.Map<List<LeadAllInfoResponse>>(leads));
     }
@@ -75,6 +74,7 @@ public class LeadsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status422UnprocessableEntity)]
     public async Task<ActionResult> Update([FromBody] LeadUpdateRequest request, int id)
     {
+        _logger.LogInformation("Controller: Lead registration");
         var claims = this.GetClaims();
 
         await _leadsService.Update(_mapper.Map<LeadDto>(request), id, claims);
@@ -89,6 +89,7 @@ public class LeadsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<ActionResult> Remove(int id)
     {
+        _logger.LogInformation("Controller: Remove lead");
         var claims = this.GetClaims();
 
         await _leadsService.DeleteOrRestore(id, true, claims);
@@ -103,6 +104,7 @@ public class LeadsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<ActionResult> Restore(int id)
     {
+        _logger.LogInformation("Controller: Restore lead");
         var claims = this.GetClaims();
 
         await _leadsService.DeleteOrRestore(id, false, claims);

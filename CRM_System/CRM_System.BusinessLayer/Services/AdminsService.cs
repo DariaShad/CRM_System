@@ -1,4 +1,5 @@
 ﻿using CRM_System.DataLayer;
+using Microsoft.Extensions.Logging;
 
 namespace CRM_System.BusinessLayer.Services
 {
@@ -7,12 +8,16 @@ namespace CRM_System.BusinessLayer.Services
 
         private readonly IAdminRepository _adminRepository;
 
-        public AdminsService (IAdminRepository adminRepository)
+        private readonly ILogger <AdminsService> _logger;
+
+        public AdminsService (IAdminRepository adminRepository, ILogger<AdminsService> logger)
         {
             _adminRepository = adminRepository;
+            _logger = logger;
         }
         public async Task<AdminDto> GetAdminByEmail(string email)
         {
+            _logger.LogInformation("Business layer: Database query for getting admin by email");
             var admin = await _adminRepository.GetAdminByEmail(email);
 
             if (admin is null)
@@ -24,6 +29,7 @@ namespace CRM_System.BusinessLayer.Services
 
         public async Task <int> AddAdmin(AdminDto admin)
         {
+            _logger.LogInformation("Business layer: Database query for adding admin");
             bool isUniqueEmail = await CheckEmailForUniqueness(admin.Email);
             if (!isUniqueEmail)
                 throw new NotUniqueEmailException($"This email is registered already");

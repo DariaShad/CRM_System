@@ -74,6 +74,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IAccountsRepository, AccountsRepository>();
         services.AddScoped<IAccountsService, AccountsService>();
+        services.AddScoped <IHttpService, TransactionStoreClient>();
+        services.AddScoped <ITransactionsService, TransactionsService>();
 
     }
     public static void AddFluentValidation(this IServiceCollection services)
