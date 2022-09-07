@@ -21,7 +21,7 @@ public class TransactionsController : Controller
     }
 
     [Authorize]
-    [HttpPost("deposit/tr")]
+    [HttpPost("deposit")]
     [ProducesResponseType(typeof(long), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
@@ -35,7 +35,7 @@ public class TransactionsController : Controller
     }
 
     [Authorize]
-    [HttpPost("tr/withdraw")]
+    [HttpPost("withdraw")]
     [ProducesResponseType(typeof(long), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
@@ -49,7 +49,7 @@ public class TransactionsController : Controller
     }
 
     [Authorize]
-    [HttpPost("sf/transfer/gd")]
+    [HttpPost("transfer")]
     [ProducesResponseType(typeof(long), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
