@@ -1,4 +1,5 @@
 ﻿using CRM_System.BusinessLayer;
+using CRM_System.BusinessLayer.Exceptions;
 using System.Net;
 
 namespace CRM_System.API;
@@ -30,10 +31,15 @@ public class ExceptionMiddleware
         {
             await HandleExceptionAsync(httpContext, HttpStatusCode.Conflict, error.Message);
         }
+        catch (BadGatewayException error)
+        {
+            await HandleExceptionAsync(httpContext, HttpStatusCode.BadGateway, error.Message);
+        }
         catch (Exception error)
         {
             await HandleExceptionAsync(httpContext, HttpStatusCode.InternalServerError, error.StackTrace);
         }
+        
     }
 
     private async Task HandleExceptionAsync(HttpContext context, HttpStatusCode statusCode, string message)

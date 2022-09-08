@@ -26,7 +26,7 @@ public class AuthController : ControllerBase
     {
         var user = await _authService.Login(loginRequest.Login, loginRequest.Password);
 
-        _logger.LogInformation("Controllers: Login is successful");
+        _logger.LogInformation($"Controllers: Login is successful for {loginRequest.Login}");
 
         return _authService.GetToken(user);
     }

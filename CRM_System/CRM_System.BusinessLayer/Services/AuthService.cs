@@ -22,7 +22,7 @@ public class AuthService : IAuthService
 
     public async Task<ClaimModel> Login(string login, string password)
     {
-        _logger.LogInformation("Business layer: Database query for login");
+        _logger.LogInformation($"Business layer: Database query for login {login}") ;
         ClaimModel claimModel = new ClaimModel();
 
         var lead = await _leadsRepository.GetByEmail(login);
@@ -38,7 +38,7 @@ public class AuthService : IAuthService
 
     public string GetToken(ClaimModel claimModel)
     {
-        _logger.LogInformation("Business layer: Database query for getting token");
+        _logger.LogInformation($"Business layer: Database query for getting token");
         if (claimModel is null)
             throw new DataException("There are empty properties");
 

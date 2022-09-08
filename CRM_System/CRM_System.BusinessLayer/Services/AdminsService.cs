@@ -17,7 +17,7 @@ namespace CRM_System.BusinessLayer.Services
         }
         public async Task<AdminDto> GetAdminByEmail(string email)
         {
-            _logger.LogInformation("Business layer: Database query for getting admin by email");
+            _logger.LogInformation($"Business layer: Database query for getting admin by email {email}");
             var admin = await _adminRepository.GetAdminByEmail(email);
 
             if (admin is null)
@@ -29,7 +29,7 @@ namespace CRM_System.BusinessLayer.Services
 
         public async Task <int> AddAdmin(AdminDto admin)
         {
-            _logger.LogInformation("Business layer: Database query for adding admin");
+            _logger.LogInformation($"Business layer: Database query for adding admin {admin.Email}");
             bool isUniqueEmail = await CheckEmailForUniqueness(admin.Email);
             if (!isUniqueEmail)
                 throw new NotUniqueEmailException($"This email is registered already");

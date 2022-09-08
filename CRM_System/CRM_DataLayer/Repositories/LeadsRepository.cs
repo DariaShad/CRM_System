@@ -1,16 +1,20 @@
 ﻿using Dapper;
+using Microsoft.Extensions.Logging;
 using System.Data;
 
 namespace CRM_System.DataLayer;
 
 public class LeadsRepository : BaseRepository, ILeadsRepository
 {
-    public LeadsRepository(IDbConnection connection) : base(connection)
+    private readonly ILogger<LeadsRepository> _logger;
+    public LeadsRepository(IDbConnection connection, ILogger<LeadsRepository> logger) : base(connection)
     {
+        _logger = logger;
     }
 
     public async Task<int> Add(LeadDto leadDto)
     {
+        _logger.LogInformation($"Data Layer: Add lead: {leadDto.FirstName}, {leadDto.LastName}, {leadDto.Patronymic}, {leadDto.Birthday}, {leadDto.City}");
         var id = await _connectionString.QuerySingleAsync<int>(
             StoredProcedures.Lead_Add,
             param: new
@@ -34,6 +38,7 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
 
     public async Task<List<LeadDto>> GetAll()
     {
+        _logger.LogInformation($"Data Layer: Get all leads");
         var leads = _connectionString.Query<LeadDto>(
             StoredProcedures.Lead_GetAll,
             commandType: System.Data.CommandType.StoredProcedure)
@@ -48,12 +53,14 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
             StoredProcedures.Lead_GetAllInfoByLeadId,
             param: new { id },
             commandType: System.Data.CommandType.StoredProcedure);
+        _logger.LogInformation($"Data Layer: Get by id {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}");
 
         return lead;
     }
 
     public async Task<LeadDto> GetByEmail(string email)
     {
+        _logger.LogInformation($"Data Layer: Get by email {email}");
         var lead = await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
             StoredProcedures.Lead_GetLeadByEmail,
             param: new { email },

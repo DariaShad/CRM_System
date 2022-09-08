@@ -17,37 +17,43 @@ public class AccountsService : IAccountsService
 
     public async Task <int> AddAccount(AccountDto accountDTO, ClaimModel claim)
     {
-        _logger.LogInformation("Business layer: Database query for adding account");
+        _logger.LogInformation($"Business layer: Database query for adding account {accountDTO.LeadId}, {accountDTO.Currency}, {accountDTO.Status}");
         AccessService.CheckAccessForLeadAndManager(accountDTO.Id, claim);
         return await _accountRepository.AddAccount(accountDTO);
     }
 
     public async Task DeleteAccount(int id, ClaimModel claim)
     {
-        _logger.LogInformation("Business layer: Database query for deleting account");
+        var account = await _accountRepository.GetAccountById(id);
+        _logger.LogInformation($"Business layer: Database query for deleting account: {id} {account.LeadId}, {account.Currency}, {account.Status}");
         AccessService.CheckAccessForLeadAndManager(id, claim);
         await _accountRepository.DeleteAccount(id);
     }
 
     public async Task <AccountDto> GetAccountById(int id, ClaimModel claim)
-    {
-        _logger.LogInformation("Business layer: Database query for getting account");
+    {   
+        //var leadId = _leadsRepository
+        var account = await _accountRepository.GetAccountById(id);
+        _logger.LogInformation($"Business layer: Database query for getting account: {id} {account.LeadId}, {account.Currency}, {account.Status}");
         AccessService.CheckAccessForLeadAndManager(id, claim); //Написано неправильно!!! нужно переделать под айди ЛИДА. А СЕЙЧАС ПОД АЙДИ АККАУНТА
-        return await _accountRepository.GetAccountById(id);
+        return account;
     }
 
-    public async Task <List<AccountDto>> GetAllAccounts() => await _accountRepository.GetAllAccounts();
-
+    public async Task<List<AccountDto>> GetAllAccounts()
+    {
+        _logger.LogInformation("Business layer: Database query for getting all accounts");
+        return await _accountRepository.GetAllAccounts();
+    }
     public async Task <List<AccountDto>> GetAllAccountsByLeadId(int leadId, ClaimModel claim)
     {
-        _logger.LogInformation("Business layer: Database query for getting accounts by lead id");
+        _logger.LogInformation($"Business layer: Database query for getting accounts by lead id : {leadId}");
         AccessService.CheckAccessForLeadAndManager(leadId, claim);
         return await _accountRepository.GetAllAccounts();
     }
 
     public async Task UpdateAccount(AccountDto account, int id, ClaimModel claim)
     {
-        _logger.LogInformation("Business layer: Database query for updating account");
+        _logger.LogInformation($"Business layer: Database query for updating account by id {id}, {account.LeadId}, {account.Status}, {account.IsDeleted}");
         AccessService.CheckAccessForLeadAndManager(id, claim);
         await _accountRepository.UpdateAccount(account, id);
     }
