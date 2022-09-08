@@ -1,4 +1,5 @@
-﻿using CRM_System.DataLayer;
+﻿using CRM_System.API.Extensions;
+using CRM_System.DataLayer;
 using Microsoft.Extensions.Logging;
 
 namespace CRM_System.BusinessLayer;
@@ -19,7 +20,8 @@ public class LeadsService : ILeadsService
 
     public async Task<int> Add(LeadDto lead)
     {
-        _logger.LogInformation("Business layer: Database query for adding lead");
+        _logger.LogInformation($"Business layer: Database query for adding lead {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
+            $"{lead.City}, {lead.Address.MaskTheLastFive}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
         bool isUniqueEmail = await CheckEmailForUniqueness(lead.Email);
         if (!isUniqueEmail)
             throw new NotUniqueEmailException($"This email is registered already");
@@ -40,8 +42,9 @@ public class LeadsService : ILeadsService
 
     public async Task<LeadDto> GetById(int id, ClaimModel claims)
     {
-        _logger.LogInformation("Business layer: Database query for getting lead by id");
         var lead = await _leadRepository.GetById(id);
+        _logger.LogInformation($"Business layer: Database query for getting lead by id {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
+            $"{lead.City}, {lead.Address.MaskTheLastFive}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
         AccessService.CheckAccessForLeadAndManager(lead.Id, claims);
 
         return lead;
@@ -49,7 +52,7 @@ public class LeadsService : ILeadsService
 
     public async Task<LeadDto?> GetByEmail(string email)
     {
-        _logger.LogInformation("Business layer: Database query for getting lead by email");
+        _logger.LogInformation($"Business layer: Database query for getting lead by email {email}");
         var lead = await _leadRepository.GetByEmail(email);
 
         if (lead is null)
@@ -63,7 +66,8 @@ public class LeadsService : ILeadsService
 
     public async Task Update(LeadDto newLead, int id, ClaimModel claims)
     {
-        _logger.LogInformation("Business layer: Database query for updating lead");
+        _logger.LogInformation($"Business layer: Database query for updating lead {id}, new data: {newLead.FirstName}, {newLead.LastName}, {newLead.Patronymic}, {newLead.Birthday}, {newLead.Phone.MaskNumber()}, " +
+            $"{newLead.City}, {newLead.Address.MaskTheLastFive}");
         var lead = await _leadRepository.GetById(id);
 
         if (lead is null || newLead is null)
@@ -84,8 +88,9 @@ public class LeadsService : ILeadsService
 
     public async Task DeleteOrRestore(int id, bool isDeleted, ClaimModel claims)
     {
-        _logger.LogInformation("Business layer: Database query for deleting lead");
         var lead = await _leadRepository.GetById(id);
+        _logger.LogInformation($"Business layer: Database query for deleting lead {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
+            $"{lead.City}, {lead.Address.MaskTheLastFive}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
 
         if (lead is null)
             throw new NotFoundException($"Lead with id '{id}' was not found");

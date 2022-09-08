@@ -33,7 +33,7 @@ public class TransactionStoreClient : IHttpService
         {
         response = await _httpClient.PostAsync(path, requestPayload);
         CheckStatusCode(response.StatusCode);
-
+        
         }
          catch (Exception ex)
         {

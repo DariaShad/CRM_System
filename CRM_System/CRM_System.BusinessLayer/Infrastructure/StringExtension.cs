@@ -22,5 +22,19 @@
             maskedNumber += theLastTwoNumbers;
             return maskedNumber;
         }
+
+        public static string MaskPassport(this string originalData)
+        {
+            string firstFourNumbers = originalData.Substring(0, 2);
+            string theLastTwoNumbers = originalData.Substring(8, 2);
+            string maskedNumber = firstFourNumbers.PadRight(8, '*');
+            maskedNumber += theLastTwoNumbers;
+            return maskedNumber;
+        }
+        public static string MaskTheLastFive(this string originalData)
+        {
+            string maskedData = originalData.Remove(originalData.Length - 5, 5);
+            return $"{maskedData} *****";
+        }
     }
 }

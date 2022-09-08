@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CRM_System.API;
 
-//[AuthorizeByRole(Role.Admin)]
+[AuthorizeByRole(Role.Admin)]
 
 [ApiController]
 [Produces("application/json")]
@@ -24,7 +24,7 @@ public class AdminsController : ControllerBase
         _mapper = mapper;
         _logger= logger;
     }
-    [AllowAnonymous]
+
     [HttpPost]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
@@ -33,7 +33,7 @@ public class AdminsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status422UnprocessableEntity)]
     public async Task<ActionResult<int>> AddAdmin([FromBody] LoginRequest adminRegistrationRequest)
     {
-        _logger.LogInformation("Controller: Add an admin");
+        _logger.LogInformation($"Controller: Add an admin: {adminRegistrationRequest.Login}");
         var result = await _adminsService.AddAdmin(_mapper.Map<AdminDto>(adminRegistrationRequest));
         return Created($"{this.GetUrl()}/{result}", result);
     }
