@@ -2,16 +2,25 @@
 {
     public static class StringExtension
     {
-        public static string Mask(this string originalData)
+        public static string MaskEmail(this string originalData)
         {
-            if (originalData.Length<4)
+            int index = originalData.IndexOf('@');
+            string output = originalData;
+            if (index > 3)
             {
-
+                output = originalData.Substring(0, 2) + new string('*', index - 2) + originalData.Substring(index);
             }
-            string maskedData = originalData.Remove(0, 2);
-            maskedData = maskedData.Remove(maskedData.Length-2, 2);
+            return output;
 
-            return $"**{maskedData}**";
+        }
+
+        public static string MaskNumber(this string originalData)
+        {
+            string firstFourNumbers = originalData.Substring(0, 4);
+            string theLastTwoNumbers = originalData.Substring(9, 2);
+            string maskedNumber = firstFourNumbers.PadRight(9, '*');
+            maskedNumber += theLastTwoNumbers;
+            return maskedNumber;
         }
     }
 }

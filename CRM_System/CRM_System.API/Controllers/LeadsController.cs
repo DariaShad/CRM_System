@@ -32,7 +32,7 @@ public class LeadsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status422UnprocessableEntity)]
     public async Task<ActionResult<int>> Register([FromBody] LeadRegistrationRequest request)
     {
-        _logger.LogInformation($"Controller: Lead registration: {request.FirstName}, {request.LastName.Mask()} ");
+        _logger.LogInformation($"Controller: Lead registration: {request.FirstName}, {request.Email.MaskEmail()}, {request.Phone.MaskNumber()} ");
         var result = await _leadsService.Add(_mapper.Map<LeadDto>(request));
         return Created($"{this.GetUrl()}/{result}", result);
     }
