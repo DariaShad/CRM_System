@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CRM_System.API.Extensions;
 using CRM_System.BusinessLayer;
 using CRM_System.DataLayer;
 using Microsoft.AspNetCore.Authorization;
@@ -31,7 +32,7 @@ public class LeadsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status422UnprocessableEntity)]
     public async Task<ActionResult<int>> Register([FromBody] LeadRegistrationRequest request)
     {
-        _logger.LogInformation("Controller: Lead registration");
+        _logger.LogInformation($"Controller: Lead registration: {request.FirstName}, {request.LastName.Mask()} ");
         var result = await _leadsService.Add(_mapper.Map<LeadDto>(request));
         return Created($"{this.GetUrl()}/{result}", result);
     }

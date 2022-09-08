@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using CRM_System.BusinessLayer.Exceptions;
+using System.Net;
+using System.Text;
 using System.Text.Json;
 
 namespace CRM_System.BusinessLayer;
@@ -26,8 +28,17 @@ public class TransactionStoreClient : IHttpService
     {
         var serializedPayload = JsonSerializer.Serialize(payload);
         var requestPayload = new StringContent(serializedPayload, Encoding.UTF8, "application/json");
+        HttpResponseMessage response;
+        try 
+        {
+        response = await _httpClient.PostAsync(path, requestPayload);
+        CheckStatusCode(response.StatusCode);
 
-        var response = await _httpClient.PostAsync(path, requestPayload);
+        }
+         catch (Exception ex)
+        {
+            throw new BadGatewayException("");
+        }
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
@@ -59,5 +70,12 @@ public class TransactionStoreClient : IHttpService
 
         var content = await response.Content.ReadAsStringAsync();
         return content;
+    }
+    private void CheckStatusCode(HttpStatusCode statusCode)
+    {
+        if (statusCode == HttpStatusCode.InternalServerError)
+        {
+            throw new BadGatewayException("");
+        }
     }
 }
