@@ -1,5 +1,6 @@
 ﻿using CRM_System.BusinessLayer;
 using CRM_System.DataLayer;
+using IncredibleBackendContracts.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -68,12 +69,12 @@ public class TransactionsController : Controller
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult<string>> GetTransactionById(int transactionId)
+    public async Task<ActionResult<TransactionResponse>> GetTransactionById(int transactionId)
     {
         _logger.LogInformation("Controllers: Get transaction by id");
         var claims = this.GetClaims();
-        var transactions = await _transactionsService.GetTransactionById(transactionId);
-        return Json(transactions);
+        var transaction = await _transactionsService.GetTransactionById(transactionId);
+        return Ok(transaction);
     }
 
     [Authorize]
@@ -82,7 +83,7 @@ public class TransactionsController : Controller
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult<string>> GetTransactionsByAccountId(int accountId)
+    public async Task<ActionResult<TransactionResponse>> GetTransactionsByAccountId(int accountId)
     {
         _logger.LogInformation("Controllers: Get transaction by account id");
         var claims = this.GetClaims();
