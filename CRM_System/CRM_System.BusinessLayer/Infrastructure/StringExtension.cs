@@ -23,7 +23,7 @@
             return maskedNumber;
         }
 
-        public static string MaskPassport(this string originalData)
+        public static string MaskPassport(this string originalData)//принимать два параметра
         {
             string firstFourNumbers = originalData.Substring(0, 2);
             string theLastTwoNumbers = originalData.Substring(8, 2);

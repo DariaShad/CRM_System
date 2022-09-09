@@ -1,5 +1,7 @@
 using CRM_System.API;
 using CRM_System.API.Infrastucture;
+using CRM_System.API.Models.Responses;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using NLog;
 using NLog.Web;
@@ -28,6 +30,8 @@ builder.Services.AddAuthentications();
 builder.Services.AddServices();
 builder.Services.AddFluentValidation();
 builder.Services.AddAutoMapper(typeof(MapperConfig));
+builder.Services.AddMassTransit(
+    config => config.UsingRabbitMq((ctx, cfg) => cfg.ReceiveEndpoint("delete-lead", c => c.Bind<LeadDeletedEvent>()))); //const
 
 var app = builder.Build();
 

@@ -35,7 +35,7 @@ public class TransactionsService : ITransactionsService
         return await _httpService.Post<TransferTransactionRequest, List<long>>(request, _path);
     }
 
-    public async Task<string> GetTransactionById(int transactionId)
+    public async Task<TransactionRequest> GetTransactionById(int transactionId)
     {
         _logger.LogInformation($"Business layer: Database query for getting transaction by id {transactionId}");
         return await _httpService.GetTransaction(transactionId);

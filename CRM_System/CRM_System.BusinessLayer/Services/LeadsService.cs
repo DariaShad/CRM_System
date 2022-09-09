@@ -21,7 +21,7 @@ public class LeadsService : ILeadsService
     public async Task<int> Add(LeadDto lead)
     {
         _logger.LogInformation($"Business layer: Database query for adding lead {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
-            $"{lead.City}, {lead.Address.MaskTheLastFive}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
+            $"{lead.City}, {lead.Address.MaskTheLastFive()}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
         bool isUniqueEmail = await CheckEmailForUniqueness(lead.Email);
         if (!isUniqueEmail)
             throw new NotUniqueEmailException($"This email is registered already");
@@ -49,7 +49,7 @@ public class LeadsService : ILeadsService
 
         return lead;
     }
-
+    //Update role
     public async Task<LeadDto?> GetByEmail(string email)
     {
         _logger.LogInformation($"Business layer: Database query for getting lead by email {email}");

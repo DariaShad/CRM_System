@@ -15,6 +15,9 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.1" />
     <PackageReference Include="IncredibleBackend" Version="1.1.2" />
+    <PackageReference Include="MassTransit" Version="8.0.7-develop.576" />
+    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.3.1" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.7-develop.576" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.7" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="5.1.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
@@ -23,7 +26,6 @@
 
   <ItemGroup>
     <Folder Include="CustomAttributes\" />
-    <Folder Include="Models\Responses" />
   </ItemGroup>
 
   <ItemGroup>

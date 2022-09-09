@@ -92,7 +92,7 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
         if (isDeleting)
             await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
                 StoredProcedures.Lead_Delete,
-                param: new { id },
+                param: new { id, IsDeleted=true },
                 commandType: System.Data.CommandType.StoredProcedure);
         else
             await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
