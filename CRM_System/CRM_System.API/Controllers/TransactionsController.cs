@@ -83,7 +83,7 @@ public class TransactionsController : Controller
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult<TransactionResponse>> GetTransactionsByAccountId(int accountId)
+    public async Task<ActionResult<List<TransactionResponse>>> GetTransactionsByAccountId(int accountId)
     {
         _logger.LogInformation("Controllers: Get transaction by account id");
         var claims = this.GetClaims();
@@ -97,7 +97,7 @@ public class TransactionsController : Controller
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult<string>> GetBalanceByAccountsId(int accountId)
+    public async Task<ActionResult<decimal>> GetBalanceByAccountsId(int accountId)
     {
         _logger.LogInformation("Controllers: Get balance by account id");
         var claims = this.GetClaims();
