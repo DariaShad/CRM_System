@@ -5,7 +5,6 @@
 	@Patronymic nvarchar(50),
 	@Birthday date,
 	@Phone nvarchar(15),
-	@Passport nvarchar(150),
 	@City tinyint,
 	@Address nvarchar(60)
 
@@ -18,7 +17,6 @@ SET FirstName = @FirstName,
 	Patronymic = @Patronymic,
 	Birthday = @Birthday,
 	Phone = @Phone,
-	Passport = @Passport,
 	City = @City,
 	[Address] = @Address
 

@@ -1,4 +1,6 @@
-﻿using CRM_System.DataLayer;
+﻿using CRM_System.API.Producer;
+using CRM_System.DataLayer;
+using IncredibleBackendContracts.Events;
 using Microsoft.Extensions.Logging;
 
 namespace CRM_System.BusinessLayer;
@@ -9,16 +11,19 @@ public class AccountsService : IAccountsService
 
     private readonly ILogger<AccountsService> _logger;
 
-    public AccountsService(IAccountsRepository accountRepository, ILogger<AccountsService> logger)
+    private readonly IRabbitMQProducer _rabbitMq;
+    public AccountsService(IAccountsRepository accountRepository, ILogger<AccountsService> logger, IRabbitMQProducer rabbitMq)
     {
         _accountRepository = accountRepository;
         _logger = logger;
+        _rabbitMq = rabbitMq;
     }
 
     public async Task <int> AddAccount(AccountDto accountDTO, ClaimModel claim)
     {
         _logger.LogInformation($"Business layer: Database query for adding account {accountDTO.LeadId}, {accountDTO.Currency}, {accountDTO.Status}");
         AccessService.CheckAccessForLeadAndManager(accountDTO.Id, claim);
+        await _rabbitMq.SendRatesMessage(new AccountCreatedEvent() { Id = accountDTO.Id, Currency = (IncredibleBackendContracts.Enums.Currency)accountDTO.Currency, Status = (IncredibleBackendContracts.Enums.AccountStatus)accountDTO.Status, LeadId = accountDTO.LeadId });
         return await _accountRepository.AddAccount(accountDTO);
     }
 

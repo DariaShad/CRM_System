@@ -39,7 +39,6 @@ public class LeadsController : ControllerBase
         _logger.LogInformation($"Controller: Lead registration: {request.FirstName}, {request.LastName}, {request.Patronymic}, {request.Birthday}, {request.Phone.MaskNumber()}, " +
             $"{request.City}, {request.Address.MaskTheLastFive()}, {request.Email.MaskEmail()}, {request.Passport.MaskPassport()}");
         var result = await _leadsService.Add(_mapper.Map<LeadDto>(request));
-
         return Created($"{this.GetUrl()}/{result}", result);
     }
 
@@ -73,7 +72,7 @@ public class LeadsController : ControllerBase
         return Ok(_mapper.Map<List<LeadAllInfoResponse>>(leads));
     }
 
-    [AuthorizeByRole(Role.Regular, Role.Vip)]
+    [Authorize]
     [HttpPut("{id}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
@@ -103,8 +102,8 @@ public class LeadsController : ControllerBase
         var lead = await _leadsService.GetById(id, claims);
         _logger.LogInformation($"Controller: Remove lead by id {id}:{lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
             $"{lead.City}, {lead.Address.MaskTheLastFive}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
-        await _leadsService.DeleteOrRestore(id, true, claims);
-        await _rabbitMq.SendRatesMessage(new LeadDeletedEvent() { Id = id });
+        await _leadsService.Delete(id, true, claims);
+
         return NoContent();
     }
 
@@ -117,7 +116,7 @@ public class LeadsController : ControllerBase
     public async Task<ActionResult> Restore(int id)
     {
         var claims = this.GetClaims();
-        await _leadsService.DeleteOrRestore(id, false, claims);
+        await _leadsService.Restore(id, false, claims);
         var lead = await _leadsService.GetById(id, claims);
         _logger.LogInformation($"Controller: Restore lead by id {id}: {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
             $"{lead.City}, {lead.Address.MaskTheLastFive}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");

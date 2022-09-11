@@ -50,7 +50,7 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
     public async Task<LeadDto> GetById(int id)
     {
         var lead = await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
-            StoredProcedures.Lead_GetAllInfoByLeadId,
+            StoredProcedures.Lead_GetById,
             param: new { id },
             commandType: System.Data.CommandType.StoredProcedure);
         _logger.LogInformation($"Data Layer: Get by id {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}");
@@ -72,7 +72,7 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
     public async Task Update(LeadDto leadDto)
     {
         await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
-            StoredProcedures.Account_Update,
+            StoredProcedures.Lead_Update,
             param: new
             {
                 leadDto.FirstName,
@@ -80,7 +80,6 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
                 leadDto.Patronymic,
                 leadDto.Birthday,
                 leadDto.Phone,
-                leadDto.Passport,
                 leadDto.City,
                 leadDto.Address
             },
@@ -97,7 +96,9 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
         else
             await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
                 StoredProcedures.Lead_Delete,
-                param: new { id },
+                param: new { id, IsDeleted=false },
                 commandType: System.Data.CommandType.StoredProcedure);
     }
+
+
 }

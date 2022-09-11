@@ -1,5 +1,7 @@
 ﻿using CRM_System.API.Extensions;
+using CRM_System.API.Producer;
 using CRM_System.DataLayer;
+using IncredibleBackendContracts.Events;
 using Microsoft.Extensions.Logging;
 
 namespace CRM_System.BusinessLayer;
@@ -11,11 +13,13 @@ public class LeadsService : ILeadsService
     private readonly IAccountsRepository _accountRepository;
 
     private readonly ILogger<LeadsService> _logger;
+    private readonly IRabbitMQProducer _rabbitMq;
 
-    public LeadsService(ILeadsRepository leadRepository, ILogger<LeadsService> logger)
+    public LeadsService(ILeadsRepository leadRepository, ILogger<LeadsService> logger, IRabbitMQProducer rabbitMq)
     {
         _leadRepository = leadRepository;
         _logger = logger;
+        _rabbitMq = rabbitMq;
     }
 
     public async Task<int> Add(LeadDto lead)
@@ -36,6 +40,8 @@ public class LeadsService : ILeadsService
             LeadId = lead.Id,
         };
         //_accountRepository.AddAccount(account);
+
+        await _rabbitMq.SendRatesMessage(new LeadCreatedEvent() { Id = lead.Id });
 
         return await _leadRepository.Add(lead);
     }
@@ -74,7 +80,7 @@ public class LeadsService : ILeadsService
             throw new NotFoundException($"Lead with id '{lead.Id}' was not found");
 
         AccessService.CheckAccessForLeadAndManager(lead.Id, claims);
-
+        lead.Id = id;
         lead.FirstName = newLead.FirstName;
         lead.LastName = newLead.LastName;
         lead.Patronymic = newLead.Patronymic;
@@ -82,11 +88,29 @@ public class LeadsService : ILeadsService
         lead.Phone = newLead.Phone;
         lead.City = newLead.City;
         lead.Address = newLead.Address;
+        
+        //lead.Email = lead.Email;
+        //lead.RegistrationDate = lead.RegistrationDate;
+        //lead.Role = lead.Role;
+        //lead.Passport = lead.Passport;
 
         await _leadRepository.Update(lead);
     }
 
-    public async Task DeleteOrRestore(int id, bool isDeleted, ClaimModel claims)
+    public async Task Restore(int id, bool isDeleted, ClaimModel claims)
+    {
+        var lead = await _leadRepository.GetById(id);
+        _logger.LogInformation($"Business layer: Database query for restoring lead {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
+            $"{lead.City}, {lead.Address.MaskTheLastFive}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
+
+        if (lead is null)
+            throw new NotFoundException($"Lead with id '{id}' was not found");
+                
+        AccessService.CheckAccessForLeadAndManager(lead.Id, claims);
+        
+        await _leadRepository.DeleteOrRestore(id, isDeleted);
+    }
+    public async Task Delete(int id, bool isDeleted, ClaimModel claims)
     {
         var lead = await _leadRepository.GetById(id);
         _logger.LogInformation($"Business layer: Database query for deleting lead {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
@@ -94,8 +118,11 @@ public class LeadsService : ILeadsService
 
         if (lead is null)
             throw new NotFoundException($"Lead with id '{id}' was not found");
-                
+
         AccessService.CheckAccessForLeadAndManager(lead.Id, claims);
+
+        await _rabbitMq.SendRatesMessage(new LeadDeletedEvent() { Id = id });
+
         await _leadRepository.DeleteOrRestore(id, isDeleted);
     }
 

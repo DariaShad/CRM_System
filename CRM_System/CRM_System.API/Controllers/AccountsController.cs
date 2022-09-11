@@ -54,7 +54,7 @@ public class AccountsController : ControllerBase
         return Ok(_mapper.Map<List<AccountResponse>>(result));
     }
 
-    [AuthorizeByRole(Role.Regular, Role.Vip)]
+    [Authorize]
     [HttpPost]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
@@ -68,7 +68,7 @@ public class AccountsController : ControllerBase
         return Created("", result);
     }
 
-    [AuthorizeByRole(Role.Regular, Role.Vip)]
+    [Authorize]
     [HttpPut("{id}")] 
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
@@ -84,7 +84,7 @@ public class AccountsController : ControllerBase
         return NoContent();
     }
 
-    [AuthorizeByRole(Role.Regular, Role.Vip)]
+    [Authorize]
     [HttpDelete("{id}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
