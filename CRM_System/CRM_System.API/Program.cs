@@ -38,6 +38,8 @@ builder.Services.AddMassTransit(
         cfg.ReceiveEndpoint("delete-lead", c => c.Bind<LeadDeletedEvent>());
         cfg.ReceiveEndpoint("add-lead", c => c.Bind<LeadCreatedEvent>());
         cfg.ReceiveEndpoint("add-account", c => c.Bind<AccountCreatedEvent>());
+        cfg.ReceiveEndpoint("delete-account", c => c.Bind<AccountDeletedEvent>());
+        cfg.ReceiveEndpoint("update-account", c => c.Bind<AccountUpdatedEvent>());
     }));
     
 

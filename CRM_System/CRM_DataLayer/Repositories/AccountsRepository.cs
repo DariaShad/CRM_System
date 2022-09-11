@@ -56,7 +56,7 @@ public class AccountsRepository : BaseRepository, IAccountsRepository
             StoredProcedures.Account_Update,
             param: new
             {
-                account.Currency,
+                account.Status,
                 account.IsDeleted
             },
              commandType: CommandType.StoredProcedure);
