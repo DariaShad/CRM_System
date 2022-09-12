@@ -16,5 +16,5 @@ public class LeadDto
     public string Password { get; set; }
     public DateTime RegistrationDate { get; set; }
     public bool IsDeleted { get; set; }
-    public List<AccountDto> Accounts { get; set; }
+    public List<AccountDto> Accounts { get; set; } = new List<AccountDto>();
 }

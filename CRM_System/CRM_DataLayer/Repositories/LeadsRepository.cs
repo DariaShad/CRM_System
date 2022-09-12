@@ -60,15 +60,15 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
 
     public async Task<LeadDto> GetById(int id)
     {
-        var lead = (await _connectionString.QueryAsync<LeadDto, List <AccountDto>, LeadDto>(
+        var lead = (await _connectionString.QueryAsync<LeadDto, AccountDto, LeadDto>(
             StoredProcedures.Lead_GetAllInfoByLeadId,
             (lead, account) =>
             {
-                lead.Accounts = account;
+                lead.Accounts.Add(account);
                 return lead;
             },
-            splitOn: "IdAccount",
-            param: new { IdLead = id },
+            splitOn: "Id",
+            param: new { Id = id },
             commandType: System.Data.CommandType.StoredProcedure)).FirstOrDefault();
 
         _logger.LogInformation($"Data Layer: Get by id {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}");
