@@ -47,12 +47,30 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
         return leads;
     }
 
+    //public async Task<LeadDto> GetById(int id)
+    //{
+    //    var lead = await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
+    //        StoredProcedures.Lead_GetAllInfoByLeadId,
+    //        param: new { IdLead = id },
+    //        commandType: System.Data.CommandType.StoredProcedure);
+    //    _logger.LogInformation($"Data Layer: Get by id {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}");
+
+    //    return lead;
+    //}
+
     public async Task<LeadDto> GetById(int id)
     {
-        var lead = await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
-            StoredProcedures.Lead_GetById,
-            param: new { id },
-            commandType: System.Data.CommandType.StoredProcedure);
+        var lead = (await _connectionString.QueryAsync<LeadDto, List <AccountDto>, LeadDto>(
+            StoredProcedures.Lead_GetAllInfoByLeadId,
+            (lead, account) =>
+            {
+                lead.Accounts = account;
+                return lead;
+            },
+            splitOn: "IdAccount",
+            param: new { IdLead = id },
+            commandType: System.Data.CommandType.StoredProcedure)).FirstOrDefault();
+
         _logger.LogInformation($"Data Layer: Get by id {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}");
 
         return lead;

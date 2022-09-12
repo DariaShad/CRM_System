@@ -80,7 +80,7 @@ public class LeadsService : ILeadsService
             throw new NotFoundException($"Lead with id '{lead.Id}' was not found");
 
         AccessService.CheckAccessForLeadAndManager(lead.Id, claims);
-        lead.Id = id;
+
         lead.FirstName = newLead.FirstName;
         lead.LastName = newLead.LastName;
         lead.Patronymic = newLead.Patronymic;
