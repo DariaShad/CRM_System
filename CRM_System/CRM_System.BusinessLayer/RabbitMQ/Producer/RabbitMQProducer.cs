@@ -14,7 +14,7 @@ namespace CRM_System.API.Producer
             _logger = logger;
         }
 
-        public async Task SendRatesMessage<T>(T message)
+        public async Task SendMessage<T>(T message)
         {
             try
             {

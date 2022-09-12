@@ -41,7 +41,7 @@ public class LeadsService : ILeadsService
         };
         //_accountRepository.AddAccount(account);
 
-        await _rabbitMq.SendRatesMessage(new LeadCreatedEvent() { Id = lead.Id });
+        await _rabbitMq.SendMessage(new LeadCreatedEvent() { Id = lead.Id });
 
         return await _leadRepository.Add(lead);
     }
@@ -89,11 +89,6 @@ public class LeadsService : ILeadsService
         lead.City = newLead.City;
         lead.Address = newLead.Address;
         
-        //lead.Email = lead.Email;
-        //lead.RegistrationDate = lead.RegistrationDate;
-        //lead.Role = lead.Role;
-        //lead.Passport = lead.Passport;
-
         await _leadRepository.Update(lead);
     }
 
@@ -121,7 +116,7 @@ public class LeadsService : ILeadsService
 
         AccessService.CheckAccessForLeadAndManager(lead.Id, claims);
 
-        await _rabbitMq.SendRatesMessage(new LeadDeletedEvent() { Id = id });
+        await _rabbitMq.SendMessage(new LeadDeletedEvent() { Id = id });
 
         await _leadRepository.DeleteOrRestore(id, isDeleted);
     }

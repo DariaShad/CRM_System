@@ -23,7 +23,7 @@ public class AccountsService : IAccountsService
     {
         _logger.LogInformation($"Business layer: Database query for adding account {accountDTO.LeadId}, {accountDTO.Currency}, {accountDTO.Status}");
         AccessService.CheckAccessForLeadAndManager(accountDTO.Id, claim);
-        await _rabbitMq.SendRatesMessage(new AccountCreatedEvent() { Id = accountDTO.Id, Currency = (IncredibleBackendContracts.Enums.Currency)accountDTO.Currency, Status = (IncredibleBackendContracts.Enums.AccountStatus)accountDTO.Status, LeadId = accountDTO.LeadId });
+        await _rabbitMq.SendMessage(new AccountCreatedEvent() { Id = accountDTO.Id, Currency = (IncredibleBackendContracts.Enums.Currency)accountDTO.Currency, Status = (IncredibleBackendContracts.Enums.AccountStatus)accountDTO.Status, LeadId = accountDTO.LeadId });
         return await _accountRepository.AddAccount(accountDTO);
     }
 
@@ -32,7 +32,7 @@ public class AccountsService : IAccountsService
         var account = await _accountRepository.GetAccountById(id);
         _logger.LogInformation($"Business layer: Database query for deleting account: {id} {account.LeadId}, {account.Currency}, {account.Status}");
         AccessService.CheckAccessForLeadAndManager(id, claim);
-        await _rabbitMq.SendRatesMessage(new AccountDeletedEvent() { Id = id});
+        await _rabbitMq.SendMessage(new AccountDeletedEvent() { Id = id});
         await _accountRepository.DeleteAccount(id);
     }
 
@@ -61,7 +61,7 @@ public class AccountsService : IAccountsService
     {
         _logger.LogInformation($"Business layer: Database query for updating account by id {id}, {account.LeadId}, {account.Status}, {account.IsDeleted}");
         AccessService.CheckAccessForLeadAndManager(id, claim);
-        await _rabbitMq.SendRatesMessage(new AccountUpdatedEvent() { Id = id, Status= (IncredibleBackendContracts.Enums.AccountStatus)account.Status });
+        await _rabbitMq.SendMessage(new AccountUpdatedEvent() { Id = id, Status= (IncredibleBackendContracts.Enums.AccountStatus)account.Status });
         await _accountRepository.UpdateAccount(account, id);
     }
 

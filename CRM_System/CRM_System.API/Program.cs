@@ -2,6 +2,7 @@ using CRM_System.API;
 using CRM_System.API.Infrastucture;
 using CRM_System.API.Models;
 using CRM_System.API.Models.Responses;
+using IncredibleBackendContracts.Constants;
 using IncredibleBackendContracts.Events;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -35,11 +36,13 @@ builder.Services.AddAutoMapper(typeof(MapperConfig));
 builder.Services.AddMassTransit(
     config => config.UsingRabbitMq((ctx, cfg) =>
     {
-        cfg.ReceiveEndpoint("delete-lead", c => c.Bind<LeadDeletedEvent>());
-        cfg.ReceiveEndpoint("add-lead", c => c.Bind<LeadCreatedEvent>());
-        cfg.ReceiveEndpoint("add-account", c => c.Bind<AccountCreatedEvent>());
-        cfg.ReceiveEndpoint("delete-account", c => c.Bind<AccountDeletedEvent>());
-        cfg.ReceiveEndpoint("update-account", c => c.Bind<AccountUpdatedEvent>());
+        cfg.ReceiveEndpoint(RabbitEndpoint.LeadsRoleUpdateCrm, c => c.Bind<LeadsRoleUpdatedEvent>());
+
+        cfg.ReceiveEndpoint(RabbitEndpoint.LeadDelete, c => c.Bind<LeadDeletedEvent>());
+        cfg.ReceiveEndpoint(RabbitEndpoint.LeadCreate, c => c.Bind<LeadCreatedEvent>());
+        cfg.ReceiveEndpoint(RabbitEndpoint.AccountCreate, c => c.Bind<AccountCreatedEvent>());
+        cfg.ReceiveEndpoint(RabbitEndpoint.AccountDelete, c => c.Bind<AccountDeletedEvent>());
+        cfg.ReceiveEndpoint(RabbitEndpoint.AccountUpdate, c => c.Bind<AccountUpdatedEvent>());
     }));
     
 

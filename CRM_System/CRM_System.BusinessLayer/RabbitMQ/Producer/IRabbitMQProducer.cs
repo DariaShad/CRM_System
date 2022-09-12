@@ -2,6 +2,6 @@
 {
     public interface IRabbitMQProducer
     {
-        Task SendRatesMessage<T>(T message);
+        Task SendMessage<T>(T message);
     }
 }
