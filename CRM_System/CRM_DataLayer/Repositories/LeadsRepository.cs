@@ -47,12 +47,30 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
         return leads;
     }
 
+    //public async Task<LeadDto> GetById(int id)
+    //{
+    //    var lead = await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
+    //        StoredProcedures.Lead_GetAllInfoByLeadId,
+    //        param: new { IdLead = id },
+    //        commandType: System.Data.CommandType.StoredProcedure);
+    //    _logger.LogInformation($"Data Layer: Get by id {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}");
+
+    //    return lead;
+    //}
+
     public async Task<LeadDto> GetById(int id)
     {
-        var lead = await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
+        var lead = (await _connectionString.QueryAsync<LeadDto, AccountDto, LeadDto>(
             StoredProcedures.Lead_GetAllInfoByLeadId,
-            param: new { id },
-            commandType: System.Data.CommandType.StoredProcedure);
+            (lead, account) =>
+            {
+                lead.Accounts.Add(account);
+                return lead;
+            },
+            splitOn: "Id",
+            param: new { Id = id },
+            commandType: System.Data.CommandType.StoredProcedure)).FirstOrDefault();
+
         _logger.LogInformation($"Data Layer: Get by id {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}");
 
         return lead;
@@ -72,7 +90,7 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
     public async Task Update(LeadDto leadDto)
     {
         await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
-            StoredProcedures.Account_Update,
+            StoredProcedures.Lead_Update,
             param: new
             {
                 leadDto.FirstName,
@@ -80,7 +98,6 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
                 leadDto.Patronymic,
                 leadDto.Birthday,
                 leadDto.Phone,
-                leadDto.Passport,
                 leadDto.City,
                 leadDto.Address
             },
@@ -92,12 +109,14 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
         if (isDeleting)
             await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
                 StoredProcedures.Lead_Delete,
-                param: new { id },
+                param: new { id, IsDeleted=true },
                 commandType: System.Data.CommandType.StoredProcedure);
         else
             await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
                 StoredProcedures.Lead_Delete,
-                param: new { id },
+                param: new { id, IsDeleted=false },
                 commandType: System.Data.CommandType.StoredProcedure);
     }
+
+
 }

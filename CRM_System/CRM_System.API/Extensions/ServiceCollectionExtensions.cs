@@ -1,4 +1,5 @@
 ﻿using CRM_System.API.Models.Requests;
+using CRM_System.API.Producer;
 using CRM_System.API.Validators;
 using CRM_System.BusinessLayer;
 using CRM_System.BusinessLayer.Services;
@@ -76,6 +77,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAccountsService, AccountsService>();
         services.AddScoped <IHttpService, TransactionStoreClient>();
         services.AddScoped <ITransactionsService, TransactionsService>();
+        services.AddScoped <IRabbitMQProducer, RabbitMQProducer>();
 
     }
     public static void AddFluentValidation(this IServiceCollection services)
@@ -87,4 +89,5 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IValidator<LeadRegistrationRequest>, LeadRegistrationValidator>();
         services.AddScoped<IValidator<LeadUpdateRequest>, LeadUpdateValidator>();
     }
+
 }

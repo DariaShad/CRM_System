@@ -37,11 +37,11 @@ public class LeadUpdateValidator : AbstractValidator<LeadUpdateRequest>
             .LessThan(DateTime.Today)
             .WithMessage("Birthay must be less than today");
 
-        RuleFor(v => v.Phone)
-            .NotEmpty()
-            .WithMessage("Fill in the field")
-            .Matches(new Regex(@"^((8 |\+7)[\- ] ?) ? (\(?\d{ 3}\)?[\- ]?)?[\d\- ]{ 7,10}$"))
-            .WithMessage("Invalid phone number");
+        //RuleFor(v => v.Phone)
+        //    .NotEmpty()
+        //    .WithMessage("Fill in the field")
+        //    .Matches(new Regex(@"^((8 |\+7)[\- ] ?) ? (\(?\d{ 3}\)?[\- ]?)?[\d\- ]{ 7,10}$"))
+        //    .WithMessage("Invalid phone number");
 
         RuleFor(v => v.City)
             .NotEmpty()

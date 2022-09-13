@@ -1,4 +1,5 @@
 ﻿using CRM_System.BusinessLayer.Exceptions;
+using IncredibleBackendContracts.Responses;
 using System.Net;
 using System.Text;
 using System.Text.Json;
@@ -46,30 +47,33 @@ public class TransactionStoreClient : IHttpService
         return result;
     }
 
-    public async Task<string> GetTransaction(int transactionId)
+    public async Task<TransactionResponse> GetTransaction(int transactionId)
     {
         var response = await _httpClient.GetAsync($"transactions/{transactionId}");
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
-        return content;
+        var result = JsonSerializer.Deserialize<TransactionResponse>(content, _options);
+        return result;
     }
-    public async Task<string> GetTransactionsByAccountId(int accountId)
+    public async Task <List<TransactionResponse>> GetTransactionsByAccountId(int accountId)
     {
         var response = await _httpClient.GetAsync($"accounts/{accountId}/transactions");
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
-        return content;
+        var result = JsonSerializer.Deserialize<List<TransactionResponse>>(content, _options);
+        return result;
     }
 
-    public async Task<string> GetBalanceByAccountsId(int accountId)
+    public async Task<decimal> GetBalanceByAccountsId(int accountId)
     {
         var response = await _httpClient.GetAsync($"accounts/{accountId}/balance");
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
-        return content;
+        var result = JsonSerializer.Deserialize<decimal>(content, _options);
+        return result;
     }
     private void CheckStatusCode(HttpStatusCode statusCode)
     {
