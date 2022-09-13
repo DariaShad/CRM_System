@@ -39,7 +39,7 @@ public class LeadsService : ILeadsService
             Status = AccountStatus.Active,
             LeadId = lead.Id,
         };
-        //_accountRepository.AddAccount(account);
+        _accountRepository.AddAccount(account);
 
         await _rabbitMq.SendMessage(new LeadCreatedEvent() { Id = lead.Id });
 
