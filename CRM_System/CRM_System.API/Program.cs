@@ -36,7 +36,7 @@ builder.Services.AddAutoMapper(typeof(MapperConfig));
 builder.Services.AddMassTransit(
     config => config.UsingRabbitMq((ctx, cfg) =>
     {
-        cfg.ReceiveEndpoint(RabbitEndpoint.LeadsRoleUpdateCrm, c => c.Bind<LeadsRoleUpdatedEvent>());
+        //cfg.ReceiveEndpoint(RabbitEndpoint.LeadsRoleUpdateCrm, c => c.Bind<LeadsRoleUpdatedEvent>());
 
         cfg.ReceiveEndpoint(RabbitEndpoint.LeadDelete, c => c.Bind<LeadDeletedEvent>());
         cfg.ReceiveEndpoint(RabbitEndpoint.LeadCreate, c => c.Bind<LeadCreatedEvent>());
