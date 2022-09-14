@@ -36,6 +36,15 @@ public class AccountsRepository : BaseRepository, IAccountsRepository
             .ToList();
         return accounts;
     }
+    public async Task<List<AccountDto>> GetAllAccountsByLeadId(int leadId)
+    {
+        _logger.LogInformation($"Data Layer: Get all accounts by lead id: {leadId}");
+        var accounts = ( await _connectionString.QueryAsync<AccountDto>(
+            StoredProcedures.Account_GetAllAccountsByLeadId,
+            param: new { leadId },
+            commandType: CommandType.StoredProcedure)).ToList();
+        return accounts;
+    }
 
     public async Task<AccountDto> GetAccountById (int id)
     {

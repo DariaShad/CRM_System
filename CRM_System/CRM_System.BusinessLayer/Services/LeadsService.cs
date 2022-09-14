@@ -15,11 +15,12 @@ public class LeadsService : ILeadsService
     private readonly ILogger<LeadsService> _logger;
     private readonly IRabbitMQProducer _rabbitMq;
 
-    public LeadsService(ILeadsRepository leadRepository, ILogger<LeadsService> logger, IRabbitMQProducer rabbitMq)
+    public LeadsService(ILeadsRepository leadRepository, ILogger<LeadsService> logger, IRabbitMQProducer rabbitMq, IAccountsRepository accountRepository)
     {
         _leadRepository = leadRepository;
         _logger = logger;
         _rabbitMq = rabbitMq;
+        _accountRepository = accountRepository;
     }
 
     public async Task<int> Add(LeadDto lead)
@@ -33,17 +34,21 @@ public class LeadsService : ILeadsService
         lead.Password = PasswordHash.HashPassword(lead.Password);
         lead.Role = Role.Regular;
 
+
+        var leadId = await _leadRepository.Add(lead);
+
         AccountDto account = new AccountDto()
         {
+            LeadId = leadId,
             Currency = Currency.RUB,
-            Status = AccountStatus.Active,
-            LeadId = lead.Id,
+            Status = AccountStatus.Active
         };
-        _accountRepository.AddAccount(account);
+
+        await _accountRepository.AddAccount(account);
 
         await _rabbitMq.SendMessage(new LeadCreatedEvent() { Id = lead.Id });
 
-        return await _leadRepository.Add(lead);
+        return leadId;
     }
 
     public async Task<LeadDto> GetById(int id, ClaimModel claims)
@@ -117,6 +122,16 @@ public class LeadsService : ILeadsService
         AccessService.CheckAccessForLeadAndManager(lead.Id, claims);
 
         await _rabbitMq.SendMessage(new LeadDeletedEvent() { Id = id });
+
+        List<AccountDto> accounts = new List<AccountDto>();
+
+        accounts = await _accountRepository.GetAllAccountsByLeadId(id);
+
+        while (accounts.Count > 0)
+        {
+            await _accountRepository.DeleteAccount(accounts[accounts.Count-1].Id);
+            accounts.Remove(accounts[accounts.Count - 1]);
+        }
 
         await _leadRepository.DeleteOrRestore(id, isDeleted);
     }
