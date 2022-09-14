@@ -1,5 +1,6 @@
-﻿namespace CRM_System.DataLayer;
+﻿using IncredibleBackendContracts.Enums;
 
+namespace CRM_System.DataLayer;
 public class LeadDto
 {
     public int Id { get; set; }

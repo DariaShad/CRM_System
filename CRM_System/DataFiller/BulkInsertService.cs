@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using CRM_System.BusinessLayer;
 using CRM_System.DataLayer;
+using IncredibleBackendContracts.Enums;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -11,7 +12,7 @@ namespace DataFiller
         public static List<AccountDto> FillListOfAccounts()
         {
             var testAccounts = new Faker<AccountDto>();
-            //.RuleFor(a => a.Currency, c => c.Random.Enum<Currency>())
+            //.RuleFor(a => a.TradingCurrency, c => c.Random.Enum<TradingCurrency>())
             //.RuleFor(a => a.Status, c => c.Random.Enum<AccountStatus>());
 
             List<AccountDto> accounts = new List<AccountDto>();
@@ -21,7 +22,7 @@ namespace DataFiller
             int leadId = 4550001;
             foreach (AccountDto account in accounts)
             {
-                account.Currency = Currency.JPY;
+                account.Currency = TradingCurrency.JPY;
                 account.Status = AccountStatus.Active;
                 account.LeadId = leadId;
                 account.IsDeleted = false;
@@ -32,7 +33,7 @@ namespace DataFiller
         public static void BulkInsertAccounts()
         {
             DataTable tbl = new DataTable();
-            tbl.Columns.Add(new DataColumn("Currency", typeof(Enum)));
+            tbl.Columns.Add(new DataColumn("TradingCurrency", typeof(Enum)));
             tbl.Columns.Add(new DataColumn("Status", typeof(Enum)));
             tbl.Columns.Add(new DataColumn("LeadId", typeof(int)));
             tbl.Columns.Add(new DataColumn("IsDeleted", typeof(bool)));
@@ -41,7 +42,7 @@ namespace DataFiller
             for (int i = 0; i < accounts.Count; i++)
             {
                 DataRow dr = tbl.NewRow();
-                dr["Currency"] = accounts[i].Currency;
+                dr["TradingCurrency"] = accounts[i].Currency;
                 dr["Status"] = accounts[i].Status;
                 dr["LeadId"] = accounts[i].LeadId;
                 dr["IsDeleted"] = accounts[i].IsDeleted;
@@ -53,7 +54,7 @@ namespace DataFiller
             SqlBulkCopy objbulk = new SqlBulkCopy(con);
             objbulk.DestinationTableName = "Account";
             //objbulk.ColumnMappings.Add("Id", "Id");
-            objbulk.ColumnMappings.Add("Currency", "Currency");
+            objbulk.ColumnMappings.Add("TradingCurrency", "TradingCurrency");
             objbulk.ColumnMappings.Add("Status", "Status");
             objbulk.ColumnMappings.Add("LeadId", "LeadId");
             objbulk.ColumnMappings.Add("IsDeleted", "IsDeleted");

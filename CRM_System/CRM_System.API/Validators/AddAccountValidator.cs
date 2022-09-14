@@ -7,7 +7,7 @@ namespace CRM_System.API.Validators
     {
         public AddAccountValidator()
         {
-            RuleFor(a => a.Currency)
+            RuleFor(a => a.TradingCurrency)
                 .IsInEnum()
                 .NotEmpty();
 

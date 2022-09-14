@@ -23,11 +23,11 @@ public class TransactionRequestValidator : AbstractValidator<TransactionRequest>
             .GreaterThan(0)
             .WithMessage("Amount must be greater than zero");
 
-        RuleFor(v => v.Currency)
+        RuleFor(v => v.TradingCurrency)
             .NotEmpty()
             .WithMessage("Fill in the field")
             .IsInEnum()
-            .WithMessage("Invalid currency");
+            .WithMessage("Invalid TradingCurrency");
     }
 }
 

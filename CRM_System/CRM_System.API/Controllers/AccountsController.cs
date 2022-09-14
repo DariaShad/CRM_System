@@ -62,7 +62,7 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public async Task <ActionResult<int>> AddAccount([FromBody] AddAccountRequest accountRequest)
     {
-        _logger.LogInformation($"Controller: Add an account: LeadId:{accountRequest.LeadId}, Currency:{accountRequest.Currency}");
+        _logger.LogInformation($"Controller: Add an account: LeadId:{accountRequest.LeadId}, TradingCurrency:{accountRequest.TradingCurrency}");
         var claim = this.GetClaims();
         var result= await _accountService.AddAccount(_mapper.Map<AccountDto>(accountRequest), claim);
         return Created("", result);

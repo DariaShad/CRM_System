@@ -19,7 +19,7 @@ BEGIN
 		L.RegistrationDate,
 		L.IsDeleted,
 		A.Id,
-		A.Currency,
+		A.TradingCurrency,
 		A.[Status]
 	FROM dbo.[Lead] as L
 	

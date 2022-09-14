@@ -18,7 +18,7 @@ select
 		L.[Role], 
 		L.RegistrationDate, 
 		A.Id, 
-		A.Currency, 
+		A.TradingCurrency, 
 		A.[Status] from [dbo].[Lead] as L
 	left join [dbo].[Account] as A on L.Id = A.LeadId
 

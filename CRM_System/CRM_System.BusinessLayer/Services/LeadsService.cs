@@ -1,6 +1,7 @@
 ﻿using CRM_System.API.Extensions;
 using CRM_System.API.Producer;
 using CRM_System.DataLayer;
+using IncredibleBackendContracts.Enums;
 using IncredibleBackendContracts.Events;
 using Microsoft.Extensions.Logging;
 
@@ -40,7 +41,7 @@ public class LeadsService : ILeadsService
         AccountDto account = new AccountDto()
         {
             LeadId = leadId,
-            Currency = Currency.RUB,
+            Currency = TradingCurrency.RUB,
             Status = AccountStatus.Active
         };
 

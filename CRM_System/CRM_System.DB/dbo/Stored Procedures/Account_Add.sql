@@ -1,15 +1,15 @@
 ﻿CREATE PROCEDURE [dbo].[Account_Add]
-	@Currency TINYINT,
+	@TradingCurrency TINYINT,
 	@Status TINYINT,
 	@LeadId INT
 AS
 BEGIN
 INSERT INTO dbo.Account(
-	Currency,
+	TradingCurrency,
 	[Status],
 	LeadId) 
 	VALUES(
-	@Currency,
+	@TradingCurrency,
 	@Status,
 	@LeadId)
 

@@ -4,7 +4,7 @@
 AS
 BEGIN
 
-	SELECT Id, Currency, [Status], LeadId, IsDeleted
+	SELECT Id, TradingCurrency, [Status], LeadId, IsDeleted
 	FROM dbo.Account
 	WHERE Id=@Id
 

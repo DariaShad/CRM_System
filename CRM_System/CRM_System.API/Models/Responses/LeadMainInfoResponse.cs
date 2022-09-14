@@ -1,4 +1,5 @@
 ﻿using CRM_System.DataLayer;
+using IncredibleBackendContracts.Enums;
 
 namespace CRM_System;
 public class LeadMainInfoResponse

@@ -20,21 +20,21 @@ public class TransactionsService : ITransactionsService
 
     public async Task<long> AddDeposit(TransactionRequest request)
     {
-        _logger.LogInformation($"Business layer: Database query for adding deposit: {request.AccountId}, {request.Amount}, {request.Currency}, {request.TransactionType}");
+        _logger.LogInformation($"Business layer: Database query for adding deposit: {request.AccountId}, {request.Amount}, {request.TradingCurrency}, {request.TransactionType}");
         _path = "/transactions/deposit";
         return await _httpService.Post<TransactionRequest, long>(request, _path);
     }
 
     public async Task<long> AddWithdraw(TransactionRequest request)
     {
-        _logger.LogInformation($"Business layer: Database query for adding withdraw {request.AccountId}, {request.Amount}, {request.Currency}, {request.TransactionType}");
+        _logger.LogInformation($"Business layer: Database query for adding withdraw {request.AccountId}, {request.Amount}, {request.TradingCurrency}, {request.TransactionType}");
         _path = "/transactions/withdraw";
         return await _httpService.Post<TransactionRequest, long>(request, _path);
     }
 
     public async Task<List<long>> AddTransfer(TransferTransactionRequest request)
     {
-        _logger.LogInformation($"Business layer: Database query for adding transfer {request.RecipientAccountId}, {request.SenderAccountId} {request.Amount}, {request.Currency}, {request.TransactionType}");
+        _logger.LogInformation($"Business layer: Database query for adding transfer {request.RecipientAccountId}, {request.SenderAccountId} {request.Amount}, {request.TradingCurrency}, {request.TransactionType}");
         _path = "/transactions/transfer";
         return await _httpService.Post<TransferTransactionRequest, List<long>>(request, _path);
     }

@@ -2,6 +2,7 @@
 using CRM_System.BusinessLayer;
 using CRM_System.BusinessLayer.Models;
 using CRM_System.DataLayer;
+using IncredibleBackendContracts.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

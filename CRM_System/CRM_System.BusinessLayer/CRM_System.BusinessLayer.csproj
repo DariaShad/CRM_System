@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.2.1" />
-    <PackageReference Include="IncredibleBackend" Version="2.0.0" />
+    <PackageReference Include="IncredibleBackend" Version="2.1.3" />
     <PackageReference Include="MassTransit" Version="8.0.7-develop.576" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.7-develop.576" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />

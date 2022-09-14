@@ -3,6 +3,7 @@ using Castle.Core.Logging;
 using CRM_System.API.Models.Requests;
 using CRM_System.BusinessLayer;
 using CRM_System.DataLayer;
+using IncredibleBackendContracts.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -71,7 +72,7 @@ public class AccountControllerTests
         //given
         var account = new AddAccountRequest
         {
-            Currency = Currency.USD,
+            TradingCurrency = TradingCurrency.USD,
             Status = AccountStatus.Active,
             LeadId = 1
         };

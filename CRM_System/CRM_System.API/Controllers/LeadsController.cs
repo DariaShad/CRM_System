@@ -4,6 +4,7 @@ using CRM_System.API.Models.Responses;
 using CRM_System.API.Producer;
 using CRM_System.BusinessLayer;
 using CRM_System.DataLayer;
+using IncredibleBackendContracts.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
