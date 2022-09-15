@@ -1,4 +1,5 @@
 ﻿using CRM_System.API.Producer;
+using CRM_System.BusinessLayer.Exceptions;
 using CRM_System.DataLayer;
 using IncredibleBackendContracts.Enums;
 using IncredibleBackendContracts.Events;
@@ -29,24 +30,18 @@ public class AccountsService : IAccountsService
         AccessService.CheckAccessForLeadAndManager(accountDTO.Id, claim);
 
         var lead = await _leadRepository.GetById(accountDTO.LeadId);
-        if ((lead.Role == Role.Regular
-            || lead.Role == Role.Vip)
-            && (accountDTO.Currency == TradingCurrency.RUB
-            || accountDTO.Currency == TradingCurrency.USD))
-        {
-            throw new Exception("Cannot have more than one account of the same TradingCurrency");
-        }
+
         if (lead.Role == Role.Regular)
         {
             if (accountDTO.Currency != TradingCurrency.RUB
             || accountDTO.Currency != TradingCurrency.USD)
             {
-                throw new Exception("Regular lead cannot have any other account except RUB or USD");
+                throw new RegularAccountRestrictionException("Regular lead cannot have any other account except RUB or USD");
             }
         }
 
         List <AccountDto> accountsOfLead = await _accountRepository.GetAllAccountsByLeadId(accountDTO.LeadId);
-        List<TradingCurrency> currencies = new List<TradingCurrency>() { TradingCurrency.EUR, TradingCurrency.EUR, TradingCurrency.USD, TradingCurrency.JPY,
+        List<TradingCurrency> currencies = new List<TradingCurrency>() { TradingCurrency.EUR, TradingCurrency.RUB, TradingCurrency.USD, TradingCurrency.JPY,
         TradingCurrency.AMD, TradingCurrency.BGN, TradingCurrency.RSD, TradingCurrency.CNY};
 
         foreach (var account in accountsOfLead)
@@ -55,7 +50,7 @@ public class AccountsService : IAccountsService
             {
                 if (account.Currency == currency)
                 {
-                    throw new Exception($"Already have an account with currency: {currency}");
+                    throw new RepeatCurrencyException($"Already have an account with currency: {currency}");
                 }
             }
         }

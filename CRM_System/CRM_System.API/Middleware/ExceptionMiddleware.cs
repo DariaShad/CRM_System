@@ -35,6 +35,14 @@ public class ExceptionMiddleware
         {
             await HandleExceptionAsync(httpContext, HttpStatusCode.BadGateway, error.Message);
         }
+        catch (RepeatCurrencyException error)
+        {
+            await HandleExceptionAsync(httpContext, HttpStatusCode.Conflict, error.Message);
+        }
+        catch (RegularAccountRestrictionException error)
+        {
+            await HandleExceptionAsync(httpContext, HttpStatusCode.Conflict, error.Message);
+        }
         catch (Exception error)
         {
             await HandleExceptionAsync(httpContext, HttpStatusCode.InternalServerError, error.StackTrace);
