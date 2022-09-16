@@ -2,10 +2,13 @@
 using CRM_System.API.Producer;
 using CRM_System.API.Validators;
 using CRM_System.BusinessLayer;
+using CRM_System.BusinessLayer.RabbitMQ.Consumer;
 using CRM_System.BusinessLayer.Services;
 using CRM_System.DataLayer;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using IncredibleBackendContracts.Events;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -78,6 +81,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped <IHttpService, TransactionStoreClient>();
         services.AddScoped <ITransactionsService, TransactionsService>();
         services.AddScoped <IRabbitMQProducer, RabbitMQProducer>();
+        //services.AddScoped <IConsumer<LeadsRoleUpdatedEvent>, RabbitMQConsumer>();
 
     }
     public static void AddFluentValidation(this IServiceCollection services)

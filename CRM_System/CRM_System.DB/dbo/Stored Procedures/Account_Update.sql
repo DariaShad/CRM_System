@@ -5,8 +5,7 @@
 AS
 BEGIN
 
-UPDATE dbo.Account
-
+UPDATE dbo.[Account]
 SET [Status]=@Status
 	
 WHERE 

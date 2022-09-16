@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Account]
 (
 	[Id] BIGINT IDENTITY (1, 1) NOT NULL PRIMARY KEY,
-	[TradingCurrency] TINYINT NOT NULL,
+	[Currency] TINYINT NOT NULL,
 	[Status] TINYINT NOT NULL,
 	[LeadId] INT NOT NULL,
 	[IsDeleted] BIT DEFAULT 0 NOT NULL,
@@ -12,5 +12,5 @@ CREATE NONCLUSTERED INDEX [NonClusteredIndex-20220829-171313] ON [dbo].[Account]
 (
 	[LeadId] ASC
 )
-INCLUDE([Id],[TradingCurrency],[Status]) ON [PRIMARY]
+INCLUDE([Id],[Currency],[Status]) ON [PRIMARY]
 GO
