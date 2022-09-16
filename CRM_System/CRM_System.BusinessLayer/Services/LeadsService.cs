@@ -86,7 +86,7 @@ public class LeadsService : ILeadsService
             throw new NotFoundException($"Lead with id '{lead.Id}' was not found");
 
         AccessService.CheckAccessForLeadAndManager(lead.Id, claims);
-
+        lead.Id = id;
         lead.FirstName = newLead.FirstName;
         lead.LastName = newLead.LastName;
         lead.Patronymic = newLead.Patronymic;
@@ -94,8 +94,11 @@ public class LeadsService : ILeadsService
         lead.Phone = newLead.Phone;
         lead.City = newLead.City;
         lead.Address = newLead.Address;
+
         
         await _leadRepository.Update(lead);
+        await _rabbitMq.SendMessage(new LeadUpdatedEvent() { Id = id, FirstName = lead.FirstName, LastName = lead.LastName, Patronymic = lead.Patronymic, 
+        Birthday = lead.Birthday, Phone = lead.Phone, City = lead.City, Address = lead.Address });
     }
 
     public async Task Restore(int id, bool isDeleted, ClaimModel claims)

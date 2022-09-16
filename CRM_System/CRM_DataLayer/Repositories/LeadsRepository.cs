@@ -89,10 +89,11 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
 
     public async Task Update(LeadDto leadDto)
     {
-        await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
+        await _connectionString.QueryFirstOrDefaultAsync(
             StoredProcedures.Lead_Update,
             param: new
             {
+                leadDto.Id,
                 leadDto.FirstName,
                 leadDto.LastName,
                 leadDto.Patronymic,
@@ -102,6 +103,7 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
                 leadDto.Address
             },
             commandType: System.Data.CommandType.StoredProcedure);
+
     }
 
     public async Task DeleteOrRestore(int id, bool isDeleting)

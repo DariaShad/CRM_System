@@ -60,13 +60,13 @@ public class AccountsRepository : BaseRepository, IAccountsRepository
 
     public async Task UpdateAccount(AccountDto account, int id)
     {
-        _logger.LogInformation($"Data Layer: Get account by id {id}: {account.LeadId}, {account.Currency}, {account.Status}");
+        _logger.LogInformation($"Data Layer: Get account by id {id}: {account.Status}");
         _connectionString.Execute(
             StoredProcedures.Account_Update,
             param: new
             {
-                account.Status,
-                account.IsDeleted
+                id,
+                account.Status
             },
              commandType: CommandType.StoredProcedure);
     }

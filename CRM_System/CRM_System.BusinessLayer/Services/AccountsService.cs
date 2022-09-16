@@ -91,9 +91,9 @@ public class AccountsService : IAccountsService
 
     public async Task UpdateAccount(AccountDto account, int id, ClaimModel claim)
     {
-        _logger.LogInformation($"Business layer: Database query for updating account by id {id}, {account.LeadId}, {account.Status}, {account.IsDeleted}");
+        _logger.LogInformation($"Business layer: Database query for updating account by id {id}, {account.Status}");
         AccessService.CheckAccessForLeadAndManager(id, claim);
-        await _rabbitMq.SendMessage(new AccountUpdatedEvent() { Id = id, Status= (IncredibleBackendContracts.Enums.AccountStatus)account.Status });
+        await _rabbitMq.SendMessage(new AccountUpdatedEvent() { Id = id, Status = account.Status });
         await _accountRepository.UpdateAccount(account, id);
     }
 

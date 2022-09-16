@@ -78,7 +78,7 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status422UnprocessableEntity)]
     public async Task <ActionResult> UpdateAccount([FromBody] UpdateAccountRequest accountRequest, int id)
     {
-        _logger.LogInformation($"Controller: Update an account by id: {id}. IsDeleted {accountRequest.IsDeleted}, AccountStatus {accountRequest.Status}");
+        _logger.LogInformation($"Controller: Update an account by id: {id}, AccountStatus {accountRequest.Status}");
         var claim = this.GetClaims();
         await _accountService.UpdateAccount(_mapper.Map<AccountDto>(accountRequest), id, claim);
         return NoContent();

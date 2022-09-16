@@ -43,6 +43,7 @@ builder.Services.AddMassTransit(
         cfg.ReceiveEndpoint(RabbitEndpoint.AccountCreate, c => c.Bind<AccountCreatedEvent>());
         cfg.ReceiveEndpoint(RabbitEndpoint.AccountDelete, c => c.Bind<AccountDeletedEvent>());
         cfg.ReceiveEndpoint(RabbitEndpoint.AccountUpdate, c => c.Bind<AccountUpdatedEvent>());
+        cfg.ReceiveEndpoint(RabbitEndpoint.LeadUpdate, c => c.Bind<LeadUpdatedEvent>());
     }));
     
 

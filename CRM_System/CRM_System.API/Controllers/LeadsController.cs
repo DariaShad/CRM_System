@@ -117,10 +117,10 @@ public class LeadsController : ControllerBase
     public async Task<ActionResult> Restore(int id)
     {
         var claims = this.GetClaims();
-        await _leadsService.Restore(id, false, claims);
         var lead = await _leadsService.GetById(id, claims);
         _logger.LogInformation($"Controller: Restore lead by id {id}: {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
             $"{lead.City}, {lead.Address.MaskTheLastFive}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
+        await _leadsService.Restore(id, false, claims);
 
         return NoContent();
     }
