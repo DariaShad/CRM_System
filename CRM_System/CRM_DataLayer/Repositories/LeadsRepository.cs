@@ -106,6 +106,19 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
 
     }
 
+    public async Task UpdateRole(LeadDto leadDto, int id)
+    {
+        await _connectionString.QueryFirstOrDefaultAsync(
+            StoredProcedures.Lead_Update,
+            param: new
+            {
+                id,
+                leadDto.Role
+            },
+            commandType: System.Data.CommandType.StoredProcedure);
+
+    }
+
     public async Task DeleteOrRestore(int id, bool isDeleting)
     {
         if (isDeleting)

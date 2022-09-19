@@ -12,6 +12,7 @@ public class MapperConfig : Profile
     {
         CreateMap<LeadRegistrationRequest, LeadDto>();
         CreateMap<LeadUpdateRequest, LeadDto>();
+        CreateMap<LeadUpdateRoleRequest, LeadDto>();
         CreateMap<LeadDto, LeadAllInfoResponse>();
         CreateMap<LeadDto, LeadMainInfoResponse>();
 

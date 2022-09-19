@@ -101,6 +101,21 @@ public class LeadsService : ILeadsService
         Birthday = lead.Birthday, Phone = lead.Phone, City = lead.City, Address = lead.Address });
     }
 
+    public async Task UpdateRole(LeadDto leadDto, int id, ClaimModel claims)
+    {
+        var lead = await _leadRepository.GetById(id);
+
+        if (lead is null || leadDto is null)
+            throw new NotFoundException($"Lead with id '{lead.Id}' was not found");
+
+        AccessService.CheckAccessForLeadAndManager(id, claims);
+
+        lead.Role = leadDto.Role;
+
+        await _leadRepository.UpdateRole(leadDto, id);
+        //await _rabbitMq.SendMessage(new LeadsRoleUpdatedEvent() { Ids = new List<int> { lead.Id } });
+    }
+
     public async Task Restore(int id, bool isDeleted, ClaimModel claims)
     {
         var lead = await _leadRepository.GetById(id);
