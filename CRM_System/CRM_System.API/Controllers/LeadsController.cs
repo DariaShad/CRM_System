@@ -91,21 +91,21 @@ public class LeadsController : ControllerBase
         return NoContent();
     }
 
-    [Authorize]
-    [HttpPut("{id}")]
-    [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status422UnprocessableEntity)]
-    public async Task<ActionResult> UpdateRole([FromBody] LeadUpdateRoleRequest request, int id)
-    {
-        _logger.LogInformation($"Controller: Update lead by id: {id}");
-        var claims = this.GetClaims();
+    //[Authorize]
+    //[HttpPut("{id}")]
+    //[ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
+    //[ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    //[ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    //[ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+    //[ProducesResponseType(typeof(void), StatusCodes.Status422UnprocessableEntity)]
+    //public async Task<ActionResult> UpdateRole([FromBody] LeadUpdateRoleRequest request, int id)
+    //{
+    //    _logger.LogInformation($"Controller: Update lead by id: {id}");
+    //    var claims = this.GetClaims();
 
-        await _leadsService.UpdateRole(_mapper.Map<LeadDto>(request), id, claims);
-        return NoContent();
-    }
+    //    await _leadsService.UpdateRole(_mapper.Map<LeadDto>(request), id, claims);
+    //    return NoContent();
+    //}
 
     [Authorize]
     [HttpDelete("{id}")]
