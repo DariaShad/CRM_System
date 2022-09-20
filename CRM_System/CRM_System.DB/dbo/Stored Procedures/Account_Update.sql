@@ -1,13 +1,12 @@
 ﻿CREATE PROCEDURE [dbo].[Account_Update]
 	@Id BIGINT,
-	@Status TINYINT,
-	@IsDeleted BIT 
+	@Status TINYINT
 
 AS
 BEGIN
 
-UPDATE dbo.Account
-SET [Status]=@Status, IsDeleted = @IsDeleted
+UPDATE dbo.[Account]
+SET [Status]=@Status
 	
 WHERE 
 Id=@Id

@@ -14,7 +14,7 @@ public class TransactionStoreClient : IHttpService
 
     public TransactionStoreClient()
     {
-        string baseAddress ="https://piter-education.ru:6060/";
+        string baseAddress ="https://piter-education.ru:6066/";
 
         if (_httpClient.BaseAddress == null)
         {

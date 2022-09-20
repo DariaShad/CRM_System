@@ -1,4 +1,5 @@
 ﻿using CRM_System.DataLayer;
+using IncredibleBackendContracts.Enums;
 using Microsoft.Extensions.Logging;
 
 namespace CRM_System.BusinessLayer;

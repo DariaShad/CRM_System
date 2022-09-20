@@ -1,4 +1,5 @@
 ﻿using CRM_System.DataLayer;
+using IncredibleBackendContracts.Enums;
 using Microsoft.AspNetCore.Authorization;
 
 namespace CRM_System.API;
