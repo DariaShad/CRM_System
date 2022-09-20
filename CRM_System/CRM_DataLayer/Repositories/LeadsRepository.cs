@@ -51,7 +51,7 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
     //{
     //    var lead = await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
     //        StoredProcedures.Lead_GetAllInfoByLeadId,
-    //        param: new { IdLead = id },
+    //        param: new { Id = id },
     //        commandType: System.Data.CommandType.StoredProcedure);
     //    _logger.LogInformation($"Data Layer: Get by id {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}");
 

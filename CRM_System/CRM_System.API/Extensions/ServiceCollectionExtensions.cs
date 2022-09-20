@@ -7,6 +7,8 @@ using CRM_System.BusinessLayer.Services;
 using CRM_System.DataLayer;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using IncredibleBackend.Messaging.Extentions;
+using IncredibleBackendContracts.Constants;
 using IncredibleBackendContracts.Events;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -78,9 +80,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IAccountsRepository, AccountsRepository>();
         services.AddScoped<IAccountsService, AccountsService>();
-        services.AddScoped <IHttpService, TransactionStoreClient>();
-        services.AddScoped <ITransactionsService, TransactionsService>();
-        services.AddScoped <IRabbitMQProducer, RabbitMQProducer>();
+        services.AddScoped<IHttpService, TransactionStoreClient>();
+        services.AddScoped<ITransactionsService, TransactionsService>();
+        services.AddScoped<IRabbitMQProducer, RabbitMQProducer>();
         //services.AddScoped <IConsumer<LeadsRoleUpdatedEvent>, RabbitMQConsumer>();
 
     }
@@ -94,4 +96,18 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IValidator<LeadUpdateRequest>, LeadUpdateValidator>();
     }
 
-}
+    public static void AddConsumers(this IServiceCollection services)
+    {
+        services.RegisterConsumersAndProducers(
+            (config) =>
+            {
+                config.AddConsumer<RabbitMQConsumer>();
+            },
+
+            (cfg, ctx) =>
+            {
+                cfg.RegisterConsumer<RabbitMQConsumer>(ctx, RabbitEndpoint.LeadsRoleUpdateCrm);
+            }, null);
+    }
+
+    }

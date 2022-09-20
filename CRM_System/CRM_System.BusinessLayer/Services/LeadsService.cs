@@ -109,7 +109,7 @@ public class LeadsService : ILeadsService
         Birthday = lead.Birthday, Phone = lead.Phone, City = lead.City, Address = lead.Address });
     }
 
-    public async Task UpdateRole(LeadDto leadDto, int id, ClaimModel claims)
+    public async Task UpdateRole(List <int> ids)
     {
         var lead = await _leadRepository.GetById(id);
 
@@ -126,15 +126,16 @@ public class LeadsService : ILeadsService
 
     public async Task Restore(int id, bool isDeleted, ClaimModel claims)
     {
-        var lead = await _leadRepository.GetById(id);
-        _logger.LogInformation($"Business layer: Database query for restoring lead {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
-            $"{lead.City}, {lead.Address.MaskTheLastFive}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
+        //var lead = await _leadRepository.GetById(id);
+        //_logger.LogInformation($"Business layer: Database query for restoring lead {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
+        //    $"{lead.City}, {lead.Address.MaskTheLastFive}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
 
-        if (lead is null)
-            throw new NotFoundException($"Lead with id '{id}' was not found");
-                
-        AccessService.CheckAccessForLeadAndManager(lead.Id, claims);
-        
+        //if (lead is null)
+        //{
+        //    throw new NotFoundException($"Lead with id '{id}' was not found");
+
+        //}
+
         await _leadRepository.DeleteOrRestore(id, isDeleted);
     }
     public async Task Delete(int id, bool isDeleted, ClaimModel claims)
