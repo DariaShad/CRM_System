@@ -1,4 +1,4 @@
-﻿namespace CRM_System.BusinessLayer;
+﻿namespace CRM_System.BusinessLayer.Exceptions;
 
 public class NotFoundException : Exception
 {

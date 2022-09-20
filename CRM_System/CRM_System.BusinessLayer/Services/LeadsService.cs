@@ -1,5 +1,6 @@
 ﻿using CRM_System.API.Extensions;
 using CRM_System.API.Producer;
+using CRM_System.BusinessLayer.Exceptions;
 using CRM_System.DataLayer;
 using IncredibleBackendContracts.Enums;
 using IncredibleBackendContracts.Events;
@@ -55,20 +56,27 @@ public class LeadsService : ILeadsService
     public async Task<LeadDto> GetById(int id, ClaimModel claims)
     {
         var lead = await _leadRepository.GetById(id);
+        if (lead == null || lead.IsDeleted == true)
+        {
+            throw new NotFoundException("Lead with this id was not found");
+        }
         _logger.LogInformation($"Business layer: Database query for getting lead by id {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
             $"{lead.City}, {lead.Address.MaskTheLastFive}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
         AccessService.CheckAccessForLeadAndManager(lead.Id, claims);
 
         return lead;
     }
-    //Update role
-    public async Task<LeadDto?> GetByEmail(string email)
+    
+    public async Task<LeadDto> GetByEmail(string email)
     {
         _logger.LogInformation($"Business layer: Database query for getting lead by email {email}");
         var lead = await _leadRepository.GetByEmail(email);
 
         if (lead is null)
+        {
             throw new NotFoundException($"Lead with email '{email}' was not found");
+
+        }
 
         else
             return lead;
