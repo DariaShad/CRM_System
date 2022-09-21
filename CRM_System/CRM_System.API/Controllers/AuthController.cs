@@ -7,7 +7,6 @@ namespace CRM_System.API;
 
 [AllowAnonymous]
 [ApiController]
-[Produces("application/json")]
 [Route("[controller]")]
 public class AuthController : ControllerBase
 {
@@ -22,12 +21,13 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost]
-    public async Task <string> Login([FromBody] LoginRequest loginRequest)
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    public async Task <ActionResult<string>> Login([FromBody] LoginRequest loginRequest)
     {
         var user = await _authService.Login(loginRequest.Login, loginRequest.Password);
 
         _logger.LogInformation($"Controllers: Login is successful for {loginRequest.Login}");
 
-        return _authService.GetToken(user);
+        return Ok(_authService.GetToken(user));
     }
 }
