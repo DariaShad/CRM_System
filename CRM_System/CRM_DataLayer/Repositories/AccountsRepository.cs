@@ -79,4 +79,13 @@ public class AccountsRepository : BaseRepository, IAccountsRepository
             param: new { id= accountId},
             commandType: System.Data.CommandType.StoredProcedure);
     }
+
+    public async Task RestoreAccount(int accountId)
+    {
+        _logger.LogInformation($"Data Layer: Delete account {accountId}");
+        _connectionString.Execute(
+            StoredProcedures.Account_Restore,
+            param: new { id = accountId },
+            commandType: System.Data.CommandType.StoredProcedure);
+    }
 }

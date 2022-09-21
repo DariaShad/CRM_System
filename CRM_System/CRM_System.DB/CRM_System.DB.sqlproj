@@ -86,6 +86,7 @@
     <Build Include="dbo\Stored Procedures\Admin_Add.sql" />
     <Build Include="dbo\Stored Procedures\Lead_UpdateRole.sql" />
     <Build Include="dbo\Tables\IntTable.sql" />
+    <Build Include="dbo\Stored Procedures\Account_Restore.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CRM_System.DB.publish.xml" />
