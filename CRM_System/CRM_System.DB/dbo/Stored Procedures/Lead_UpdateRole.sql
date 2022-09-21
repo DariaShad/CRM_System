@@ -1,14 +1,12 @@
 ﻿CREATE PROCEDURE [dbo].[Lead_UpdateRole]
-
-	@Id int,
-	@Role tinyint
-
+ @ids intTable READONLY
 AS
 BEGIN
-
-UPDATE dbo.[Lead]
-SET 
-[Role] = @Role
-WHERE Id = @Id
-
+    
+     UPDATE [dbo].[Lead]
+	 SET [Role] = 2 
+     where [Id] in (select Id from @ids)
+     Update [dbo].[Lead]
+	 SET [Role] = 1 
+     where [Id] not in (select Id from @ids)
 END

@@ -111,16 +111,7 @@ public class LeadsService : ILeadsService
 
     public async Task UpdateRole(List <int> ids)
     {
-        var lead = await _leadRepository.GetById(id);
-
-        if (lead is null || leadDto is null)
-            throw new NotFoundException($"Lead with id '{lead.Id}' was not found");
-
-        AccessService.CheckAccessForLeadAndManager(id, claims);
-
-        lead.Role = leadDto.Role;
-
-        await _leadRepository.UpdateRole(leadDto, id);
+        //await _leadRepository.UpdateRole(leadDto, id);
         //await _rabbitMq.SendMessage(new LeadsRoleUpdatedEvent() { Ids = new List<int> { lead.Id } });
     }
 

@@ -106,17 +106,20 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
 
     }
 
-    public async Task UpdateRole(LeadDto leadDto, int id)
+    public async Task UpdateLeadsRoles(List<int> vipIds)
     {
-        await _connectionString.QueryFirstOrDefaultAsync(
-            StoredProcedures.Lead_Update,
-            param: new
-            {
-                id,
-                leadDto.Role
-            },
-            commandType: System.Data.CommandType.StoredProcedure);
+        DataTable data = new DataTable();
+        data.Columns.Add("id", typeof(int));
+        vipIds.ForEach(x => data.Rows.Add(x));
 
+        _logger.LogInformation("Data layer: Connection to data base");
+        await _connectionString.QuerySingleAsync
+            (StoredProcedures.Lead_UpdateRole,
+                param: new
+                {
+                    ids = data
+                },
+                commandType: CommandType.StoredProcedure);
     }
 
     public async Task DeleteOrRestore(int id, bool isDeleting)
