@@ -12,8 +12,8 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.2.1" />
-    <PackageReference Include="IncredibleBackend" Version="2.2.2" />
-    <PackageReference Include="IncredibleBackend.Rmq" Version="1.1.5" />
+    <PackageReference Include="IncredibleBackend" Version="2.2.3" />
+    <PackageReference Include="IncredibleBackend.Rmq" Version="1.1.7" />
     <PackageReference Include="MassTransit" Version="8.0.7-develop.576" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.7-develop.576" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />

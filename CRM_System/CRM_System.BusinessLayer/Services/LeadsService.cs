@@ -46,10 +46,12 @@ public class LeadsService : ILeadsService
             Status = AccountStatus.Active
         };
 
-        await _accountRepository.AddAccount(account);
+        var accountId = await _accountRepository.AddAccount(account);
 
-        await _producer.ProduceMessage<LeadCreatedEvent>(new LeadCreatedEvent() { Id = lead.Id }, $"Lead send queue");
-
+        await _producer.ProduceMessage<LeadCreatedEvent>(new LeadCreatedEvent() { Id = lead.Id, FirstName = lead.FirstName, LastName = lead.LastName, Patronymic = lead.Patronymic, 
+            Birthday = lead.Birthday, Address = lead.Address, City = lead.City, Email = lead.Email, Passport = lead.Passport, Phone = lead.Phone, RegistrationDate = lead.RegistrationDate}, $"Lead send queue");
+        await _producer.ProduceMessage(new AccountCreatedEvent() { Id = accountId, Currency=account.Currency, LeadId= leadId, Status = account.Status }, "");
+        //add account
         return leadId;
     }
 
@@ -111,7 +113,7 @@ public class LeadsService : ILeadsService
     public async Task UpdateRole(List <int> vipIds)
     {
         await _leadRepository.UpdateLeadsRoles(vipIds);
-        //await _rabbitMq.SendMessage(new LeadsRoleUpdatedEvent() { Ids = vipIds });
+        await _producer.ProduceMessage(new LeadsRoleUpdatedEvent(vipIds), "");
     }
 
     public async Task Restore(int id, bool isDeleted, ClaimModel claims)
@@ -144,11 +146,12 @@ public class LeadsService : ILeadsService
 
         accounts = await _accountRepository.GetAllAccountsByLeadId(id);
 
-        while (accounts.Count > 0)
+        foreach (var account in accounts)
         {
-            await _accountRepository.DeleteAccount(accounts[accounts.Count-1].Id);
-            accounts.Remove(accounts[accounts.Count - 1]);
+            await _accountRepository.DeleteAccount(account.Id);
+            await _producer.ProduceMessage(new AccountDeletedEvent() { Id = account.Id }, "");
         }
+
 
         await _leadRepository.DeleteOrRestore(id, isDeleted);
     }
