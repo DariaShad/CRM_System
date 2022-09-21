@@ -2,7 +2,6 @@
 using CRM_System.API.Extensions;
 using CRM_System.API.Models.Requests;
 using CRM_System.API.Models.Responses;
-using CRM_System.API.Producer;
 using CRM_System.BusinessLayer;
 using CRM_System.DataLayer;
 using IncredibleBackendContracts.Enums;
@@ -21,14 +20,12 @@ public class LeadsController : ControllerBase
     private readonly ILeadsService _leadsService;
     private readonly IMapper _mapper;
     private readonly ILogger<LeadsController> _logger;
-    private readonly IRabbitMQProducer _rabbitMq;
 
-    public LeadsController(ILeadsService leadsService, IMapper mapper, ILogger<LeadsController> logger, IRabbitMQProducer rabbitMq)
+    public LeadsController(ILeadsService leadsService, IMapper mapper, ILogger<LeadsController> logger)
     {
         _leadsService = leadsService;
         _mapper = mapper;
         _logger = logger;
-        _rabbitMq = rabbitMq;
     }
 
     [AllowAnonymous]

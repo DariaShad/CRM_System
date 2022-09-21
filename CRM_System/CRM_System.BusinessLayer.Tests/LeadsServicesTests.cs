@@ -1,6 +1,6 @@
-﻿using CRM_System.API.Producer;
-using CRM_System.DataLayer;
+﻿using CRM_System.DataLayer;
 using FluentAssertions;
+using IncredibleBackend.Messaging.Interfaces;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
@@ -21,16 +21,16 @@ namespace CRM_System.BusinessLayer.Tests
         private Mock<IAccountsRepository> _accountsRepositoryMock;
         private ClaimModel _claimModel;
         private Mock <ILogger<LeadsService>> _logger;
-        private Mock <IRabbitMQProducer> _producer;
+        private  IMessageProducer _producer;
 
         [SetUp]
         public void Setup()
         {
             _accountsRepositoryMock = new Mock<IAccountsRepository>();
-            _producer = new Mock<IRabbitMQProducer>();
+            //_producer = new Mock <IMessageProducer>();
             _logger = new Mock <ILogger<LeadsService>>();
             _leadsRepositoryMock = new Mock<ILeadsRepository>();
-            _sut = new LeadsService(_leadsRepositoryMock.Object, _logger.Object, _producer.Object, _accountsRepositoryMock.Object);
+            _sut = new LeadsService(_leadsRepositoryMock.Object, _logger.Object, _producer, _accountsRepositoryMock.Object);
         }
 
         [Test]

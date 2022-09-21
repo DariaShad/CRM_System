@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[Lead_UpdateRole]
- @ids intTable READONLY
+ @ids IntTable READONLY
 AS
 BEGIN
     

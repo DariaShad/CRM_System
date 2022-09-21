@@ -1,7 +1,7 @@
 ﻿using CRM_System.API.Extensions;
-using CRM_System.API.Producer;
 using CRM_System.BusinessLayer.Exceptions;
 using CRM_System.DataLayer;
+using IncredibleBackend.Messaging.Interfaces;
 using IncredibleBackendContracts.Enums;
 using IncredibleBackendContracts.Events;
 using Microsoft.Extensions.Logging;
@@ -15,13 +15,13 @@ public class LeadsService : ILeadsService
     private readonly IAccountsRepository _accountRepository;
 
     private readonly ILogger<LeadsService> _logger;
-    private readonly IRabbitMQProducer _rabbitMq;
+    private readonly IMessageProducer _producer;
 
-    public LeadsService(ILeadsRepository leadRepository, ILogger<LeadsService> logger, IRabbitMQProducer rabbitMq, IAccountsRepository accountRepository)
+    public LeadsService(ILeadsRepository leadRepository, ILogger<LeadsService> logger, IMessageProducer producer, IAccountsRepository accountRepository)
     {
         _leadRepository = leadRepository;
         _logger = logger;
-        _rabbitMq = rabbitMq;
+       _producer = producer;
         _accountRepository = accountRepository;
     }
 
@@ -48,7 +48,7 @@ public class LeadsService : ILeadsService
 
         await _accountRepository.AddAccount(account);
 
-        await _rabbitMq.SendMessage(new LeadCreatedEvent() { Id = lead.Id });
+        await _producer.ProduceMessage<LeadCreatedEvent>(new LeadCreatedEvent() { Id = lead.Id }, $"Lead send queue");
 
         return leadId;
     }
@@ -75,7 +75,6 @@ public class LeadsService : ILeadsService
         if (lead is null)
         {
             throw new NotFoundException($"Lead with email '{email}' was not found");
-
         }
 
         else
@@ -105,27 +104,26 @@ public class LeadsService : ILeadsService
 
         
         await _leadRepository.Update(lead);
-        await _rabbitMq.SendMessage(new LeadUpdatedEvent() { Id = id, FirstName = lead.FirstName, LastName = lead.LastName, Patronymic = lead.Patronymic, 
-        Birthday = lead.Birthday, Phone = lead.Phone, City = lead.City, Address = lead.Address });
+        await _producer.ProduceMessage(new LeadUpdatedEvent() { Id = id, FirstName = lead.FirstName, LastName = lead.LastName, Patronymic = lead.Patronymic, 
+        Birthday = lead.Birthday, Phone = lead.Phone, City = lead.City, Address = lead.Address }, "");
     }
 
-    public async Task UpdateRole(List <int> ids)
+    public async Task UpdateRole(List <int> vipIds)
     {
-        //await _leadRepository.UpdateRole(leadDto, id);
-        //await _rabbitMq.SendMessage(new LeadsRoleUpdatedEvent() { Ids = new List<int> { lead.Id } });
+        await _leadRepository.UpdateLeadsRoles(vipIds);
+        //await _rabbitMq.SendMessage(new LeadsRoleUpdatedEvent() { Ids = vipIds });
     }
 
     public async Task Restore(int id, bool isDeleted, ClaimModel claims)
     {
-        //var lead = await _leadRepository.GetById(id);
-        //_logger.LogInformation($"Business layer: Database query for restoring lead {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
-        //    $"{lead.City}, {lead.Address.MaskTheLastFive}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
+        var lead = await _leadRepository.GetLeadByIdWithDeleted(id);
+        _logger.LogInformation($"Business layer: Database query for restoring lead {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
+            $"{lead.City}, {lead.Address.MaskTheLastFive}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
 
-        //if (lead is null)
-        //{
-        //    throw new NotFoundException($"Lead with id '{id}' was not found");
-
-        //}
+        if (lead is null)
+        {
+            throw new NotFoundException($"Lead with id '{id}' was not found");
+        }
 
         await _leadRepository.DeleteOrRestore(id, isDeleted);
     }
@@ -140,7 +138,7 @@ public class LeadsService : ILeadsService
 
         AccessService.CheckAccessForLeadAndManager(lead.Id, claims);
 
-        await _rabbitMq.SendMessage(new LeadDeletedEvent() { Id = id });
+        await _producer.ProduceMessage(new LeadDeletedEvent() { Id = id }, "");
 
         List<AccountDto> accounts = new List<AccountDto>();
 

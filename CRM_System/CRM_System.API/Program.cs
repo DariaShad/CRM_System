@@ -33,20 +33,8 @@ builder.Services.AddAuthentications();
 builder.Services.AddServices();
 builder.Services.AddFluentValidation();
 builder.Services.AddAutoMapper(typeof(MapperConfig));
-builder.Services.AddMassTransit(
-    config => config.UsingRabbitMq((ctx, cfg) =>
-    {
-        cfg.ReceiveEndpoint(RabbitEndpoint.LeadsRoleUpdateCrm, c => c.Bind<LeadsRoleUpdatedEvent>());
 
-        cfg.ReceiveEndpoint(RabbitEndpoint.LeadDelete, c => c.Bind<LeadDeletedEvent>());
-        cfg.ReceiveEndpoint(RabbitEndpoint.LeadCreate, c => c.Bind<LeadCreatedEvent>());
-        cfg.ReceiveEndpoint(RabbitEndpoint.AccountCreate, c => c.Bind<AccountCreatedEvent>());
-        cfg.ReceiveEndpoint(RabbitEndpoint.AccountDelete, c => c.Bind<AccountDeletedEvent>());
-        cfg.ReceiveEndpoint(RabbitEndpoint.AccountUpdate, c => c.Bind<AccountUpdatedEvent>());
-        cfg.ReceiveEndpoint(RabbitEndpoint.LeadUpdate, c => c.Bind<LeadUpdatedEvent>());
-    }));
-    
-builder.Services.AddConsumers();
+builder.Services.AddConsumersAndProducers();
 
 var app = builder.Build();
 

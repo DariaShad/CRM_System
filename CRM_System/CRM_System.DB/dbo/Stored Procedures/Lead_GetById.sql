@@ -20,7 +20,8 @@ BEGIN
 		L.IsDeleted,
 		A.Id,
 		A.Currency,
-		A.[Status]
+		A.[Status],
+		A.IsDeleted
 	FROM dbo.[Lead] as L
 	
 	LEFT JOIN dbo.Account as A on (A.LeadId = L.Id)

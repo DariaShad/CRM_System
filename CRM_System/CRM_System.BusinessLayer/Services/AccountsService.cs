@@ -1,6 +1,6 @@
-﻿using CRM_System.API.Producer;
-using CRM_System.BusinessLayer.Exceptions;
+﻿using CRM_System.BusinessLayer.Exceptions;
 using CRM_System.DataLayer;
+using IncredibleBackend.Messaging.Interfaces;
 using IncredibleBackendContracts.Enums;
 using IncredibleBackendContracts.Events;
 using Microsoft.Extensions.Logging;
@@ -15,12 +15,12 @@ public class AccountsService : IAccountsService
 
     private readonly ILogger<AccountsService> _logger;
 
-    private readonly IRabbitMQProducer _rabbitMq;
-    public AccountsService(IAccountsRepository accountRepository, ILogger<AccountsService> logger, IRabbitMQProducer rabbitMq, ILeadsRepository leadRepository)
+    private readonly IMessageProducer _producer;
+    public AccountsService(IAccountsRepository accountRepository, ILogger<AccountsService> logger, IMessageProducer producer, ILeadsRepository leadRepository)
     {
         _accountRepository = accountRepository;
         _logger = logger;
-        _rabbitMq = rabbitMq;
+        _producer = producer;
         _leadRepository = leadRepository;
     }
 
@@ -55,7 +55,7 @@ public class AccountsService : IAccountsService
             }
         }
 
-        await _rabbitMq.SendMessage(new AccountCreatedEvent() { Id = accountDTO.Id, Currency = accountDTO.Currency, Status = (IncredibleBackendContracts.Enums.AccountStatus)accountDTO.Status, LeadId = accountDTO.LeadId });
+        await _producer.ProduceMessage(new AccountCreatedEvent() { Id = accountDTO.Id, Currency = accountDTO.Currency, LeadId = accountDTO.LeadId }, "");
         return await _accountRepository.AddAccount(accountDTO);
     }
 
@@ -64,7 +64,7 @@ public class AccountsService : IAccountsService
         var account = await _accountRepository.GetAccountById(id);
         _logger.LogInformation($"Business layer: Database query for deleting account: {id} {account.LeadId}, {account.Currency}, {account.Status}");
         AccessService.CheckAccessForLeadAndManager(id, claim);
-        await _rabbitMq.SendMessage(new AccountDeletedEvent() { Id = id});
+        await _producer.ProduceMessage(new AccountDeletedEvent() { Id = id}, "");
         await _accountRepository.DeleteAccount(id);
     }
 
@@ -93,7 +93,7 @@ public class AccountsService : IAccountsService
     {
         _logger.LogInformation($"Business layer: Database query for updating account by id {id}, {account.Status}");
         AccessService.CheckAccessForLeadAndManager(id, claim);
-        await _rabbitMq.SendMessage(new AccountUpdatedEvent() { Id = id, Status = account.Status });
+        await _producer.ProduceMessage(new AccountUpdatedEvent() { Id = id, Status = account.Status }, "");
         await _accountRepository.UpdateAccount(account, id);
     }
 
