@@ -82,7 +82,7 @@ public class AccountsRepository : BaseRepository, IAccountsRepository
 
     public async Task RestoreAccount(int accountId)
     {
-        _logger.LogInformation($"Data Layer: Delete account {accountId}");
+        _logger.LogInformation($"Data Layer: Restore account {accountId}");
         _connectionString.Execute(
             StoredProcedures.Account_Restore,
             param: new { id = accountId },

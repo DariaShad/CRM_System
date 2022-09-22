@@ -97,6 +97,7 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
 
     public async Task Update(LeadDto leadDto)
     {
+        _logger.LogInformation($"Data Layer: update lead by id {leadDto.Id}");
         await _connectionString.QueryFirstOrDefaultAsync(
             StoredProcedures.Lead_Update,
             param: new
@@ -120,7 +121,7 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
         data.Columns.Add("id", typeof(int));
         vipIds.ForEach(x => data.Rows.Add(x));
 
-        _logger.LogInformation("Data layer: Connection to data base");
+        _logger.LogInformation("Data layer: update roles for leads");
         await _connectionString.QuerySingleAsync
             (StoredProcedures.Lead_UpdateRole,
                 param: new
@@ -133,15 +134,22 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
     public async Task DeleteOrRestore(int id, bool isDeleting)
     {
         if (isDeleting)
+        {
+            _logger.LogInformation($"Data layer: delete lead by id {id}");
             await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
-                StoredProcedures.Lead_Delete,
-                param: new { id, IsDeleted=true },
-                commandType: System.Data.CommandType.StoredProcedure);
+                  StoredProcedures.Lead_Delete,
+                  param: new { id, IsDeleted = true },
+                  commandType: System.Data.CommandType.StoredProcedure);
+        }
         else
+        {
+            _logger.LogInformation($"Data layer: restore lead by id {id}");
             await _connectionString.QueryFirstOrDefaultAsync<LeadDto>(
                 StoredProcedures.Lead_Delete,
-                param: new { id, IsDeleted=false },
+                param: new { id, IsDeleted = false },
                 commandType: System.Data.CommandType.StoredProcedure);
+        }
+           
     }
 
 

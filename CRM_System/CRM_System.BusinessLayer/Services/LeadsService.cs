@@ -29,9 +29,13 @@ public class LeadsService : ILeadsService
     {
         _logger.LogInformation($"Business layer: Database query for adding lead {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
             $"{lead.City}, {lead.Address.MaskTheLastFive()}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
+
         bool isUniqueEmail = await CheckEmailForUniqueness(lead.Email);
+
         if (!isUniqueEmail)
+        {
             throw new NotUniqueEmailException($"This email is registered already");
+        }    
 
         lead.Password = PasswordHash.HashPassword(lead.Password);
         lead.Role = Role.Regular;
@@ -47,11 +51,13 @@ public class LeadsService : ILeadsService
         };
 
         var accountId = await _accountRepository.AddAccount(account);
+        _logger.LogInformation($"Business layer: Database query for adding account Id: {accountId} by LeadId {lead.Id}");
 
         await _producer.ProduceMessage<LeadCreatedEvent>(new LeadCreatedEvent() { Id = lead.Id, FirstName = lead.FirstName, LastName = lead.LastName, Patronymic = lead.Patronymic, 
-            Birthday = lead.Birthday, Address = lead.Address, City = lead.City, Email = lead.Email, Passport = lead.Passport, Phone = lead.Phone, RegistrationDate = lead.RegistrationDate}, $"Lead send queue");
-        await _producer.ProduceMessage(new AccountCreatedEvent() { Id = accountId, Currency=account.Currency, LeadId= leadId, Status = account.Status }, "");
-        //add account
+            Birthday = lead.Birthday, Address = lead.Address, City = lead.City, Email = lead.Email, Passport = lead.Passport, Phone = lead.Phone, RegistrationDate = lead.RegistrationDate}, $"Lead with id: {lead.Id} has been queued");
+
+        await _producer.ProduceMessage(new AccountCreatedEvent() { Id = accountId, Currency=account.Currency, LeadId= leadId, Status = account.Status }, $"Account with id: {accountId} has been queued");
+
         return leadId;
     }
 
@@ -64,6 +70,7 @@ public class LeadsService : ILeadsService
         }
         _logger.LogInformation($"Business layer: Database query for getting lead by id {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
             $"{lead.City}, {lead.Address.MaskTheLastFive}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
+
         AccessService.CheckAccessForLeadAndManager(lead.Id, claims);
 
         return lead;
@@ -78,6 +85,7 @@ public class LeadsService : ILeadsService
         }
         _logger.LogInformation($"Business layer: Database query for getting lead by id {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
             $"{lead.City}, {lead.Address.MaskTheLastFive}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
+
         AccessService.CheckAccessForLeadAndManager(lead.Id, claims);
 
         return lead;
@@ -97,7 +105,12 @@ public class LeadsService : ILeadsService
             return lead;
     }
 
-    public async Task<List<LeadDto>> GetAll() => await _leadRepository.GetAll();
+    public async Task<List<LeadDto>> GetAll()
+    {
+        _logger.LogInformation($"Business layer: Database query for getting all leads");
+        return await _leadRepository.GetAll();
+
+    }
 
     public async Task Update(LeadDto newLead, int id, ClaimModel claims)
     {
@@ -126,8 +139,10 @@ public class LeadsService : ILeadsService
 
     public async Task UpdateRole(List <int> vipIds)
     {
-        await _leadRepository.UpdateLeadsRoles(vipIds);
-        await _producer.ProduceMessage(new LeadsRoleUpdatedEvent(vipIds), "");
+        _logger.LogInformation($"Business layer: Database query for updating roles for leads");
+
+       await _leadRepository.UpdateLeadsRoles(vipIds);
+        await _producer.ProduceMessage(new LeadsRoleUpdatedEvent(vipIds), $"Lead's roles has been queued");
     }
 
     public async Task Restore(int id, bool isDeleted, ClaimModel claims)
