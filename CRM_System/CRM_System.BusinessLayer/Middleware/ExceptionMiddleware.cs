@@ -36,6 +36,11 @@ public class ExceptionMiddleware
         {
             await HandleExceptionAsync(httpContext, HttpStatusCode.BadGateway, error.Message);
         }
+
+        catch (GatewayTimeoutException error)
+        {
+            await HandleExceptionAsync(httpContext, HttpStatusCode.GatewayTimeout, error.Message);
+        }
         catch (RepeatCurrencyException error)
         {
             await HandleExceptionAsync(httpContext, HttpStatusCode.Conflict, error.Message);

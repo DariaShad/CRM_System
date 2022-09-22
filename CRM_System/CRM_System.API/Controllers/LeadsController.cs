@@ -47,7 +47,7 @@ public class LeadsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<LeadMainInfoResponse>> GetById(int id)
+    public async Task<ActionResult<LeadAllInfoResponse>> GetById(int id)
     {
         var claims = this.GetClaims();
         var lead = await _leadsService.GetById(id, claims);
@@ -57,7 +57,7 @@ public class LeadsController : ControllerBase
         if (lead is null)
             return NotFound();
         else
-            return Ok(_mapper.Map<LeadMainInfoResponse>(lead));
+            return Ok(_mapper.Map<LeadAllInfoResponse>(lead));
     }
 
     [AuthorizeByRole(Role.Admin)]
@@ -88,22 +88,6 @@ public class LeadsController : ControllerBase
         return NoContent();
     }
 
-    //[Authorize]
-    //[HttpPut("{id}")]
-    //[ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
-    //[ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
-    //[ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
-    //[ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    //[ProducesResponseType(typeof(void), StatusCodes.Status422UnprocessableEntity)]
-    //public async Task<ActionResult> UpdateRole([FromBody] LeadUpdateRoleRequest request, int id)
-    //{
-    //    _logger.LogInformation($"Controller: Update lead by id: {id}");
-    //    var claims = this.GetClaims();
-
-    //    await _leadsService.UpdateRole(_mapper.Map<LeadDto>(request), id, claims);
-    //    return NoContent();
-    //}
-
     [Authorize]
     [HttpDelete("{id}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
@@ -131,9 +115,9 @@ public class LeadsController : ControllerBase
     public async Task<ActionResult> Restore(int id)
     {
         var claims = this.GetClaims();
-        //var lead = await _leadsService.GetById(id, claims);
-        //_logger.LogInformation($"Controller: Restore lead by id {id}: {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
-        //    $"{lead.City}, {lead.Address.MaskTheLastFive}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
+        var lead = await _leadsService.GetByIdWithDeleted(id, claims);
+        _logger.LogInformation($"Controller: Restore lead by id {id}: {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
+            $"{lead.City}, {lead.Address.MaskTheLastFive}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
         await _leadsService.Restore(id, false, claims);
 
         return NoContent();

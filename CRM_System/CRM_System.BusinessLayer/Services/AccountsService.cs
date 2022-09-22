@@ -86,7 +86,7 @@ public class AccountsService : IAccountsService
     {
         _logger.LogInformation($"Business layer: Database query for getting accounts by lead id : {leadId}");
         AccessService.CheckAccessForLeadAndManager(leadId, claim);
-        return await _accountRepository.GetAllAccounts();
+        return await _accountRepository.GetAllAccountsByLeadId(leadId);
     }
 
     public async Task UpdateAccount(AccountDto account, int id, ClaimModel claim)

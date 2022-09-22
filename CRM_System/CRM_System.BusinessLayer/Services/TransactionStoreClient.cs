@@ -20,7 +20,7 @@ public class TransactionStoreClient : IHttpService
         {
             _httpClient.BaseAddress = new Uri(baseAddress);
         }
-        //_httpClient.Timeout = new TimeSpan(0, 0, 30);
+        _httpClient.Timeout = new TimeSpan(0, 0, 10);
 
         _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
     }
@@ -30,16 +30,11 @@ public class TransactionStoreClient : IHttpService
         var serializedPayload = JsonSerializer.Serialize(payload);
         var requestPayload = new StringContent(serializedPayload, Encoding.UTF8, "application/json");
         HttpResponseMessage response;
-        try 
-        {
+
         response = await _httpClient.PostAsync(path, requestPayload);
+
         CheckStatusCode(response.StatusCode);
         
-        }
-         catch (Exception ex)
-        {
-            throw new BadGatewayException("");
-        }
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
@@ -78,6 +73,16 @@ public class TransactionStoreClient : IHttpService
     private void CheckStatusCode(HttpStatusCode statusCode)
     {
         if (statusCode == HttpStatusCode.InternalServerError)
+        {
+            throw new BadGatewayException("");
+        }
+
+        if (statusCode == HttpStatusCode.GatewayTimeout)
+        {
+            throw new GatewayTimeoutException("");
+        }
+
+        if (statusCode == HttpStatusCode.BadGateway)
         {
             throw new BadGatewayException("");
         }

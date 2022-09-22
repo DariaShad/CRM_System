@@ -68,7 +68,21 @@ public class LeadsService : ILeadsService
 
         return lead;
     }
-    
+
+    public async Task<LeadDto> GetByIdWithDeleted(int id, ClaimModel claims)
+    {
+        var lead = await _leadRepository.GetLeadByIdWithDeleted(id);
+        if (lead == null)
+        {
+            throw new NotFoundException("Lead with this id was not found");
+        }
+        _logger.LogInformation($"Business layer: Database query for getting lead by id {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
+            $"{lead.City}, {lead.Address.MaskTheLastFive}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
+        AccessService.CheckAccessForLeadAndManager(lead.Id, claims);
+
+        return lead;
+    }
+
     public async Task<LeadDto> GetByEmail(string email)
     {
         _logger.LogInformation($"Business layer: Database query for getting lead by email {email}");
