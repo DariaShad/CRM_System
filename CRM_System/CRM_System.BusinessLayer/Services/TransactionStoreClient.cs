@@ -20,7 +20,7 @@ public class TransactionStoreClient : IHttpService
         {
             _httpClient.BaseAddress = new Uri(baseAddress);
         }
-        _httpClient.Timeout = new TimeSpan(0, 0, 10);
+        //_httpClient.Timeout = new TimeSpan(0, 0, 10);
 
         _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
     }
@@ -42,9 +42,9 @@ public class TransactionStoreClient : IHttpService
         return result;
     }
 
-    public async Task<TransactionResponse> GetTransaction(int transactionId)
+    public async Task<TransactionResponse> GetTransaction(int id)
     {
-        var response = await _httpClient.GetAsync($"transactions/{transactionId}");
+        var response = await _httpClient.GetAsync($"transactions/{id}");
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();

@@ -142,7 +142,7 @@ public class LeadsService : ILeadsService
         _logger.LogInformation($"Business layer: Database query for updating roles for leads");
 
        await _leadRepository.UpdateLeadsRoles(vipIds);
-        await _producer.ProduceMessage(new LeadsRoleUpdatedEvent(vipIds), $"Lead's roles has been queued (update roles)");
+        await _producer.ProduceMessage(new LeadsRoleUpdatedEvent() { Ids = vipIds }, $"Lead's roles has been queued (update roles)");
     }
 
     public async Task Restore(int id, bool isDeleted, ClaimModel claims)
