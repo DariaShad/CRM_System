@@ -21,16 +21,16 @@ namespace CRM_System.BusinessLayer.Tests
         private Mock<IAccountsRepository> _accountsRepositoryMock;
         private ClaimModel _claimModel;
         private Mock <ILogger<LeadsService>> _logger;
-        private  IMessageProducer _producer;
+        private Mock <IMessageProducer> _producer;
 
         [SetUp]
         public void Setup()
         {
             _accountsRepositoryMock = new Mock<IAccountsRepository>();
-            //_producer = new Mock <IMessageProducer>();
+            _producer = new Mock <IMessageProducer>();
             _logger = new Mock <ILogger<LeadsService>>();
             _leadsRepositoryMock = new Mock<ILeadsRepository>();
-            _sut = new LeadsService(_leadsRepositoryMock.Object, _logger.Object, _producer, _accountsRepositoryMock.Object);
+            _sut = new LeadsService(_leadsRepositoryMock.Object, _logger.Object, _producer.Object, _accountsRepositoryMock.Object);
         }
 
         [Test]

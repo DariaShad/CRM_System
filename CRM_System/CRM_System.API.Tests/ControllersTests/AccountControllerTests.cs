@@ -21,15 +21,16 @@ public class AccountControllerTests
 
     private ClaimModel _claims;
 
-    private ILogger<AccountsController> _logger;
+    private Mock <ILogger<AccountsController>> _logger;
 
     [SetUp]
     public void Setup()
     {
+        _logger = new Mock<ILogger<AccountsController>>();
         _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<MapperConfig>()));
         _claims = new ClaimModel();
         _accountsServiceMock= new Mock<IAccountsService>();
-        _sut = new AccountsController(_accountsServiceMock.Object, _mapper, _logger);
+        _sut = new AccountsController(_accountsServiceMock.Object, _mapper, _logger.Object);
     }
 
     [Test]
