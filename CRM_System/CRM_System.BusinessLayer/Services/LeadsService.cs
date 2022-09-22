@@ -54,9 +54,9 @@ public class LeadsService : ILeadsService
         _logger.LogInformation($"Business layer: Database query for adding account Id: {accountId} by LeadId {lead.Id}");
 
         await _producer.ProduceMessage<LeadCreatedEvent>(new LeadCreatedEvent() { Id = lead.Id, FirstName = lead.FirstName, LastName = lead.LastName, Patronymic = lead.Patronymic, 
-            Birthday = lead.Birthday, Address = lead.Address, City = lead.City, Email = lead.Email, Passport = lead.Passport, Phone = lead.Phone, RegistrationDate = lead.RegistrationDate}, $"Lead with id: {lead.Id} has been queued");
+            Birthday = lead.Birthday, Address = lead.Address, City = lead.City, Email = lead.Email, Passport = lead.Passport, Phone = lead.Phone, RegistrationDate = lead.RegistrationDate}, $"Lead with id: {lead.Id} has been queued (add)");
 
-        await _producer.ProduceMessage(new AccountCreatedEvent() { Id = accountId, Currency=account.Currency, LeadId= leadId, Status = account.Status }, $"Account with id: {accountId} has been queued");
+        await _producer.ProduceMessage(new AccountCreatedEvent() { Id = accountId, Currency=account.Currency, LeadId= leadId, Status = account.Status }, $"Account with id: {accountId} has been queued (add)");
 
         return leadId;
     }
@@ -134,7 +134,7 @@ public class LeadsService : ILeadsService
         
         await _leadRepository.Update(lead);
         await _producer.ProduceMessage(new LeadUpdatedEvent() { Id = id, FirstName = lead.FirstName, LastName = lead.LastName, Patronymic = lead.Patronymic, 
-        Birthday = lead.Birthday, Phone = lead.Phone, City = lead.City, Address = lead.Address }, "");
+        Birthday = lead.Birthday, Phone = lead.Phone, City = lead.City, Address = lead.Address }, $"Lead with id: {lead.Id} has been queued (update)");
     }
 
     public async Task UpdateRole(List <int> vipIds)
@@ -142,7 +142,7 @@ public class LeadsService : ILeadsService
         _logger.LogInformation($"Business layer: Database query for updating roles for leads");
 
        await _leadRepository.UpdateLeadsRoles(vipIds);
-        await _producer.ProduceMessage(new LeadsRoleUpdatedEvent(vipIds), $"Lead's roles has been queued");
+        await _producer.ProduceMessage(new LeadsRoleUpdatedEvent(vipIds), $"Lead's roles has been queued (update roles)");
     }
 
     public async Task Restore(int id, bool isDeleted, ClaimModel claims)
@@ -169,7 +169,7 @@ public class LeadsService : ILeadsService
 
         AccessService.CheckAccessForLeadAndManager(lead.Id, claims);
 
-        await _producer.ProduceMessage(new LeadDeletedEvent() { Id = id }, "");
+        await _producer.ProduceMessage(new LeadDeletedEvent() { Id = id }, $"Lead with id: { lead.Id} has been queued (delete)");
 
         List<AccountDto> accounts = new List<AccountDto>();
 
@@ -178,9 +178,8 @@ public class LeadsService : ILeadsService
         foreach (var account in accounts)
         {
             await _accountRepository.DeleteAccount(account.Id);
-            await _producer.ProduceMessage(new AccountDeletedEvent() { Id = account.Id }, "");
+            await _producer.ProduceMessage(new AccountDeletedEvent() { Id = account.Id }, $"Account with id: { account.Id} has been queued (delete)");
         }
-
 
         await _leadRepository.DeleteOrRestore(id, isDeleted);
     }

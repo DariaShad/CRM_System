@@ -55,8 +55,9 @@ public class AccountsService : IAccountsService
             }
         }
 
-        await _producer.ProduceMessage(new AccountCreatedEvent() { Id = accountDTO.Id, Currency = accountDTO.Currency, LeadId = accountDTO.LeadId }, "");
-        return await _accountRepository.AddAccount(accountDTO);
+        var accountId = await _accountRepository.AddAccount(accountDTO);
+        await _producer.ProduceMessage(new AccountCreatedEvent() { Id = accountDTO.Id, Currency = accountDTO.Currency, LeadId = accountDTO.LeadId }, $"Account with id: { accountId} has been queued (add)");
+        return accountId;
     }
 
     public async Task DeleteAccount(int id, ClaimModel claim)
@@ -64,16 +65,15 @@ public class AccountsService : IAccountsService
         var account = await _accountRepository.GetAccountById(id);
         _logger.LogInformation($"Business layer: Database query for deleting account: {id} {account.LeadId}, {account.Currency}, {account.Status}");
         AccessService.CheckAccessForLeadAndManager(id, claim);
-        await _producer.ProduceMessage(new AccountDeletedEvent() { Id = id}, "");
+        await _producer.ProduceMessage(new AccountDeletedEvent() { Id = id}, $"Account with id: { account.Id} has been queued (delete)");
         await _accountRepository.DeleteAccount(id);
     }
 
     public async Task <AccountDto> GetAccountById(int id, ClaimModel claim)
     {   
-        //var leadId = _leadsRepository
         var account = await _accountRepository.GetAccountById(id);
         _logger.LogInformation($"Business layer: Database query for getting account: {id} {account.LeadId}, {account.Currency}, {account.Status}");
-        AccessService.CheckAccessForLeadAndManager(id, claim); //Написано неправильно!!! нужно переделать под айди ЛИДА. А СЕЙЧАС ПОД АЙДИ АККАУНТА
+        AccessService.CheckAccessForLeadAndManager(claim.Id, claim); 
         return account;
     }
 
@@ -93,7 +93,7 @@ public class AccountsService : IAccountsService
     {
         _logger.LogInformation($"Business layer: Database query for updating account by id {id}, {account.Status}");
         AccessService.CheckAccessForLeadAndManager(id, claim);
-        await _producer.ProduceMessage(new AccountUpdatedEvent() { Id = id, Status = account.Status }, "");
+        await _producer.ProduceMessage(new AccountUpdatedEvent() { Id = id, Status = account.Status }, $"Account with id: { account.Id} has been queued (update)");
         await _accountRepository.UpdateAccount(account, id);
     }
 
