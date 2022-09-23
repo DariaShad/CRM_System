@@ -39,20 +39,11 @@ public class AccountsService : IAccountsService
                 throw new RegularAccountRestrictionException("Regular lead cannot have any other account except RUB or USD");
             }
         }
-
         List <AccountDto> accountsOfLead = await _accountRepository.GetAllAccountsByLeadId(accountDTO.LeadId);
-        List<TradingCurrency> currencies = new List<TradingCurrency>() { TradingCurrency.EUR, TradingCurrency.RUB, TradingCurrency.USD, TradingCurrency.JPY,
-        TradingCurrency.AMD, TradingCurrency.BGN, TradingCurrency.RSD, TradingCurrency.CNY};
-
-        foreach (var account in accountsOfLead)
+        var isRepeated = accountsOfLead.Any(a => a.Currency == accountDTO.Currency);
+        if (isRepeated)
         {
-          foreach (var currency in currencies)
-            {
-                if (account.Currency == currency)
-                {
-                    throw new RepeatCurrencyException($"Already have an account with currency: {currency}");
-                }
-            }
+            throw new RepeatCurrencyException($"Already have an account with this currency");
         }
 
         var accountId = await _accountRepository.AddAccount(accountDTO);

@@ -68,7 +68,7 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
 
     public async Task<LeadDto> GetById(int id)
     {
-        var lead = (await _connectionString.QueryAsync<LeadDto, AccountDto, LeadDto>(
+        var lead =  _connectionString.Query<LeadDto, AccountDto, LeadDto>(
             StoredProcedures.Lead_GetAllInfoByLeadId,
             (lead, account) =>
             {
@@ -77,7 +77,7 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
             },
             splitOn: "Id",
             param: new { Id = id },
-            commandType: System.Data.CommandType.StoredProcedure)).FirstOrDefault();
+            commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
 
         _logger.LogInformation($"Data Layer: Get by id {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}");
 
@@ -98,7 +98,7 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
     public async Task Update(LeadDto leadDto)
     {
         _logger.LogInformation($"Data Layer: update lead by id {leadDto.Id}");
-        await _connectionString.QueryFirstOrDefaultAsync(
+         _connectionString.QueryFirstOrDefault(
             StoredProcedures.Lead_Update,
             param: new
             {
