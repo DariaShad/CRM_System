@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Castle.Core.Logging;
 using CRM_System.API.Models.Requests;
 using CRM_System.BusinessLayer;
 using CRM_System.DataLayer;
@@ -43,13 +42,12 @@ public class AccountControllerTests
             Id = accountId,
             Role = Role.Regular
         };
-        _accountsServiceMock.Setup(a => a.GetAccountById(It.Is<int>(i => i == accountId), It.Is<ClaimModel>(c => c.Id==accountId))).ReturnsAsync(new AccountDto());
+        _accountsServiceMock.Setup(a => a.GetAccountById(It.IsAny<int>(), It.IsAny<ClaimModel>())).ReturnsAsync(new AccountDto());
         
         //when
         var actual= await _sut.GetAccount(accountId);
 
         //then
-        _accountsServiceMock.Verify(a => a.GetAccountById(It.Is<int>(i => i == accountId), It.Is<ClaimModel>(c => c.Id == accountId)), Times.Once);
         var actualResult = actual.Result as ObjectResult;
         Assert.AreEqual(StatusCodes.Status200OK, actualResult.StatusCode);
     }

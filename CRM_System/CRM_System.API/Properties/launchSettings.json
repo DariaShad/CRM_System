@@ -18,7 +18,8 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "CRM_CONNECTION_STRING": "Server=80.78.240.16;Database=CRM.Db;Trusted_Connection=False;User Id=Student;Password=qwe!23",
-        "LOG_DIRECTORY": "C:\\1234"
+        "LOG_DIRECTORY": "C:\\1234",
+        "TRANSACTION_STORE_BASE_URL": "https://piter-education.ru:6060/"
         //"$(MSBuildProjectDirectory)\\Logs"
 
       }

@@ -14,7 +14,12 @@ public class TransactionStoreClient : IHttpService
 
     public TransactionStoreClient()
     {
-        string baseAddress ="https://piter-education.ru:6060/";
+        var baseAddress = Environment.GetEnvironmentVariable("TRANSACTION_STORE_BASE_URL");
+
+        if (baseAddress == null)
+        {
+            throw new ArgumentNullException(nameof(baseAddress));
+        }
 
         if (_httpClient.BaseAddress == null)
         {

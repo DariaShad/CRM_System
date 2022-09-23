@@ -287,45 +287,8 @@ public class LeadsControllerTests
         var actualResult = actual as NoContentResult;
 
         Assert.AreEqual(StatusCodes.Status204NoContent, actualResult.StatusCode);
-        //Assert.IsTrue(lead.IsDeleted);
 
         _leadsServiceMock.Verify(l => l.Delete(lead.Id, true, It.IsAny<ClaimModel>()), Times.Once);
     }
 
-    [Test]
-    public async Task RestoreTest_ValidRequestPassed_NoContentResultReceived()
-    {
-        //given
-        var lead = new LeadDto
-        {
-            Id = 6,
-            FirstName = "Asmaa",
-            LastName = "Pavlina",
-            Patronymic = "Marlena",
-            Birthday = DateTime.Parse("1979-11-07"),
-            Email = "Insch9@gmail.com",
-            Phone = "+77221007356",
-            Passport = "7716 755288",
-            City = City.Chelyabinsk,
-            Address = "957 Simpson Street",
-            Role = Role.Vip,
-            Password = "na9}UeC5nY",
-            RegistrationDate = DateTime.Parse("2017-10-10"),
-            IsDeleted = true
-        };
-
-        _leadsServiceMock.Setup(l => l.GetById(lead.Id, It.IsAny<ClaimModel>()))
-            .ReturnsAsync(lead);
-
-        //when
-        var actual = await _sut.Remove(lead.Id);
-
-        //then
-        var actualResult = actual as NoContentResult;
-
-        Assert.AreEqual(StatusCodes.Status204NoContent, actualResult.StatusCode);
-        //Assert.IsFalse(lead.IsDeleted);
-
-        _leadsServiceMock.Verify(l => l.Restore(lead.Id, false, It.IsAny<ClaimModel>()), Times.Once);
-    }
 }

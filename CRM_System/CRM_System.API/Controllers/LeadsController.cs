@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using CRM_System.API.Extensions;
-using CRM_System.API.Models.Requests;
-using CRM_System.API.Models.Responses;
 using CRM_System.BusinessLayer;
 using CRM_System.DataLayer;
 using IncredibleBackendContracts.Enums;

@@ -1,11 +1,5 @@
 using CRM_System.API;
 using CRM_System.API.Infrastucture;
-using CRM_System.API.Models;
-using CRM_System.API.Models.Responses;
-using IncredibleBackendContracts.Constants;
-using IncredibleBackendContracts.Events;
-using MassTransit;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using NLog;
 using NLog.Web;
 using System.Data;

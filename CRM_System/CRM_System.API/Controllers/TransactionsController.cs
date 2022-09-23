@@ -1,5 +1,4 @@
 ﻿using CRM_System.BusinessLayer;
-using CRM_System.DataLayer;
 using IncredibleBackendContracts.Requests;
 using IncredibleBackendContracts.Responses;
 using Microsoft.AspNetCore.Authorization;
