@@ -18,8 +18,7 @@ public class TransactionStoreClient : IHttpService
 
         if (baseAddress == null)
         {
-            baseAddress = "https://piter-education.ru:6060/";
-            //throw new ArgumentNullException(nameof(baseAddress));
+            throw new ArgumentNullException(nameof(baseAddress));
         }
 
         if (_httpClient.BaseAddress == null)
