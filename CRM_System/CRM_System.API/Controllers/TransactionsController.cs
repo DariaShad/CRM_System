@@ -1,5 +1,5 @@
 ﻿using CRM_System.BusinessLayer;
-using CRM_System.DataLayer;
+using IncredibleBackendContracts.Requests;
 using IncredibleBackendContracts.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -55,7 +55,7 @@ public class TransactionsController : Controller
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(void), StatusCodes.Status422UnprocessableEntity)]
-    public async Task<ActionResult<List<long>>> AddTransfer([FromBody] TransferTransactionRequest request)
+    public async Task<ActionResult<List<long>>> AddTransfer([FromBody] TransactionTransferRequest request)
     {
         _logger.LogInformation("Controllers: Add transfer");
         var claims = this.GetClaims();

@@ -1,5 +1,4 @@
-﻿using CRM_System.DataLayer;
-using IncredibleBackendContracts.Enums;
+﻿using IncredibleBackendContracts.Enums;
 
 namespace CRM_System.API.Models.Requests;
 

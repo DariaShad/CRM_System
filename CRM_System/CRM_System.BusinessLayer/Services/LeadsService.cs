@@ -1,6 +1,7 @@
 ﻿using CRM_System.API.Extensions;
-using CRM_System.API.Producer;
+using CRM_System.BusinessLayer.Exceptions;
 using CRM_System.DataLayer;
+using IncredibleBackend.Messaging.Interfaces;
 using IncredibleBackendContracts.Enums;
 using IncredibleBackendContracts.Events;
 using Microsoft.Extensions.Logging;
@@ -14,13 +15,13 @@ public class LeadsService : ILeadsService
     private readonly IAccountsRepository _accountRepository;
 
     private readonly ILogger<LeadsService> _logger;
-    private readonly IRabbitMQProducer _rabbitMq;
+    private readonly IMessageProducer _producer;
 
-    public LeadsService(ILeadsRepository leadRepository, ILogger<LeadsService> logger, IRabbitMQProducer rabbitMq, IAccountsRepository accountRepository)
+    public LeadsService(ILeadsRepository leadRepository, ILogger<LeadsService> logger, IMessageProducer producer, IAccountsRepository accountRepository)
     {
         _leadRepository = leadRepository;
         _logger = logger;
-        _rabbitMq = rabbitMq;
+       _producer = producer;
         _accountRepository = accountRepository;
     }
 
@@ -28,9 +29,13 @@ public class LeadsService : ILeadsService
     {
         _logger.LogInformation($"Business layer: Database query for adding lead {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
             $"{lead.City}, {lead.Address.MaskTheLastFive()}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
+
         bool isUniqueEmail = await CheckEmailForUniqueness(lead.Email);
+
         if (!isUniqueEmail)
+        {
             throw new NotUniqueEmailException($"This email is registered already");
+        }    
 
         lead.Password = PasswordHash.HashPassword(lead.Password);
         lead.Role = Role.Regular;
@@ -45,9 +50,13 @@ public class LeadsService : ILeadsService
             Status = AccountStatus.Active
         };
 
-        await _accountRepository.AddAccount(account);
+        var accountId = await _accountRepository.AddAccount(account);
+        _logger.LogInformation($"Business layer: Database query for adding account Id: {accountId} by LeadId {lead.Id}");
 
-        await _rabbitMq.SendMessage(new LeadCreatedEvent() { Id = lead.Id });
+        await _producer.ProduceMessage<LeadCreatedEvent>(new LeadCreatedEvent() { Id = lead.Id, FirstName = lead.FirstName, LastName = lead.LastName, Patronymic = lead.Patronymic, 
+            Birthday = lead.Birthday, Address = lead.Address, City = lead.City, Email = lead.Email, Passport = lead.Passport, Phone = lead.Phone, RegistrationDate = lead.RegistrationDate}, $"Lead with id: {lead.Id} has been queued (add)");
+
+        await _producer.ProduceMessage(new AccountCreatedEvent() { Id = accountId, Currency=account.Currency, LeadId= leadId, Status = account.Status }, $"Account with id: {accountId} has been queued (add)");
 
         return leadId;
     }
@@ -55,26 +64,53 @@ public class LeadsService : ILeadsService
     public async Task<LeadDto> GetById(int id, ClaimModel claims)
     {
         var lead = await _leadRepository.GetById(id);
+        if (lead == null || lead.IsDeleted == true)
+        {
+            throw new NotFoundException("Lead with this id was not found");
+        }
         _logger.LogInformation($"Business layer: Database query for getting lead by id {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
             $"{lead.City}, {lead.Address.MaskTheLastFive}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
+
         AccessService.CheckAccessForLeadAndManager(lead.Id, claims);
 
         return lead;
     }
-    //Update role
-    public async Task<LeadDto?> GetByEmail(string email)
+
+    public async Task<LeadDto> GetDeletedLeadById(int id, ClaimModel claims)
+    {
+        var lead = await _leadRepository.GetDeletedLeadById(id);
+        if (lead == null)
+        {
+            throw new NotFoundException("Lead with this id was not found");
+        }
+        _logger.LogInformation($"Business layer: Database query for getting lead by id {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
+            $"{lead.City}, {lead.Address.MaskTheLastFive}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
+
+        AccessService.CheckAccessForLeadAndManager(lead.Id, claims);
+
+        return lead;
+    }
+
+    public async Task<LeadDto> GetByEmail(string email)
     {
         _logger.LogInformation($"Business layer: Database query for getting lead by email {email}");
         var lead = await _leadRepository.GetByEmail(email);
 
         if (lead is null)
+        {
             throw new NotFoundException($"Lead with email '{email}' was not found");
+        }
 
         else
             return lead;
     }
 
-    public async Task<List<LeadDto>> GetAll() => await _leadRepository.GetAll();
+    public async Task<List<LeadDto>> GetAll()
+    {
+        _logger.LogInformation($"Business layer: Database query for getting all leads");
+        return await _leadRepository.GetAll();
+
+    }
 
     public async Task Update(LeadDto newLead, int id, ClaimModel claims)
     {
@@ -97,36 +133,29 @@ public class LeadsService : ILeadsService
 
         
         await _leadRepository.Update(lead);
-        await _rabbitMq.SendMessage(new LeadUpdatedEvent() { Id = id, FirstName = lead.FirstName, LastName = lead.LastName, Patronymic = lead.Patronymic, 
-        Birthday = lead.Birthday, Phone = lead.Phone, City = lead.City, Address = lead.Address });
+        await _producer.ProduceMessage(new LeadUpdatedEvent() { Id = id, FirstName = lead.FirstName, LastName = lead.LastName, Patronymic = lead.Patronymic, 
+        Birthday = lead.Birthday, Phone = lead.Phone, City = lead.City, Address = lead.Address }, $"Lead with id: {lead.Id} has been queued (update)");
     }
 
-    public async Task UpdateRole(LeadDto leadDto, int id, ClaimModel claims)
+    public async Task UpdateRole(List <int> vipIds)
     {
-        var lead = await _leadRepository.GetById(id);
+        _logger.LogInformation($"Business layer: Database query for updating roles for leads");
 
-        if (lead is null || leadDto is null)
-            throw new NotFoundException($"Lead with id '{lead.Id}' was not found");
-
-        AccessService.CheckAccessForLeadAndManager(id, claims);
-
-        lead.Role = leadDto.Role;
-
-        await _leadRepository.UpdateRole(leadDto, id);
-        //await _rabbitMq.SendMessage(new LeadsRoleUpdatedEvent() { Ids = new List<int> { lead.Id } });
+        await _leadRepository.UpdateLeadsRoles(vipIds);
+        await _producer.ProduceMessage(new LeadsRoleUpdatedEvent() { Ids = vipIds }, $"Lead's roles has been queued (update roles)");
     }
 
     public async Task Restore(int id, bool isDeleted, ClaimModel claims)
     {
-        var lead = await _leadRepository.GetById(id);
+        var lead = await _leadRepository.GetDeletedLeadById(id);
         _logger.LogInformation($"Business layer: Database query for restoring lead {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
             $"{lead.City}, {lead.Address.MaskTheLastFive}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
 
         if (lead is null)
+        {
             throw new NotFoundException($"Lead with id '{id}' was not found");
-                
-        AccessService.CheckAccessForLeadAndManager(lead.Id, claims);
-        
+        }
+
         await _leadRepository.DeleteOrRestore(id, isDeleted);
     }
     public async Task Delete(int id, bool isDeleted, ClaimModel claims)
@@ -140,16 +169,16 @@ public class LeadsService : ILeadsService
 
         AccessService.CheckAccessForLeadAndManager(lead.Id, claims);
 
-        await _rabbitMq.SendMessage(new LeadDeletedEvent() { Id = id });
+        await _producer.ProduceMessage(new LeadDeletedEvent() { Id = id }, $"Lead with id: { lead.Id} has been queued (delete)");
 
         List<AccountDto> accounts = new List<AccountDto>();
 
         accounts = await _accountRepository.GetAllAccountsByLeadId(id);
 
-        while (accounts.Count > 0)
+        foreach (var account in accounts)
         {
-            await _accountRepository.DeleteAccount(accounts[accounts.Count-1].Id);
-            accounts.Remove(accounts[accounts.Count - 1]);
+            await _accountRepository.DeleteAccount(account.Id);
+            await _producer.ProduceMessage(new AccountDeletedEvent() { Id = account.Id }, $"Account with id: { account.Id} has been queued (delete)");
         }
 
         await _leadRepository.DeleteOrRestore(id, isDeleted);

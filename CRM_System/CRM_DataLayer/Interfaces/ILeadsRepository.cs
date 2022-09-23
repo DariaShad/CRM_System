@@ -5,8 +5,9 @@ public interface ILeadsRepository
     Task<int> Add(LeadDto leadDto);
     Task<List<LeadDto>> GetAll();
     Task<LeadDto> GetById(int id);
+    Task<LeadDto> GetDeletedLeadById(int id);
     Task<LeadDto> GetByEmail(string email);
     Task Update(LeadDto leadDto);
-    Task UpdateRole(LeadDto leadDto, int id);
+    Task UpdateLeadsRoles(List<int> vipIds);
     Task DeleteOrRestore(int id, bool isDeleting);
 }

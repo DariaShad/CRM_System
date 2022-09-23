@@ -14,13 +14,18 @@ public class TransactionStoreClient : IHttpService
 
     public TransactionStoreClient()
     {
-        string baseAddress ="https://piter-education.ru:6066/";
+        var baseAddress = Environment.GetEnvironmentVariable("TRANSACTION_STORE_BASE_URL");
+
+        if (baseAddress == null)
+        {
+            throw new ArgumentNullException(nameof(baseAddress));
+        }
 
         if (_httpClient.BaseAddress == null)
         {
             _httpClient.BaseAddress = new Uri(baseAddress);
         }
-        //_httpClient.Timeout = new TimeSpan(0, 0, 30);
+        //_httpClient.Timeout = new TimeSpan(0, 0, 10);
 
         _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
     }
@@ -30,16 +35,11 @@ public class TransactionStoreClient : IHttpService
         var serializedPayload = JsonSerializer.Serialize(payload);
         var requestPayload = new StringContent(serializedPayload, Encoding.UTF8, "application/json");
         HttpResponseMessage response;
-        try 
-        {
+
         response = await _httpClient.PostAsync(path, requestPayload);
+
         CheckStatusCode(response.StatusCode);
         
-        }
-         catch (Exception ex)
-        {
-            throw new BadGatewayException("");
-        }
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
@@ -47,9 +47,9 @@ public class TransactionStoreClient : IHttpService
         return result;
     }
 
-    public async Task<TransactionResponse> GetTransaction(int transactionId)
+    public async Task<TransactionResponse> GetTransaction(int id)
     {
-        var response = await _httpClient.GetAsync($"transactions/{transactionId}");
+        var response = await _httpClient.GetAsync($"transactions/{id}");
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
@@ -78,6 +78,16 @@ public class TransactionStoreClient : IHttpService
     private void CheckStatusCode(HttpStatusCode statusCode)
     {
         if (statusCode == HttpStatusCode.InternalServerError)
+        {
+            throw new BadGatewayException("");
+        }
+
+        if (statusCode == HttpStatusCode.GatewayTimeout)
+        {
+            throw new GatewayTimeoutException("");
+        }
+
+        if (statusCode == HttpStatusCode.BadGateway)
         {
             throw new BadGatewayException("");
         }

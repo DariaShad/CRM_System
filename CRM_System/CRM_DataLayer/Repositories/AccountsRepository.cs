@@ -61,7 +61,7 @@ public class AccountsRepository : BaseRepository, IAccountsRepository
     public async Task UpdateAccount(AccountDto account, int id)
     {
         _logger.LogInformation($"Data Layer: Get account by id {id}: {account.Status}");
-        _connectionString.Execute(
+            _connectionString.Execute(
             StoredProcedures.Account_Update,
             param: new
             {
@@ -77,6 +77,15 @@ public class AccountsRepository : BaseRepository, IAccountsRepository
         _connectionString.Execute(
             StoredProcedures.Account_Delete,
             param: new { id= accountId},
+            commandType: System.Data.CommandType.StoredProcedure);
+    }
+
+    public async Task RestoreAccount(int accountId)
+    {
+        _logger.LogInformation($"Data Layer: Restore account {accountId}");
+         _connectionString.Execute(
+            StoredProcedures.Account_Restore,
+            param: new { id = accountId },
             commandType: System.Data.CommandType.StoredProcedure);
     }
 }

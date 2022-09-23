@@ -1,4 +1,5 @@
-﻿using CRM_System.DataLayer;
+﻿using CRM_System.BusinessLayer.Exceptions;
+using CRM_System.DataLayer;
 using Microsoft.Extensions.Logging;
 
 namespace CRM_System.BusinessLayer.Services

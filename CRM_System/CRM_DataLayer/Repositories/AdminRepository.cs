@@ -12,7 +12,7 @@ public class AdminRepository : BaseRepository, IAdminRepository
         _logger = logger;
     }
 
-    public async Task<AdminDto> GetAdminByEmail(string email)
+    public async Task<AdminDto?> GetAdminByEmail(string email)
     {
         _logger.LogInformation($"Data Layer: get admin by email {email}");
         var admin = await _connectionString.QueryFirstOrDefaultAsync<AdminDto>(

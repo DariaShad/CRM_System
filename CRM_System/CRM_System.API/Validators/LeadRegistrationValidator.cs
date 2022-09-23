@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using System.Text.RegularExpressions;
 
 namespace CRM_System.API;
 
@@ -42,12 +41,6 @@ public class LeadRegistrationValidator : AbstractValidator<LeadRegistrationReque
             .WithMessage("Fill in the field")
             .EmailAddress()
             .WithMessage("Invalid email");
-
-        //RuleFor(v => v.Phone)
-        //    .NotEmpty()
-        //    .WithMessage("Fill in the field")
-        //    .Matches(new Regex(@"^((8 |\+7)[\- ] ?) ? (\(?\d{ 3}\)?[\- ]?)?[\d\- ]{ 7,10}$"))
-        //    .WithMessage("Invalid phone number");
 
         RuleFor(v => v.Passport)
             .NotEmpty()

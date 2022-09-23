@@ -1,8 +1,5 @@
 ﻿using AutoMapper;
 using CRM_System.API.Extensions;
-using CRM_System.API.Models.Requests;
-using CRM_System.API.Models.Responses;
-using CRM_System.API.Producer;
 using CRM_System.BusinessLayer;
 using CRM_System.DataLayer;
 using IncredibleBackendContracts.Enums;
@@ -17,18 +14,15 @@ namespace CRM_System.API;
 [Route("[controller]")]
 public class LeadsController : ControllerBase
 {
-    public ClaimModel _claims;
     private readonly ILeadsService _leadsService;
     private readonly IMapper _mapper;
     private readonly ILogger<LeadsController> _logger;
-    private readonly IRabbitMQProducer _rabbitMq;
 
-    public LeadsController(ILeadsService leadsService, IMapper mapper, ILogger<LeadsController> logger, IRabbitMQProducer rabbitMq)
+    public LeadsController(ILeadsService leadsService, IMapper mapper, ILogger<LeadsController> logger)
     {
         _leadsService = leadsService;
         _mapper = mapper;
         _logger = logger;
-        _rabbitMq = rabbitMq;
     }
 
     [AllowAnonymous]
@@ -50,7 +44,7 @@ public class LeadsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<LeadMainInfoResponse>> GetById(int id)
+    public async Task<ActionResult<LeadAllInfoResponse>> GetById(int id)
     {
         var claims = this.GetClaims();
         var lead = await _leadsService.GetById(id, claims);
@@ -60,7 +54,7 @@ public class LeadsController : ControllerBase
         if (lead is null)
             return NotFound();
         else
-            return Ok(_mapper.Map<LeadMainInfoResponse>(lead));
+            return Ok(_mapper.Map<LeadAllInfoResponse>(lead));
     }
 
     [AuthorizeByRole(Role.Admin)]
@@ -91,22 +85,6 @@ public class LeadsController : ControllerBase
         return NoContent();
     }
 
-    //[Authorize]
-    //[HttpPut("{id}")]
-    //[ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
-    //[ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
-    //[ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
-    //[ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    //[ProducesResponseType(typeof(void), StatusCodes.Status422UnprocessableEntity)]
-    //public async Task<ActionResult> UpdateRole([FromBody] LeadUpdateRoleRequest request, int id)
-    //{
-    //    _logger.LogInformation($"Controller: Update lead by id: {id}");
-    //    var claims = this.GetClaims();
-
-    //    await _leadsService.UpdateRole(_mapper.Map<LeadDto>(request), id, claims);
-    //    return NoContent();
-    //}
-
     [Authorize]
     [HttpDelete("{id}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
@@ -134,7 +112,7 @@ public class LeadsController : ControllerBase
     public async Task<ActionResult> Restore(int id)
     {
         var claims = this.GetClaims();
-        var lead = await _leadsService.GetById(id, claims);
+        var lead = await _leadsService.GetDeletedLeadById(id, claims);
         _logger.LogInformation($"Controller: Restore lead by id {id}: {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
             $"{lead.City}, {lead.Address.MaskTheLastFive}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
         await _leadsService.Restore(id, false, claims);

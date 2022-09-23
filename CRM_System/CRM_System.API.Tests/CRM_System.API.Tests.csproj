@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ControllersTests\PositiveTests\LeadsTests\" />
     <Folder Include="ValidatorsTests\" />
   </ItemGroup>
 

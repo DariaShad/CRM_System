@@ -1,7 +1,7 @@
 ﻿namespace CRM_System.BusinessLayer.Tests
 {
-    public class AccountsServicesTests
+    public class TransactionStoreClientTests
     {
-       
+
     }
 }
