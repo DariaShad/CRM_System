@@ -48,10 +48,10 @@ public class AccountsRepository : BaseRepository, IAccountsRepository
 
     public async Task<AccountDto> GetAccountById (int id)
     {
-        var account = _connectionString.QueryFirstOrDefault<AccountDto>(
+        var account = await (_connectionString.QueryFirstOrDefaultAsync<AccountDto>(
            StoredProcedures.Account_GetById,
             param: new { id },
-            commandType: CommandType.StoredProcedure);
+            commandType: CommandType.StoredProcedure));
 
         _logger.LogInformation($"Data Layer: Get account by id: {account.LeadId}, {account.Currency}, {account.Status}");
 
@@ -61,7 +61,7 @@ public class AccountsRepository : BaseRepository, IAccountsRepository
     public async Task UpdateAccount(AccountDto account, int id)
     {
         _logger.LogInformation($"Data Layer: Get account by id {id}: {account.Status}");
-        _connectionString.Execute(
+        await _connectionString.ExecuteAsync(
             StoredProcedures.Account_Update,
             param: new
             {
@@ -74,7 +74,7 @@ public class AccountsRepository : BaseRepository, IAccountsRepository
     public async Task DeleteAccount(int accountId)
     {
         _logger.LogInformation($"Data Layer: Delete account {accountId}");
-        _connectionString.Execute(
+        await _connectionString.ExecuteAsync(
             StoredProcedures.Account_Delete,
             param: new { id= accountId},
             commandType: System.Data.CommandType.StoredProcedure);
@@ -83,7 +83,7 @@ public class AccountsRepository : BaseRepository, IAccountsRepository
     public async Task RestoreAccount(int accountId)
     {
         _logger.LogInformation($"Data Layer: Restore account {accountId}");
-        _connectionString.Execute(
+        await _connectionString.ExecuteAsync(
             StoredProcedures.Account_Restore,
             param: new { id = accountId },
             commandType: System.Data.CommandType.StoredProcedure);

@@ -16,7 +16,6 @@ namespace CRM_System.API;
 [Route("[controller]")]
 public class LeadsController : ControllerBase
 {
-    public ClaimModel _claims;
     private readonly ILeadsService _leadsService;
     private readonly IMapper _mapper;
     private readonly ILogger<LeadsController> _logger;
@@ -115,7 +114,7 @@ public class LeadsController : ControllerBase
     public async Task<ActionResult> Restore(int id)
     {
         var claims = this.GetClaims();
-        var lead = await _leadsService.GetByIdWithDeleted(id, claims);
+        var lead = await _leadsService.GetDeletedLeadById(id, claims);
         _logger.LogInformation($"Controller: Restore lead by id {id}: {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
             $"{lead.City}, {lead.Address.MaskTheLastFive}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
         await _leadsService.Restore(id, false, claims);

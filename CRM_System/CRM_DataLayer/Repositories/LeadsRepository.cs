@@ -47,7 +47,7 @@ public class LeadsRepository : BaseRepository, ILeadsRepository
         return leads;
     }
 
-    public async Task<LeadDto> GetLeadByIdWithDeleted(int id)
+    public async Task<LeadDto> GetDeletedLeadById(int id)
     {
 
         var lead = (await _connectionString.QueryAsync<LeadDto, AccountDto, LeadDto>(

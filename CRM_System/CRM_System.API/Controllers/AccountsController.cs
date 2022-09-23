@@ -97,6 +97,4 @@ public class AccountsController : ControllerBase
         return NoContent();
     }
 
-
-    // patch for admin
 }

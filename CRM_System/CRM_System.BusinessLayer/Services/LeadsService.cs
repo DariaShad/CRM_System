@@ -76,9 +76,9 @@ public class LeadsService : ILeadsService
         return lead;
     }
 
-    public async Task<LeadDto> GetByIdWithDeleted(int id, ClaimModel claims)
+    public async Task<LeadDto> GetDeletedLeadById(int id, ClaimModel claims)
     {
-        var lead = await _leadRepository.GetLeadByIdWithDeleted(id);
+        var lead = await _leadRepository.GetDeletedLeadById(id);
         if (lead == null)
         {
             throw new NotFoundException("Lead with this id was not found");
@@ -147,7 +147,7 @@ public class LeadsService : ILeadsService
 
     public async Task Restore(int id, bool isDeleted, ClaimModel claims)
     {
-        var lead = await _leadRepository.GetLeadByIdWithDeleted(id);
+        var lead = await _leadRepository.GetDeletedLeadById(id);
         _logger.LogInformation($"Business layer: Database query for restoring lead {id}, {lead.FirstName}, {lead.LastName}, {lead.Patronymic}, {lead.Birthday}, {lead.Phone.MaskNumber()}, " +
             $"{lead.City}, {lead.Address.MaskTheLastFive}, {lead.Email.MaskEmail()}, {lead.Passport.MaskPassport()}");
 

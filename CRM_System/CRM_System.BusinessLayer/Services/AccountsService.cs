@@ -34,7 +34,7 @@ public class AccountsService : IAccountsService
         if (lead.Role == Role.Regular)
         {
             if (accountDTO.Currency != TradingCurrency.RUB
-            || accountDTO.Currency != TradingCurrency.USD)
+            && accountDTO.Currency != TradingCurrency.USD)
             {
                 throw new RegularAccountRestrictionException("Regular lead cannot have any other account except RUB or USD");
             }
@@ -63,6 +63,10 @@ public class AccountsService : IAccountsService
     public async Task DeleteAccount(int id, ClaimModel claim)
     {
         var account = await _accountRepository.GetAccountById(id);
+        if (account == null)
+        {
+            throw new NotFoundException("Account not found");
+        }
         _logger.LogInformation($"Business layer: Database query for deleting account: {id} {account.LeadId}, {account.Currency}, {account.Status}");
         AccessService.CheckAccessForLeadAndManager(id, claim);
         await _producer.ProduceMessage(new AccountDeletedEvent() { Id = id}, $"Account with id: { account.Id} has been queued (delete)");
@@ -72,16 +76,15 @@ public class AccountsService : IAccountsService
     public async Task <AccountDto> GetAccountById(int id, ClaimModel claim)
     {   
         var account = await _accountRepository.GetAccountById(id);
+        if (account == null)
+        {
+            throw new NotFoundException("Account not found");
+        }
         _logger.LogInformation($"Business layer: Database query for getting account: {id} {account.LeadId}, {account.Currency}, {account.Status}");
         AccessService.CheckAccessForLeadAndManager(claim.Id, claim); 
         return account;
     }
 
-    public async Task<List<AccountDto>> GetAllAccounts()
-    {
-        _logger.LogInformation("Business layer: Database query for getting all accounts");
-        return await _accountRepository.GetAllAccounts();
-    }
     public async Task <List<AccountDto>> GetAllAccountsByLeadId(int leadId, ClaimModel claim)
     {
         _logger.LogInformation($"Business layer: Database query for getting accounts by lead id : {leadId}");
