@@ -1,4 +1,5 @@
-﻿using IncredibleBackendContracts.Requests;
+﻿using CRM_System.BusinessLayer.Services;
+using IncredibleBackendContracts.Requests;
 using IncredibleBackendContracts.Responses;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
@@ -22,21 +23,21 @@ public class TransactionsService : ITransactionsService
     public async Task<long> AddDeposit(TransactionRequest request)
     {
         _logger.LogInformation($"Business layer: Database query for adding deposit: {request.AccountId}, {request.Amount}, {request.Currency}");
-        _path = "/transactions/deposit";
+        _path = PathConst.DepositPath;
         return await _httpService.Post<TransactionRequest, long>(request, _path);
     }
 
     public async Task<long> AddWithdraw(TransactionRequest request)
     {
         _logger.LogInformation($"Business layer: Database query for adding withdraw {request.AccountId}, {request.Amount}, {request.Currency}");
-        _path = "/transactions/withdraw";
+        _path = PathConst.WithdrawPath;
         return await _httpService.Post<TransactionRequest, long>(request, _path);
     }
 
     public async Task<List<long>> AddTransfer(TransactionTransferRequest request)
     {
         _logger.LogInformation($"Business layer: Database query for adding transfer {request.RecipientAccountId}, {request.AccountId}, {request.Amount}, {request.Currency}");
-        _path = "/transactions/transfer";
+        _path = PathConst.TransferPath;
         return await _httpService.Post<TransactionTransferRequest, List<long>>(request, _path);
     }
 
